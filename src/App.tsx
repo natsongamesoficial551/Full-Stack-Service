@@ -197,10 +197,10 @@ function App() {
                 <div className="relative bg-black/50 backdrop-blur-sm rounded-3xl p-8 border border-blue-500/20">
                   <div className="grid grid-cols-2 gap-6">
                     {[
-                      { icon: Monitor, label: 'Frontend', value: 'Iniciante' },
-                      { icon: Database, label: 'Backend', value: 'Iniciante' },
-                      { icon: Smartphone, label: 'Mobile', value: 'Iniciante' },
-                      { icon: Layers, label: 'Full-Stack', value: 'Iniciante' }
+                      { icon: Monitor, label: 'Frontend', value: '100%' },
+                      { icon: Database, label: 'Backend', value: '100%' },
+                      { icon: Smartphone, label: 'Mobile', value: '100%' },
+                      { icon: Layers, label: 'Full-Stack', value: '100%' }
                     ].map((skill, index) => {
                       const IconComponent = skill.icon;
                       return (
@@ -220,139 +220,134 @@ function App() {
       </section>
 
       {/* Services Section */}
-<section id="servicos" className="py-20 relative z-10">
-  <div className="container mx-auto px-6">
-    <div className="text-center mb-16">
-      <h2 className="text-5xl md:text-6xl font-black mb-6">
-        <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-          SERVIÇOS
-        </span>
-      </h2>
-      <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
-      <p className="text-xl text-gray-300 mt-6 max-w-3xl mx-auto">
-        Escolha o plano ideal para seu projeto. Pagamento único para desenvolvimento + custos mensais de hospedagem e domínio.
-      </p>
-    </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-      {[
-        {
-          icon: Monitor,
-          title: 'Básico',
-          description: 'Perfeito para sites institucionais e portfólios profissionais',
-          features: ['Front-end completo', 'Domínio próprio', 'Hospedagem configurada', 'Design responsivo'],
-          initialPrice: 'R$ 134,99',
-          monthlyPrice: 'R$ 18,32',
-          monthlyBreakdown: 'R$ 14,99 (hospedagem) + R$ 3,33 (domínio)',
-          color: 'from-blue-500 to-cyan-500',
-          bgColor: 'from-blue-900/20 to-cyan-900/20',
-          borderColor: 'border-blue-500/20',
-          popular: false,
-          link: 'https://w.app/sldc02'
-        },
-        {
-          icon: Database,
-          title: 'Premium',
-          description: 'Ideal para sites com funcionalidades interativas e formulários',
-          features: ['Tudo do Básico', 'Back-end básico', 'Formulários funcionais', 'Login simples'],
-          initialPrice: 'R$ 179,99',
-          monthlyPrice: 'R$ 18,32',
-          monthlyBreakdown: 'R$ 14,99 (hospedagem) + R$ 3,33 (domínio)',
-          color: 'from-purple-500 to-pink-500',
-          bgColor: 'from-purple-900/20 to-pink-900/20',
-          borderColor: 'border-purple-500/20',
-          popular: true,
-          link: 'https://w.app/zxjuck'
-        },
-        {
-          icon: Zap,
-          title: 'Developer',
-          description: 'Solução completa para projetos profissionais e empresariais',
-          features: ['Tudo do Premium', 'SEO básico', 'Suporte 30 dias', 'Hospedagem premium'],
-          initialPrice: 'R$ 265,99',
-          monthlyPrice: 'R$ 46,32',
-          monthlyBreakdown: 'R$ 39,99 (hospedagem) + R$ 6,33 (domínio)',
-          color: 'from-green-500 to-teal-500',
-          bgColor: 'from-green-900/20 to-teal-900/20',
-          borderColor: 'border-green-500/20',
-          popular: false,
-          link: 'https://w.app/hbyork'
-        }
-      ].map((service, index) => {
-        const IconComponent = service.icon;
-        return (
-          <div
-            key={index}
-            className={`group relative p-8 bg-gradient-to-br ${service.bgColor} rounded-3xl border-2 ${service.borderColor} backdrop-blur-sm hover:scale-105 transition-all duration-500 overflow-hidden ${service.popular ? 'ring-2 ring-purple-500 ring-opacity-50' : ''}`}
-          >
-            {service.popular && (
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full text-sm font-bold">
-                MAIS POPULAR
-              </div>
-            )}
-            
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <div className={`relative w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-              <IconComponent className="w-8 h-8 text-white" />
-            </div>
-            
-            <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors">
-              {service.title}
-            </h3>
-            
-            <p className="text-gray-300 leading-relaxed mb-6">
-              {service.description}
+      <section id="servicos" className="py-20 relative z-10">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-black mb-6">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                SERVIÇOS
+              </span>
+            </h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto rounded-full"></div>
+            <p className="text-xl text-gray-300 mt-6 max-w-3xl mx-auto">
+              Escolha o plano ideal para seu projeto. Pagamento único para desenvolvimento + custos mensais de hospedagem e domínio.
             </p>
-            
-            {/* Pricing */}
-            <div className="mb-6 p-4 bg-black/30 rounded-2xl border border-white/10">
-              <div className="text-center mb-4">
-                <div className="text-3xl font-black text-white mb-1">
-                  {service.initialPrice}
-                </div>
-                <div className="text-sm text-gray-400">
-                  Pagamento único para desenvolvimento
-                </div>
-              </div>
-              
-              <div className="border-t border-white/10 pt-4">
-                <div className="text-center">
-                  <div className="text-xl font-bold text-blue-400 mb-1">
-                    {service.monthlyPrice}/mês
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    {service.monthlyBreakdown}
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              {service.features.map((feature, featureIndex) => (
-                <div key={featureIndex} className="flex items-center space-x-2">
-                  <Star className="w-4 h-4 text-yellow-400" />
-                  <span className="text-sm text-gray-400">{feature}</span>
-                </div>
-              ))}
-            </div>
-            
-            <button 
-              onClick={() => window.open(service.link, '_blank')}
-              className={`w-full mt-6 py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}
-            >
-              Escolher Plano
-            </button>
-            
-            <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <ArrowRight className="w-6 h-6 text-blue-400" />
-            </div>
           </div>
-        );
-      })}
-    </div>
-  </div>
-</section>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {[
+              {
+                icon: Monitor,
+                title: 'Básico',
+                description: 'Perfeito para sites institucionais e portfólios profissionais',
+                features: ['Front-end completo', 'Domínio próprio', 'Hospedagem configurada', 'Design responsivo'],
+                initialPrice: 'R$ 134,99',
+                monthlyPrice: 'R$ 18,32',
+                monthlyBreakdown: 'R$ 14,99 (hospedagem) + R$ 3,33 (domínio)',
+                color: 'from-blue-500 to-cyan-500',
+                bgColor: 'from-blue-900/20 to-cyan-900/20',
+                borderColor: 'border-blue-500/20',
+                popular: false
+              },
+              {
+                icon: Database,
+                title: 'Premium',
+                description: 'Ideal para sites com funcionalidades interativas e formulários',
+                features: ['Tudo do Básico', 'Back-end básico', 'Formulários funcionais', 'Login simples'],
+                initialPrice: 'R$ 179,99',
+                monthlyPrice: 'R$ 18,32',
+                monthlyBreakdown: 'R$ 14,99 (hospedagem) + R$ 3,33 (domínio)',
+                color: 'from-purple-500 to-pink-500',
+                bgColor: 'from-purple-900/20 to-pink-900/20',
+                borderColor: 'border-purple-500/20',
+                popular: true
+              },
+              {
+                icon: Zap,
+                title: 'Developer',
+                description: 'Solução completa para projetos profissionais e empresariais',
+                features: ['Tudo do Premium', 'SEO básico', 'Suporte 30 dias', 'Hospedagem premium'],
+                initialPrice: 'R$ 265,99',
+                monthlyPrice: 'R$ 46,32',
+                monthlyBreakdown: 'R$ 39,99 (hospedagem) + R$ 6,33 (domínio)',
+                color: 'from-green-500 to-teal-500',
+                bgColor: 'from-green-900/20 to-teal-900/20',
+                borderColor: 'border-green-500/20',
+                popular: false
+              }
+            ].map((service, index) => {
+              const IconComponent = service.icon;
+              return (
+                <div
+                  key={index}
+                  className={`group relative p-8 bg-gradient-to-br ${service.bgColor} rounded-3xl border-2 ${service.borderColor} backdrop-blur-sm hover:scale-105 transition-all duration-500 overflow-hidden ${service.popular ? 'ring-2 ring-purple-500 ring-opacity-50' : ''}`}
+                >
+                  {service.popular && (
+                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full text-sm font-bold">
+                      MAIS POPULAR
+                    </div>
+                  )}
+                  
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <div className={`relative w-16 h-16 bg-gradient-to-br ${service.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className="w-8 h-8 text-white" />
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors">
+                    {service.title}
+                  </h3>
+                  
+                  <p className="text-gray-300 leading-relaxed mb-6">
+                    {service.description}
+                  </p>
+                  
+                  {/* Pricing */}
+                  <div className="mb-6 p-4 bg-black/30 rounded-2xl border border-white/10">
+                    <div className="text-center mb-4">
+                      <div className="text-3xl font-black text-white mb-1">
+                        {service.initialPrice}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        Pagamento único para desenvolvimento
+                      </div>
+                    </div>
+                    
+                    <div className="border-t border-white/10 pt-4">
+                      <div className="text-center">
+                        <div className="text-xl font-bold text-blue-400 mb-1">
+                          {service.monthlyPrice}/mês
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {service.monthlyBreakdown}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    {service.features.map((feature, featureIndex) => (
+                      <div key={featureIndex} className="flex items-center space-x-2">
+                        <Star className="w-4 h-4 text-yellow-400" />
+                        <span className="text-sm text-gray-400">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <button 
+                    onClick={() => scrollToSection('contato')}
+                    className={`w-full mt-6 py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}
+                  >
+                    Escolher Plano
+                  </button>
+                  
+                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <ArrowRight className="w-6 h-6 text-blue-400" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           
           {/* Additional Info */}
           <div className="mt-16 text-center">
