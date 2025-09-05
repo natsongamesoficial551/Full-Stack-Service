@@ -354,11 +354,6 @@ function App() {
                   >
                     Escolher Plano
                   </button>
-                  
-                  
-                  <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowRight className="w-6 h-6 text-blue-400" />
-                  </div>
                 </div>
               );
             })}
