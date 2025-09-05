@@ -197,20 +197,28 @@ function App() {
                 <div className="relative bg-black/50 backdrop-blur-sm rounded-3xl p-8 border border-blue-500/20">
                   <div className="grid grid-cols-2 gap-6">
                     {[
-                      { icon: Monitor, label: 'Frontend', value: '100%' },
-                      { icon: Database, label: 'Backend', value: '100%' },
-                      { icon: Smartphone, label: 'Mobile', value: '100%' },
-                      { icon: Layers, label: 'Full-Stack', value: '100%' }
+                      { icon: Monitor, label: 'Frontend', value: 'Iniciante' },
+                      { icon: Database, label: 'Backend', value: 'Iniciante' },
+                      { icon: Smartphone, label: 'Mobile', value: 'Iniciante' },
+                      { icon: Layers, label: 'Full-Stack', value: 'Iniciante' }
                     ].map((skill, index) => {
                       const IconComponent = skill.icon;
                       return (
                         <div key={index} className="text-center p-4 bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-2xl border border-blue-500/10">
                           <IconComponent className="w-8 h-8 text-blue-400 mx-auto mb-2" />
                           <p className="text-sm text-gray-300 mb-1">{skill.label}</p>
-                          <p className="text-lg font-bold text-white">{skill.value}</p>
+                          <p className="text-sm font-bold text-white">{skill.value}</p>
                         </div>
                       );
                     })}
+                    
+                    <div className="col-span-2 text-center p-4 bg-gradient-to-br from-green-900/20 to-teal-900/20 rounded-2xl border border-green-500/10">
+                      <div className="w-8 h-8 text-green-400 mx-auto mb-2">
+                        🤖
+                      </div>
+                      <p className="text-sm text-gray-300 mb-1">IA</p>
+                      <p className="text-sm font-bold text-white">Intermediário Especialista</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -340,6 +348,19 @@ function App() {
                   >
                     Escolher Plano
                   </button>
+                  
+                  <a
+                    href={
+                      service.title === 'Básico' ? 'https://w.app/sldc02' :
+                      service.title === 'Premium' ? 'https://w.app/zxjuck' :
+                      service.title === 'Developer' ? 'https://w.app/hbyork' : '#'
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`block w-full mt-3 py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center`}
+                  >
+                    Contratar Agora
+                  </a>
                   
                   <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <ArrowRight className="w-6 h-6 text-blue-400" />
@@ -509,7 +530,7 @@ function App() {
             
             <div className="flex justify-center items-center space-x-4 text-gray-500">
               <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              <span>© 2024 NATANDEV - Todos os direitos reservados</span>
+              <span>© 2025 NATANDEV - Todos os direitos reservados</span>
               <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
             </div>
           </div>
