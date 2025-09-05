@@ -343,24 +343,18 @@ function App() {
                   </div>
                   
                   <button 
-                    onClick={() => scrollToSection('contato')}
+                    onClick={() => {
+                      const whatsappLink = 
+                        service.title === 'Básico' ? 'https://w.app/sldc02' :
+                        service.title === 'Premium' ? 'https://w.app/zxjuck' :
+                        service.title === 'Developer' ? 'https://w.app/hbyork' : '#';
+                      window.open(whatsappLink, '_blank');
+                    }}
                     className={`w-full mt-6 py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}
                   >
                     Escolher Plano
                   </button>
                   
-                  <a
-                    href={
-                      service.title === 'Básico' ? 'https://w.app/sldc02' :
-                      service.title === 'Premium' ? 'https://w.app/zxjuck' :
-                      service.title === 'Developer' ? 'https://w.app/hbyork' : '#'
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`block w-full mt-3 py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center`}
-                  >
-                    Contratar Agora
-                  </a>
                   
                   <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <ArrowRight className="w-6 h-6 text-blue-400" />
