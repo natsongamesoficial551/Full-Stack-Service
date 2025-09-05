@@ -342,18 +342,22 @@ function App() {
                     ))}
                   </div>
                   
-                  <button 
-                    onClick={() => {
-                      const whatsappLink = 
-                        service.title === 'Básico' ? 'https://w.app/sldc02' :
-                        service.title === 'Premium' ? 'https://w.app/zxjuck' :
-                        service.title === 'Developer' ? 'https://w.app/hbyork' : '#';
-                      window.open(whatsappLink, '_blank');
-                    }}
-                    className={`w-full mt-6 py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl`}
-                  >
-                    Escolher Plano
-                  </button>
+                  <ul className="mt-6">
+                    <li>
+                      <a
+                        href={
+                          service.title === 'Básico' ? 'https://w.app/sldc02' :
+                          service.title === 'Premium' ? 'https://w.app/zxjuck' :
+                          service.title === 'Developer' ? 'https://w.app/hbyork' : '#'
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`w-full block py-3 px-6 bg-gradient-to-r ${service.color} rounded-xl font-semibold text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl text-center no-underline`}
+                      >
+                        Escolher Plano
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               );
             })}
