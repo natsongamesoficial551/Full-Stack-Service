@@ -1,18 +1,614 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NATANDEV - Serviços Full-Stack Inovadores | Desenvolvimento Web Premium</title>
-    <meta name="description" content="Transforme suas ideias em experiências digitais extraordinárias. Desenvolvimento Full-Stack premium com design inovador e tecnologia de ponta.">
-    <meta name="keywords" content="desenvolvimento web, full-stack, react, node.js, design moderno, sites profissionais, natandev">
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cookie&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Knewave&family=Libertinus+Keyboard&family=Limelight&family=Permanent+Marker&display=swap" rel="stylesheet">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços Full-Stack NATANDEV</title>
+    
+    <style>
+        /* Reset e configurações globais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url(./public/background\ whit.jpg);
+            background-repeat: no-repeat;
+            background-position: top center;
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Overlay para melhor legibilidade */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 140, 255, 0.1), rgba(0, 162, 255, 0.05));
+            z-index: -1;
+        }
+
+        /* Header moderno */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        #layot {
+            margin: 0;
+            background: linear-gradient(135deg, rgba(0, 140, 255, 0.9), rgba(0, 162, 255, 0.8));
+            padding: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 140, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        #Logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        #Logo:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        #logotitle {
+            font-family: "Knewave", system-ui;
+            font-weight: 400;
+            font-style: normal;
+            font-size: clamp(32px, 5vw, 54px);
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #logotitle:hover {
+            transform: translateY(-2px);
+            text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Seção Sobre com design moderno */
+        #sobre {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #sobre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #00a8ff, #0078ff, #00a8ff);
+            background-size: 200% 100%;
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        #sobretitle {
+            font-size: clamp(32px, 4vw, 45px);
+            font-family: "Libertinus Keyboard", system-ui;
+            font-weight: 400;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        #sobretitle::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #00a8ff, #0078ff);
+            border-radius: 2px;
+        }
+
+        .sobre-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .sobre-text {
+            font-family: "Bebas Neue", sans-serif;
+            font-weight: 400;
+            font-size: clamp(24px, 3vw, 35px);
+            color: #34495e;
+            line-height: 1.4;
+            transition: all 0.3s ease;
+            padding: 15px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .sobre-text:hover {
+            background: rgba(0, 168, 255, 0.05);
+            transform: translateX(10px);
+            color: #2980b9;
+        }
+
+        /* Seção Contato moderna */
+        #contato {
+            margin: 80px 0;
+        }
+
+        #backgroundcontato {
+            background: linear-gradient(135deg, #00a8ff, #0078ff);
+            padding: 80px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #backgroundcontato::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        #contatotitle {
+            font-size: clamp(32px, 4vw, 45px);
+            font-family: "Libertinus Keyboard", system-ui;
+            font-weight: 400;
+            color: white;
+            text-align: center;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        ul li {
+            transform: translateY(0);
+            transition: all 0.4s ease;
+        }
+
+        ul li:hover {
+            transform: translateY(-8px);
+        }
+
+        ul li a {
+            display: flex;
+            height: 70px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        ul li a:hover::before {
+            left: 100%;
+        }
+
+        ul li a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Seção Serviços moderna */
+        #serviço {
+            max-width: 1400px;
+            margin: 80px auto;
+            padding: 0 40px;
+        }
+
+        #serviçotitle {
+            font-size: clamp(32px, 4vw, 45px);
+            font-family: "Libertinus Keyboard", system-ui;
+            font-weight: 400;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        #serviçotitle::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #00a8ff, #0078ff);
+            border-radius: 2px;
+        }
+
+        .planos-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .plano {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plano::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #00a8ff, #0078ff);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .plano:hover::before {
+            transform: scaleX(1);
+        }
+
+        .plano:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 168, 255, 0.3);
+        }
+
+        #planogratuito {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.05));
+            border-color: rgba(46, 204, 113, 0.3);
+        }
+
+        #planogratuito::before {
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+        }
+
+        #planobasico {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.05));
+            border-color: rgba(52, 152, 219, 0.3);
+        }
+
+        #planopremium {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(142, 68, 173, 0.05));
+            border-color: rgba(155, 89, 182, 0.3);
+            position: relative;
+        }
+
+        #planopremium::after {
+            content: 'POPULAR';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        #planopremium::before {
+            background: linear-gradient(90deg, #9b59b6, #8e44ad);
+        }
+
+        #planodeveloper {
+            background: linear-gradient(135deg, rgba(230, 126, 34, 0.1), rgba(211, 84, 0, 0.05));
+            border-color: rgba(230, 126, 34, 0.3);
+        }
+
+        #planodeveloper::before {
+            background: linear-gradient(90deg, #e67e22, #d35400);
+        }
+
+        .plano p {
+            font-family: "Bebas Neue", sans-serif;
+            font-size: clamp(18px, 2.5vw, 24px);
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .plano ul {
+            display: block;
+            margin: 30px 0;
+        }
+
+        .plano ul li {
+            margin: 0;
+        }
+
+        .plano ul li a {
+            background: linear-gradient(135deg, #00a8ff, #0078ff);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(0, 168, 255, 0.3);
+            border: none;
+            height: auto;
+        }
+
+        .plano ul li a:hover {
+            background: linear-gradient(135deg, #0078ff, #00a8ff);
+            box-shadow: 0 12px 35px rgba(0, 168, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Footer moderno */
+        #footer {
+            margin-top: 80px;
+        }
+
+        #backgroundfooter {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #backgroundfooter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 168, 255, 0.1), rgba(0, 120, 255, 0.05));
+        }
+
+        #footertext {
+            font-size: clamp(16px, 2vw, 24px);
+            color: white;
+            text-align: center;
+            font-weight: 600;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            font-family: "Bebas Neue", sans-serif;
+            letter-spacing: 2px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            #header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            #sobre, #serviço {
+                margin: 40px 20px;
+                padding: 40px 20px;
+            }
+
+            .planos-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            ul {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            #backgroundcontato, #backgroundfooter {
+                padding: 40px 20px;
+            }
+        }
+
+        /* Animações suaves */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .plano {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .plano:nth-child(2) { animation-delay: 0.1s; }
+        .plano:nth-child(3) { animation-delay: 0.2s; }
+        .plano:nth-child(4) { animation-delay: 0.3s; }
+
+        /* Scroll suave */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div id="layot">
+            <section id="header">
+                <img id="Logo" src="./public/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="Logo Serviços">
+                <span id="logotitle">Serviços Full-Stack</span>
+            </section>
+        </div>
+    </header>
+
+    <section id="sobre">
+        <div>
+            <h1 id="sobretitle">SOBRE:</h1>
+            <div class="sobre-content">
+                <span class="sobre-text">Olá, aqui eu ofereço serviço Full-Stack para seu site, como funciona meu</span>
+                <span class="sobre-text">trabalho? Eu crio a estrutura do site manualmente, demoro mais ou menos</span>
+                <span class="sobre-text">Umas 3h 4h para desenvolver a estrutura Após isso, uso Inteligência Artificial</span>
+                <span class="sobre-text">Para inovar O visual e deixar do JEITO QUE VOCÊ QUISER! Reviso o código e conserto</span>
+                <span class="sobre-text">Erros ou eu adiciono algo que esteja faltando Venha fazer o seu site!</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="contato">
+        <div id="backgroundcontato">
+            <h1 id="contatotitle">CONTATO:</h1>
+            <ul>
+                <li>
+                    <a href="https://www.instagram.com/nborges.ofc/" target="_blank">📱 Instagram</a>
+                </li>
+                <li>
+                    <a href="https://natandev02.netlify.app/" target="_blank">🌐 Portfólio</a>
+                </li>
+                <li>
+                    <a href="https://www.youtube.com/@natsongames498" target="_blank">🎥 Youtube</a>
+                </li>
+                <li>
+                    <a href="#" target="_blank">💬 Discord</a>
+                </li>
+                <li>
+                    <a href="#" target="_blank">💼 LinkedIn</a>
+                </li>
+                <li>
+                    <a href="https://wa.me/5521992826074" target="_blank">📞 WhatsApp</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="serviço">
+        <h1 id="serviçotitle">SERVIÇOS:</h1>
+        <div class="planos-container">
+            <div id="planogratuito" class="plano">
+                <p>🎁 Plano básico: Desenvolvimento gratuito</p>
+                <p>✅ Obrigatório feedback</p>
+                <ul>
+                    <li>
+                        <a href="https://w.app/hicagq">Escolher Plano</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="planobasico" class="plano">
+                <p>💎 Plano básico: R$134,99 Pagamento único para desenvolver o site</p>
+                <p>💰 R$18,32 por mês</p>
+                <ul>
+                    <li>
+                        <a href="https://w.app/sldc02">Escolher Plano</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="planopremium" class="plano">
+                <p>🚀 Plano premium: R$179,99 Pagamento único para desenvolver o site</p>
+                <p>💰 R$18,32 por mês</p>
+                <ul>
+                    <li>
+                        <a href="https://w.app/zxjuck">Escolher Plano</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="planodeveloper" class="plano">
+                <p>⚡ Plano developer: R$265,99 Pagamento único para desenvolver o site</p>
+                <p>💰 R$46,32 por mês</p>
+                <ul>
+                    <li>
+                        <a href="https://w.app/hbyork">Escolher Plano</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="footer">
+        <div id="backgroundfooter">
+            <footer>
+                <span id="footertext">🏆 NATAN BORGES PODE TE ENTREGAR O MELHOR SITE!! 🏆</span>
+            </footer>
+        </div>
+    </section>
+</body>
 </html>
