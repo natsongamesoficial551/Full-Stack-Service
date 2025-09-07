@@ -26,8 +26,7 @@ export default function NatanDevWebsite() {
         "Site básico responsivo",
         "Design simples e limpo",
         "Feedback obrigatório",
-        "Suporte por WhatsApp",
-        "Entrega em 7 dias",
+        "Suporte por 7 dias",
       ],
       popular: false,
       link: "https://w.app/hicagq",
@@ -43,9 +42,7 @@ export default function NatanDevWebsite() {
         "Site profissional responsivo",
         "Design personalizado",
         "Otimização SEO básica",
-        "Formulário de contato",
-        "Suporte por 30 dias",
-        "Entrega em 5 dias",
+        "Suporte ilimitado pagando",
       ],
       popular: false,
       link: "https://w.app/sldc02",
@@ -59,12 +56,12 @@ export default function NatanDevWebsite() {
       description: "Para empresas que querem se destacar",
       features: [
         "Site premium responsivo",
+        "backend",
         "Design exclusivo e moderno",
-        "Otimização SEO avançada",
-        "Integração com redes sociais",
-        "Painel administrativo",
-        "Suporte por 60 dias",
-        "Entrega em 4 dias",
+        "Otimização SEO",
+        "Integração com API",
+        "Deploy automático",
+        "Suporte ilimitado pagando",
       ],
       popular: true,
       link: "https://w.app/zxjuck",
@@ -78,13 +75,10 @@ export default function NatanDevWebsite() {
       description: "Solução completa para desenvolvedores",
       features: [
         "Aplicação web completa",
-        "Backend personalizado",
-        "Banco de dados integrado",
-        "API REST personalizada",
-        "Dashboard administrativo",
+        "Backend Avançado",
         "Deploy automático",
-        "Suporte por 90 dias",
-        "Entrega em 3 dias",
+        "Suporte ilimitado pagando",
+        "prioridade na entrega",
       ],
       popular: false,
       link: "https://w.app/hbyork",
@@ -312,7 +306,7 @@ export default function NatanDevWebsite() {
             <span className="text-xl font-bold text-white">NATANDEV</span>
           </div>
           <p className="text-lg font-semibold text-yellow-400 mb-2">NATAN BORGES PODE TE ENTREGAR O MELHOR SITE!</p>
-          <p className="text-gray-300">© 2024 NatanDev. Todos os direitos reservados.</p>
+          <p className="text-gray-300">© 2025 NatanDev. Todos os direitos reservados.</p>
         </div>
       </footer>
     </div>
