@@ -1,26 +1,189 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Knewave&display=swap" rel="stylesheet">
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serviços Full-Stack NATANDEV</title>
+    <title>NATANDEV - Serviços Web Profissionais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary-color: #0ea5e9;
-            --accent-color: #8b5cf6;
-            --success-color: #10b981;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-            --bg-light: #f8fafc;
-            --white: #ffffff;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #161616 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 3rem;
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .loading-logo span {
+            background: linear-gradient(135deg, #00f0ff 0%, #9d4edd 50%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer-loading 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.5));
+            }
+            50% { 
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 40px rgba(0, 240, 255, 0.8));
+            }
+        }
+
+        @keyframes shimmer-loading {
+            0%, 100% { filter: brightness(1) saturate(1); }
+            50% { filter: brightness(1.5) saturate(1.5); }
+        }
+
+        .loading-text {
+            font-family: 'JetBrains Mono', monospace;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .loading-bar-container {
+            width: 400px;
+            max-width: 90vw;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+        }
+
+        .loading-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00f0ff 0%, #9d4edd 50%, #ff006e 100%);
+            border-radius: 10px;
+            width: 0%;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+            animation: none;
+        }
+
+        .loading-bar.animate {
+            animation: load-bar 12s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes load-bar {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(400px); }
+        }
+
+        .loading-percentage {
+            font-family: 'Syne', sans-serif;
+            color: #00f0ff;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+            animation: count-up 12s linear forwards;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .loading-dots span {
+            animation: dot-pulse 1.4s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dot-pulse {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .loading-spinner {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .loading-spinner::before,
+        .loading-spinner::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #00f0ff;
+            animation: spinner 1.5s linear infinite;
+        }
+
+        .loading-spinner::before {
+            width: 80px;
+            height: 80px;
+            top: 0;
+            left: 0;
+        }
+
+        .loading-spinner::after {
+            width: 60px;
+            height: 60px;
+            top: 10px;
+            left: 10px;
+            border-top-color: #9d4edd;
+            animation-duration: 1s;
+            animation-direction: reverse;
+        }
+
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
         }
 
         * {
@@ -29,465 +192,1108 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-blue: #00f0ff;
+            --dark-blue: #0066ff;
+            --accent-purple: #9d4edd;
+            --accent-pink: #ff006e;
+            --black: #0a0a0a;
+            --dark-gray: #161616;
+            --medium-gray: #2a2a2a;
+            --light-gray: #fafafa;
+            --white: #ffffff;
+            --transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        /* Header Styles */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        #layot {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        #header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        #Logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        #logotitle {
-            font-family: "Knewave", system-ui;
-            font-size: 2rem;
-            color: var(--primary-color);
-            font-weight: 400;
-        }
-
-        /* About Section */
-        #sobre {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            text-align: center;
-        }
-
-        #sobretitle {
-            font-size: 3rem;
-            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--black);
             color: var(--white);
-            margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .sobre-content {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            backdrop-filter: blur(10px);
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 0;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
         }
 
-        .sobre-text {
-            font-size: 1.25rem;
-            line-height: 1.8;
-            color: var(--text-dark);
-            max-width: 800px;
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 240, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1400px;
             margin: 0 auto;
-        }
-
-        /* Contact Section */
-        #contato {
-            max-width: 1200px;
-            margin: 4rem auto;
             padding: 0 2rem;
-        }
-
-        #backgroundcontato {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            backdrop-filter: blur(10px);
-        }
-
-        #contatotitle {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        ul {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        ul li a {
             display: flex;
-            height: 60px;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            border-radius: 12px;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--primary-blue);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
             text-decoration: none;
             font-weight: 500;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            background: var(--primary-color);
-            color: var(--white);
-            box-shadow: var(--shadow);
+            font-size: 0.95rem;
+            transition: var(--transition);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        ul li a:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            background: var(--primary-dark);
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-purple));
+            transition: var(--transition);
+            box-shadow: 0 0 10px var(--primary-blue);
         }
 
-        /* Services Section - Hostinger Style */
-        #serviço {
-            max-width: 1400px;
-            margin: 4rem auto;
-            padding: 0 2rem;
+        .nav-links a:hover {
+            color: var(--primary-blue);
         }
 
-        #serviçotitle {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--white);
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: var(--primary-blue);
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 240, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(157, 78, 221, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 110, 0.1) 0%, transparent 50%);
+            animation: moveGradient 15s ease infinite;
+        }
+
+        @keyframes moveGradient {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -30px) scale(1.1); }
+            66% { transform: translate(-30px, 50px) scale(0.9); }
+        }
+
+        .hero-content {
             text-align: center;
+            color: var(--white);
+            z-index: 1;
+            max-width: 1000px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            line-height: 1.3;
+            text-transform: uppercase;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1) saturate(1); }
+            50% { filter: brightness(1.2) saturate(1.3); }
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
             margin-bottom: 3rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+            font-weight: 300;
         }
 
-        .pricing-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .pricing-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s ease;
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
             position: relative;
             overflow: hidden;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
         }
 
-        .pricing-card.popular {
-            border: 3px solid var(--primary-color);
-            transform: scale(1.05);
+        .btn-primary:hover::before {
+            left: 100%;
         }
 
-        .pricing-card.popular::before {
-            content: 'MAIS POPULAR';
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--dark-blue) 0%, var(--accent-purple) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--primary-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-secondary::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            background: var(--primary-color);
-            color: var(--white);
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
+            width: 0;
+            height: 100%;
+            background: var(--primary-blue);
+            transition: width 0.4s;
+            z-index: -1;
         }
 
-        .discount-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--accent-color);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            font-weight: 600;
+        .btn-secondary:hover::before {
+            width: 100%;
         }
 
-        .plan-name {
-            font-size: 1.75rem;
+        .btn-secondary:hover {
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
             font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-            margin-top: 1rem;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            text-align: center;
+            text-transform: uppercase;
+            line-height: 1.3;
         }
 
-        .plan-description {
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-bottom: 4rem;
+            font-weight: 300;
         }
 
-        .price-container {
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .about-card {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(157, 78, 221, 0.05) 100%);
+            padding: 3rem;
+            border-radius: 20px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
+            border-color: var(--primary-blue);
+        }
+
+        .about-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-blue);
+            letter-spacing: -0.5px;
+        }
+
+        .about-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--dark-gray);
+            border-top: 1px solid rgba(0, 240, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .service-card {
+            background: rgba(0, 240, 255, 0.03);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(157, 78, 221, 0.1) 100%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(0, 240, 255, 0.4);
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
         }
 
         .price {
+            font-family: 'Syne', sans-serif;
             font-size: 2.5rem;
             font-weight: 700;
-            color: var(--text-dark);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .price-period {
-            color: var(--text-light);
-            font-size: 1rem;
-        }
-
-        .monthly-price {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-top: 0.5rem;
+        .price-detail {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .features-list {
             list-style: none;
             margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         .features-list li {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+            padding: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            position: relative;
+            padding-left: 1.5rem;
         }
 
-        .check-icon {
-            width: 20px;
-            height: 20px;
-            background: var(--success-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 0.75rem;
-            flex-shrink: 0;
+        .features-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: bold;
         }
 
-        .cta-button {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
+        /* Solutions Section */
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .solution-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(157, 78, 221, 0.05) 100%);
+            transition: var(--transition);
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: block;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .solution-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
+            border-color: var(--primary-blue);
+        }
+
+        .solution-content {
+            padding: 2rem;
+        }
+
+        .solution-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+            letter-spacing: -0.5px;
+        }
+
+        .solution-content p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, var(--dark-gray) 0%, var(--black) 100%);
+            color: var(--white);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cta-button.primary {
-            background: var(--primary-color);
+        .contact::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(157, 78, 221, 0.1) 0%, transparent 50%);
+        }
+
+        .contact .section-title {
             color: var(--white);
         }
 
-        .cta-button.secondary {
-            background: transparent;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
+        .contact .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+        .contact-methods {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 3rem;
         }
 
-        .cta-button.primary:hover {
-            background: var(--primary-dark);
+        .contact-card {
+            background: rgba(0, 240, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            min-width: 280px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            position: relative;
+            z-index: 1;
         }
 
-        .cta-button.secondary:hover {
-            background: var(--primary-color);
-            color: var(--white);
+        .contact-card:hover {
+            background: rgba(0, 240, 255, 0.1);
+            transform: translateY(-10px);
+            border-color: var(--primary-blue);
+            box-shadow: 0 20px 60px rgba(0, 240, 255, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .contact-card p {
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
         }
 
         /* Footer */
-        #footer {
-            margin-top: 4rem;
-        }
-
-        #backgroundfooter {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
             text-align: center;
-            backdrop-filter: blur(10px);
         }
 
-        #footertext {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary-color);
+        footer p {
+            opacity: 0.7;
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
-            #logotitle {
-                font-size: 1.5rem;
+            .nav-links {
+                gap: 1.5rem;
             }
 
-            #sobretitle, #serviçotitle {
-                font-size: 2rem;
+            .hero h1 {
+                font-size: 2.5rem;
             }
 
-            .pricing-card.popular {
-                transform: none;
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
             }
 
-            .pricing-container {
-                grid-template-columns: 1fr;
+            .btn {
+                width: 100%;
+                max-width: 300px;
             }
 
-            .sobre-content, #backgroundcontato {
-                padding: 2rem;
+            section {
+                padding: 4rem 1.5rem;
             }
+        }
+
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in.hidden {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        /* Scroll reveal animations from sides */
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-left.hidden {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+
+        .slide-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-right.hidden {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+
+        /* Staggered animations for cards */
+        .about-card, .service-card, .solution-item, .contact-card {
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .about-card.visible, .service-card.visible, .solution-item.visible, .contact-card.visible {
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .about-card.hidden, .service-card.hidden, .solution-item.hidden, .contact-card.hidden {
+            opacity: 0;
+            transform: translateX(-80px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .about-card:nth-child(1) { transition-delay: 0.1s; }
+        .about-card:nth-child(2) { transition-delay: 0.2s; }
+        .about-card:nth-child(3) { transition-delay: 0.3s; }
+
+        .service-card:nth-child(1) { transition-delay: 0.1s; }
+        .service-card:nth-child(2) { transition-delay: 0.25s; }
+        .service-card:nth-child(3) { transition-delay: 0.4s; }
+
+        .solution-item:nth-child(1) { transition-delay: 0.1s; }
+        .solution-item:nth-child(2) { transition-delay: 0.2s; }
+        .solution-item:nth-child(3) { transition-delay: 0.3s; }
+
+        .contact-card:nth-child(1) { transition-delay: 0.1s; }
+        .contact-card:nth-child(2) { transition-delay: 0.25s; }
+
+        /* Alternate direction for even items */
+        .service-card:nth-child(even), .solution-item:nth-child(even) {
+            transform: translateX(80px);
+        }
+
+        .service-card:nth-child(even).visible, .solution-item:nth-child(even).visible {
+            transform: translateX(0);
+        }
+
+        .service-card:nth-child(even).hidden, .solution-item:nth-child(even).hidden {
+            transform: translateX(80px);
         }
     </style>
 </head>
 <body>
-    <header>
-        <div id="layot">
-            <section id="header">
-                <img id="Logo" src="./public/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="Logo Serviços">
-                <span id="logotitle">Serviços Full-Stack</span>
-            </section>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-logo">NATAN<span>DEV</span></div>
+            <div class="loading-percentage" id="loadingPercentage">0%</div>
+            <div class="loading-text">
+                CARREGANDO<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar"></div>
+            </div>
         </div>
-    </header>
+    </div>
 
-    <section id="sobre">
-        <h1 id="sobretitle">SOBRE</h1>
-        <div class="sobre-content">
-            <p class="sobre-text">
-                Olá, aqui eu ofereço serviço Full-Stack para seu site. Como funciona meu trabalho? 
-                Eu crio a estrutura do site manualmente, demoro mais ou menos umas 3h-4h para desenvolver a estrutura. 
-                Após isso, uso Inteligência Artificial para inovar o visual e deixar do JEITO QUE VOCÊ QUISER! 
-                Reviso o código e conserto erros ou adiciono algo que esteja faltando. Venha fazer o seu site!
-            </p>
-        </div>
-    </section>
-
-    <section id="contato">
-        <div id="backgroundcontato">
-            <h1 id="contatotitle">CONTATO</h1>
-            <ul>
-                <li><a href="https://www.instagram.com/nborges.ofc/" target="_blank">Instagram</a></li>
-                <li><a href="https://natandev02.netlify.app/" target="_blank">Portfólio</a></li>
-                <li><a href="https://www.youtube.com/@natsongames498" target="_blank">Youtube</a></li>
-                <li><a href="#" target="_blank">Discord</a></li>
-                <li><a href="#" target="_blank">LinkedIn</a></li>
-                <li><a href="https://wa.me/5521992826074" target="_blank">WhatsApp</a></li>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">NATAN<span>DEV</span></a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">Sobre</a></li>
+                <li><a href="#services">Serviços</a></li>
+                <li><a href="#solutions">Soluções</a></li>
+                <li><a href="#contact">Contato</a></li>
             </ul>
         </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Transforme Sua Presença <span>Digital</span></h1>
+            <p>Sites modernos, rápidos e responsivos para empresas, profissionais autônomos e marcas pessoais. Desenvolvimento full-stack com tecnologia de ponta.</p>
+            <div class="cta-buttons">
+                <a href="#services" class="btn btn-primary">Ver Planos</a>
+                <a href="#contact" class="btn btn-secondary">Fale Conosco</a>
+            </div>
+        </div>
     </section>
 
-    <section id="serviço">
-        <h1 id="serviçotitle">SERVIÇOS</h1>
-        
-        <div class="pricing-container">
-            <!-- Plano Gratuito -->
-            <div class="pricing-card">
-                <div class="plan-name">Gratuito</div>
-                <div class="plan-description">Desenvolvimento limitado</div>
-                <div class="price-container">
-                    <div class="price">R$ 0<span class="price-period">/único</span></div>
-                    <div class="monthly-price">Obrigatório feedback</div>
-                </div>
+    <!-- About Section -->
+    <section id="about" class="fade-in">
+        <h2 class="section-title">Por Que Escolher a NATANDEV?</h2>
+        <p class="section-subtitle">Desenvolvimento profissional com qualidade e agilidade</p>
+        <div class="about-content">
+            <div class="about-card">
+                <h3>⚡ Desenvolvimento Rápido</h3>
+                <p>Estrutura base desenvolvida em 3-4 horas com código limpo e otimizado. Começamos do zero e entregamos resultados impressionantes em tempo recorde.</p>
+            </div>
+            <div class="about-card">
+                <h3>🤖 Tecnologia de Ponta</h3>
+                <p>Uso estratégico de Inteligência Artificial para criar o visual exatamente como você deseja, combinado com expertise humana para garantir qualidade.</p>
+            </div>
+            <div class="about-card">
+                <h3>✓ Qualidade Garantida</h3>
+                <p>Revisão detalhada do código e correção de erros para garantir máxima performance, segurança e experiência do usuário impecável.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services fade-in">
+        <h2 class="section-title">Planos e Serviços</h2>
+        <p class="section-subtitle">Soluções personalizadas para cada necessidade e orçamento</p>
+        <div class="services-grid">
+
+            <!-- Plano Starter -->
+            <div class="service-card">
+                <div class="service-icon">🌱</div>
+                <h3>Plano Starter</h3>
+                <div class="price">R$ 18,32<span style="font-size: 1rem; font-weight: 400;">/mês</span></div>
+                <p class="price-detail">+ R$ 150,00 desenvolvimento inicial<br>Ideal para começar sua presença online</p>
                 <ul class="features-list">
-                    <li><span class="check-icon">✓</span>Desenvolvimento básico</li>
-                    <li><span class="check-icon">✓</span>Estrutura simples</li>
-                    <li><span class="check-icon">✗</span>Sem suporte</li>
-                    <li><span class="check-icon">✗</span>Sem hospedagem</li>
+                    <li>Site responsivo básico</li>
+                    <li>Design moderno e limpo</li>
+                    <li>Otimização para mobile</li>
+                    <li>Hospedagem inclusa</li>
+                    <li>Suporte por email</li>
                 </ul>
-                <a href="https://w.app/hicagq" class="cta-button secondary">Escolher Plano</a>
+                <a href="#contact" class="btn btn-primary" style="width: 100%;">Começar Agora</a>
             </div>
 
-            <!-- Plano Básico -->
-            <div class="pricing-card popular">
-                <div class="discount-badge">POPULAR</div>
-                <div class="plan-name">Básico</div>
-                <div class="plan-description">Tudo que você precisa para começar</div>
-                <div class="price-container">
-                    <div class="price">R$ 134,99<span class="price-period">/único</span></div>
-                    <div class="monthly-price">R$ 18,32 por mês</div>
-                </div>
+            <!-- Plano Professional -->
+            <div class="service-card">
+                <div class="service-icon">🚀</div>
+                <h3>Plano Professional</h3>
+                <div class="price">R$ 46,32<span style="font-size: 1rem; font-weight: 400;">/mês</span></div>
+                <p class="price-detail">+ R$ 320,00 desenvolvimento inicial<br>Para negócios que querem crescer</p>
                 <ul class="features-list">
-                    <li><span class="check-icon">✓</span>Desenvolvimento completo</li>
-                    <li><span class="check-icon">✓</span>Hospedagem incluída</li>
-                    <li><span class="check-icon">✓</span>Domínio grátis</li>
-                    <li><span class="check-icon">✓</span>Suporte por 1 semana</li>
+                    <li>Tudo do Plano Starter</li>
+                    <li>Design personalizado avançado</li>
+                    <li>Animações e interatividade</li>
+                    <li>SEO otimizado</li>
+                    <li>Integração com redes sociais (botões, feed, compartilhamento)</li>
+                    <li>Formulários de contato</li>
+                    <li>Suporte prioritário</li>
                 </ul>
-                <a href="https://w.app/sldc02" class="cta-button primary">Escolher Plano</a>
-            </div>
-
-            <!-- Plano Premium -->
-            <div class="pricing-card">
-                <div class="discount-badge">RECOMENDADO</div>
-                <div class="plan-name">Premium</div>
-                <div class="plan-description">Mais ferramentas e recursos para o crescimento</div>
-                <div class="price-container">
-                    <div class="price">R$ 179,99<span class="price-period">/único</span></div>
-                    <div class="monthly-price">R$ 18,32 por mês</div>
-                </div>
-                <ul class="features-list">
-                    <li><span class="check-icon">✓</span>Tudo do plano Básico</li>
-                    <li><span class="check-icon">✓</span>Desenvolvimento profissional</li>
-                    <li><span class="check-icon">✓</span>Design mais flexível</li>
-                    <li><span class="check-icon">✓</span>Suporte por 1 mês</li>
-                </ul>
-                <a href="https://w.app/zxjuck" class="cta-button primary">Escolher Plano</a>
+                <a href="#contact" class="btn btn-primary" style="width: 100%;">Começar Agora</a>
             </div>
 
             <!-- Plano Developer -->
-            <div class="pricing-card">
-                <div class="plan-name">Developer</div>
-                <div class="plan-description">Resolve desafios complexos para seu negócio</div>
-                <div class="price-container">
-                    <div class="price">R$ 265,99<span class="price-period">/único</span></div>
-                    <div class="monthly-price">R$ 46,32 por mês</div>
-                </div>
+            <div class="service-card">
+                <div class="service-icon">💎</div>
+                <h3>Plano Developer</h3>
+                <div class="price">Sob Consulta</div>
+                <p class="price-detail">Soluções sob medida para empresas</p>
                 <ul class="features-list">
-                    <li><span class="check-icon">✓</span>Tudo dos planos anteriores</li>
-                    <li><span class="check-icon">✓</span>Desenvolvimento profissional</li>
-                    <li><span class="check-icon">✓</span>SEO otimizado</li>
-                    <li><span class="check-icon">✓</span>Suporte ilimitado</li>
+                    <li>Tudo dos planos anteriores</li>
+                    <li>Aplicações web complexas</li>
+                    <li>Sistemas personalizados</li>
+                    <li>Backend e banco de dados</li>
+                    <li>API e integrações avançadas</li>
+                    <li>Manutenção contínua</li>
+                    <li>Suporte 24/7</li>
                 </ul>
-                <a href="https://w.app/hbyork" class="cta-button primary">Escolher Plano</a>
+                <a href="#contact" class="btn btn-primary" style="width: 100%;">Falar com Especialista</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="fade-in">
+        <h2 class="section-title">Nossas Soluções</h2>
+        <p class="section-subtitle">Desenvolvemos sites sob medida para cada tipo de negócio</p>
+        <div class="solutions-grid">
+            <div class="solution-item">
+                <div class="solution-content">
+                    <h3>🏢 Sites Comerciais</h3>
+                    <p>Sites institucionais e corporativos que elevam a presença digital da sua empresa. Desenvolvemos páginas profissionais com design moderno, apresentação clara dos seus serviços, depoimentos de clientes, galeria de produtos e formulários de contato. Perfeito para empresas, consultórios, escritórios, lojas físicas e prestadores de serviços que desejam conquistar novos clientes online.</p>
+                </div>
+            </div>
+
+            <div class="solution-item">
+                <div class="solution-content">
+                    <h3>✨ Sites Interativos</h3>
+                    <p>Experiências digitais envolventes que vão além do tradicional. Criamos sites com animações sofisticadas, elementos 3D, quizzes personalizados, calculadoras interativas, jogos educativos, catálogos dinâmicos e muito mais. Ideal para marcas que querem impressionar, projetos educacionais, campanhas de marketing e empresas que buscam engajamento diferenciado com seu público.</p>
+                </div>
+            </div>
+
+            <div class="solution-item">
+                <div class="solution-content">
+                    <h3>🎨 Sites Personalizados</h3>
+                    <p>Projetos exclusivos desenvolvidos exatamente como você imaginou. Trabalhamos com design totalmente customizado, funcionalidades específicas para seu negócio, integrações com sistemas externos, áreas restritas, painéis administrativos e recursos avançados. Desde landing pages de alta conversão até plataformas complexas - transformamos sua visão em realidade digital com tecnologia de ponta.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="footer">
-        <div id="backgroundfooter">
-            <footer>
-                <span id="footertext">NATAN BORGES PODE TE ENTREGAR O MELHOR SITE!!</span>
-            </footer>
+    <!-- Contact Section -->
+    <section id="contact" class="contact fade-in">
+        <h2 class="section-title">Vamos Conversar?</h2>
+        <p class="section-subtitle">Entre em contato e transforme sua ideia em realidade</p>
+        <div class="contact-methods">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                </div>
+                <h3>WhatsApp</h3>
+                <p>Resposta rápida e atendimento personalizado</p>
+                <a href="https://wa.me/5521992826074?text=Olá! Gostaria de saber mais sobre os serviços da NATANDEV" target="_blank" class="btn btn-primary">Chamar no WhatsApp</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+                    </svg>
+                </div>
+                <h3>Instagram</h3>
+                <p>Acompanhe meu trabalho</p>
+                <a href="https://instagram.com/nborges.ofc" target="_blank" class="btn btn-primary">Seguir no Instagram</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                    </svg>
+                </div>
+                <h3>LinkedIn</h3>
+                <p>Conecte-se profissionalmente</p>
+                <a href="https://www.linkedin.com/in/natan-borges-b3a3b5382/" target="_blank" class="btn btn-primary">Conectar no LinkedIn</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </div>
+                <h3>Facebook</h3>
+                <p>Curta nossa página</p>
+                <a href="https://www.facebook.com/profile.php?id=100076973940954" target="_blank" class="btn btn-primary">Curtir no Facebook</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                    </svg>
+                </div>
+                <h3>GitHub</h3>
+                <p>Veja meus projetos</p>
+                <a href="https://github.com/natsongamesoficial551" target="_blank" class="btn btn-primary">Visitar GitHub</a>
+            </div>
+
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <svg viewBox="0 0 24 24" width="48" height="48" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <h3>Portfólio</h3>
+                <p>Confira todos os meus trabalhos</p>
+                <a href="https://natandev02.netlify.app" target="_blank" class="btn btn-primary">Ver Portfólio</a>
+            </div>
         </div>
+        <p style="margin-top: 3rem; opacity: 0.8;">📍 Rio de Janeiro, Brasil | Atendimento para todo o país</p>
     </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 NATANDEV - Serviços Web. Todos os direitos reservados.</p>
+        <p style="margin-top: 1rem;">Desenvolvido com 💙 por Natan Borges</p>
+    </footer>
+
+    <script>
+        // ==================== LOADING SCREEN ====================
+        (function() {
+            'use strict';
+            
+            const loadingScreen = document.getElementById('loadingScreen');
+            const loadingPercentage = document.getElementById('loadingPercentage');
+            const loadingBar = document.querySelector('.loading-bar');
+            
+            let intervalId = null;
+            let timeoutId = null;
+            let isLoadingComplete = false;
+            
+            function hideLoading() {
+                if (isLoadingComplete) return;
+                isLoadingComplete = true;
+                
+                if (intervalId) clearInterval(intervalId);
+                if (timeoutId) clearTimeout(timeoutId);
+                
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.visibility = 'hidden';
+                document.body.style.overflow = 'auto';
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }
+            
+            function startLoadingAnimation() {
+                let currentPercentage = 0;
+                loadingPercentage.textContent = '0%';
+                loadingBar.style.width = '0%';
+                
+                document.body.style.overflow = 'hidden';
+                
+                loadingScreen.style.display = 'flex';
+                loadingScreen.style.opacity = '1';
+                loadingScreen.style.visibility = 'visible';
+                
+                setTimeout(() => {
+                    loadingBar.classList.add('animate');
+                }, 50);
+                
+                intervalId = setInterval(() => {
+                    currentPercentage++;
+                    loadingPercentage.textContent = currentPercentage + '%';
+                    
+                    if (currentPercentage >= 100) {
+                        clearInterval(intervalId);
+                        loadingPercentage.textContent = '100%';
+                        
+                        timeoutId = setTimeout(() => {
+                            hideLoading();
+                        }, 500);
+                    }
+                }, 120);
+                
+                setTimeout(() => {
+                    if (!isLoadingComplete) {
+                        console.log('Failsafe ativado: forçando fim do loading');
+                        hideLoading();
+                    }
+                }, 13000);
+            }
+            
+            startLoadingAnimation();
+            
+        })();
+        
+        // ==================== NAVBAR ====================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ==================== SCROLL ANIMATIONS ====================
+        const observerOptions = {
+            threshold: [0, 0.1, 0.5],
+            rootMargin: '100px 0px 100px 0px'
+        };
+
+        let lastScrollY = window.scrollY;
+
+        const observer = new IntersectionObserver((entries) => {
+            const currentScrollY = window.scrollY;
+            const scrollingDown = currentScrollY > lastScrollY;
+            
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    entry.target.classList.remove('hidden');
+                } else {
+                    if (entry.boundingClientRect.top < 0 && !scrollingDown) {
+                        entry.target.classList.remove('visible');
+                        entry.target.classList.add('hidden');
+                    } else if (entry.boundingClientRect.top > window.innerHeight && scrollingDown) {
+                        entry.target.classList.remove('visible');
+                        entry.target.classList.add('hidden');
+                    } else {
+                        entry.target.classList.remove('visible');
+                        entry.target.classList.add('hidden');
+                    }
+                }
+            });
+            
+            lastScrollY = currentScrollY;
+        }, observerOptions);
+
+        window.addEventListener('scroll', () => {
+            lastScrollY = window.scrollY;
+        }, { passive: true });
+
+        document.querySelectorAll('.fade-in, .slide-left, .slide-right, .about-card, .service-card, .solution-item, .contact-card').forEach(el => observer.observe(el));
+
+        // ==================== CARD INTERACTIONS ====================
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        const solutionItems = document.querySelectorAll('.solution-item');
+        solutionItems.forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+    </script>
 </body>
 </html>
