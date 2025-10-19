@@ -1479,14 +1479,14 @@
             <div class="service-card">
                 <div class="service-icon">🌱</div>
                 <h3>Plano Starter</h3>
-                <div class="price">R$ 18,32<span style="font-size: 1rem; font-weight: 400;">/mês</span></div>
-                <p class="price-detail">+ R$ 150,00 desenvolvimento inicial<br>Ideal para começar sua presença online</p>
+                <div class="price">R$ 33,33<span style="font-size: 1rem; font-weight: 400;">/mês</span></div>
+                <p class="price-detail">+ R$ 350,00 desenvolvimento inicial<br>Ideal para começar sua presença online</p>
                 <ul class="features-list">
                     <li>Site responsivo básico</li>
                     <li>Design moderno e limpo</li>
                     <li>Otimização para mobile</li>
-                    <li>Hospedagem inclusa</li>
-                    <li>Suporte por email</li>
+                    <li>Hospedagem Intermediária</li>
+                    <li>Suporte por whatsapp/email</li>
                 </ul>
                 <a href="#contact" class="btn btn-primary" style="width: 100%;">Começar Agora</a>
             </div>
@@ -1495,36 +1495,19 @@
             <div class="service-card">
                 <div class="service-icon">🚀</div>
                 <h3>Plano Professional</h3>
-                <div class="price">R$ 46,32<span style="font-size: 1rem; font-weight: 400;">/mês</span></div>
-                <p class="price-detail">+ R$ 320,00 desenvolvimento inicial<br>Para negócios que querem crescer</p>
+                <div class="price">R$ 80,83<span style="font-size: 1rem; font-weight: 400;">/mês</span></div>
+                <p class="price-detail">+ R$ 530,00 desenvolvimento inicial<br>Para negócios que querem crescer</p>
                 <ul class="features-list">
-                    <li>Tudo do Plano Starter</li>
                     <li>Design personalizado avançado</li>
                     <li>Animações e interatividade</li>
                     <li>SEO otimizado</li>
-                    <li>Integração com redes sociais (botões, feed, compartilhamento)</li>
+                    <li>Integração de APIs</li>
+                    <li>Domínio personalizado</li>
                     <li>Formulários de contato</li>
                     <li>Suporte prioritário</li>
+                    <li>IA Intermediária(Opcional)</li>
                 </ul>
                 <a href="#contact" class="btn btn-primary" style="width: 100%;">Começar Agora</a>
-            </div>
-
-            <!-- Plano Developer -->
-            <div class="service-card">
-                <div class="service-icon">💎</div>
-                <h3>Plano Developer</h3>
-                <div class="price">Sob Consulta</div>
-                <p class="price-detail">Soluções sob medida para empresas</p>
-                <ul class="features-list">
-                    <li>Tudo dos planos anteriores</li>
-                    <li>Aplicações web complexas</li>
-                    <li>Sistemas personalizados</li>
-                    <li>Backend e banco de dados</li>
-                    <li>API e integrações avançadas</li>
-                    <li>Manutenção contínua</li>
-                    <li>Suporte 24/7</li>
-                </ul>
-                <a href="#contact" class="btn btn-primary" style="width: 100%;">Falar com Especialista</a>
             </div>
 
         </div>
@@ -1641,72 +1624,75 @@
     <script>
         // ==================== LOADING SCREEN ====================
         (function() {
-            'use strict';
+    'use strict';
+    
+    const loadingScreen = document.getElementById('loadingScreen');
+    const loadingPercentage = document.getElementById('loadingPercentage');
+    const loadingBar = document.querySelector('.loading-bar');
+    
+    let intervalId = null;
+    let timeoutId = null;
+    let isLoadingComplete = false;
+    
+    function hideLoading() {
+        if (isLoadingComplete) return;
+        isLoadingComplete = true;
+        
+        if (intervalId) clearInterval(intervalId);
+        if (timeoutId) clearTimeout(timeoutId);
+        
+        loadingScreen.style.opacity = '0';
+        loadingScreen.style.visibility = 'hidden';
+        document.body.style.overflow = 'auto';
+        
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 1000);
+    }
+    
+    function startLoadingAnimation() {
+        let currentPercentage = 0;
+        loadingPercentage.textContent = '0%';
+        loadingBar.style.width = '0%';
+        
+        document.body.style.overflow = 'hidden';
+        
+        loadingScreen.style.display = 'flex';
+        loadingScreen.style.opacity = '1';
+        loadingScreen.style.visibility = 'visible';
+        
+        setTimeout(() => {
+            loadingBar.classList.add('animate');
+        }, 50);
+        
+        // Alterado de 120ms para 40ms para durar 4 segundos
+        intervalId = setInterval(() => {
+            currentPercentage++;
+            loadingPercentage.textContent = currentPercentage + '%';
+            loadingBar.style.width = currentPercentage + '%';
             
-            const loadingScreen = document.getElementById('loadingScreen');
-            const loadingPercentage = document.getElementById('loadingPercentage');
-            const loadingBar = document.querySelector('.loading-bar');
-            
-            let intervalId = null;
-            let timeoutId = null;
-            let isLoadingComplete = false;
-            
-            function hideLoading() {
-                if (isLoadingComplete) return;
-                isLoadingComplete = true;
+            if (currentPercentage >= 100) {
+                clearInterval(intervalId);
+                loadingPercentage.textContent = '100%';
                 
-                if (intervalId) clearInterval(intervalId);
-                if (timeoutId) clearTimeout(timeoutId);
-                
-                loadingScreen.style.opacity = '0';
-                loadingScreen.style.visibility = 'hidden';
-                document.body.style.overflow = 'auto';
-                
-                setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 1000);
+                timeoutId = setTimeout(() => {
+                    hideLoading();
+                }, 500); // pode manter 500ms de delay para sumir suavemente
             }
-            
-            function startLoadingAnimation() {
-                let currentPercentage = 0;
-                loadingPercentage.textContent = '0%';
-                loadingBar.style.width = '0%';
-                
-                document.body.style.overflow = 'hidden';
-                
-                loadingScreen.style.display = 'flex';
-                loadingScreen.style.opacity = '1';
-                loadingScreen.style.visibility = 'visible';
-                
-                setTimeout(() => {
-                    loadingBar.classList.add('animate');
-                }, 50);
-                
-                intervalId = setInterval(() => {
-                    currentPercentage++;
-                    loadingPercentage.textContent = currentPercentage + '%';
-                    
-                    if (currentPercentage >= 100) {
-                        clearInterval(intervalId);
-                        loadingPercentage.textContent = '100%';
-                        
-                        timeoutId = setTimeout(() => {
-                            hideLoading();
-                        }, 500);
-                    }
-                }, 120);
-                
-                setTimeout(() => {
-                    if (!isLoadingComplete) {
-                        console.log('Failsafe ativado: forçando fim do loading');
-                        hideLoading();
-                    }
-                }, 13000);
+        }, 40);
+        
+        // Failsafe, pode reduzir se quiser também
+        setTimeout(() => {
+            if (!isLoadingComplete) {
+                console.log('Failsafe ativado: forçando fim do loading');
+                hideLoading();
             }
-            
-            startLoadingAnimation();
-            
-        })();
+        }, 5000); // 5 segundos é suficiente
+    }
+    
+    startLoadingAnimation();
+})();
+
         
         // ==================== NAVBAR ====================
         const navbar = document.getElementById('navbar');
