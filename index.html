@@ -1565,6 +1565,7 @@
                 <li><a href="#about">Sobre</a></li>
                 <li><a href="#services">Serviços</a></li>
                 <li><a href="#solutions">Soluções</a></li>
+                <li><a href="chat.html" class="active">NatanAI</a></li>
                 <li><a href="#contact">Contato</a></li>
             </ul>
         </div>
@@ -1756,7 +1757,7 @@
 
     <script>
         // ==================== LOADING SCREEN ====================
-        (function() {
+(function() {
     'use strict';
     
     const loadingScreen = document.getElementById('loadingScreen');
@@ -1766,6 +1767,9 @@
     let intervalId = null;
     let timeoutId = null;
     let isLoadingComplete = false;
+    
+    // NOVA VERIFICAÇÃO: Checa se já mostrou loading nesta sessão
+    const hasSeenLoading = sessionStorage.getItem('natandev_loading_shown');
     
     function hideLoading() {
         if (isLoadingComplete) return;
@@ -1777,6 +1781,9 @@
         loadingScreen.style.opacity = '0';
         loadingScreen.style.visibility = 'hidden';
         document.body.style.overflow = 'auto';
+        
+        // MARCA que o loading já foi mostrado nesta sessão
+        sessionStorage.setItem('natandev_loading_shown', 'true');
         
         setTimeout(() => {
             loadingScreen.style.display = 'none';
@@ -1798,7 +1805,6 @@
             loadingBar.classList.add('animate');
         }, 50);
         
-        // Alterado de 120ms para 40ms para durar 4 segundos
         intervalId = setInterval(() => {
             currentPercentage++;
             loadingPercentage.textContent = currentPercentage + '%';
@@ -1810,20 +1816,26 @@
                 
                 timeoutId = setTimeout(() => {
                     hideLoading();
-                }, 500); // pode manter 500ms de delay para sumir suavemente
+                }, 500);
             }
         }, 40);
         
-        // Failsafe, pode reduzir se quiser também
         setTimeout(() => {
             if (!isLoadingComplete) {
                 console.log('Failsafe ativado: forçando fim do loading');
                 hideLoading();
             }
-        }, 5000); // 5 segundos é suficiente
+        }, 5000);
     }
     
-    startLoadingAnimation();
+    // SE JÁ VIU O LOADING NESTA SESSÃO: pula direto
+    if (hasSeenLoading) {
+        loadingScreen.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    } else {
+        // SE É A PRIMEIRA VEZ: mostra o loading
+        startLoadingAnimation();
+    }
 })();
 
         
