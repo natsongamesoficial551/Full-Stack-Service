@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - NatanDEV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1E40AF;
+            --secondary-blue: #3B82F6;
+            --bg-main: #F9FAFB;
+            --bg-surface: #FFFFFF;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --gold-accent: #FACC15;
+        }
+
+        body.dark-mode {
+            --primary-blue: #D4AF37;
+            --secondary-blue: #C9A227;
+            --bg-main: #0F172A;
+            --bg-surface: #1E293B;
+            --text-primary: #F9FAFB;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --error: #F87171;
+            --warning: #E0C15A;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+        }
+
+        body:not(.dark-mode) {
+            background: linear-gradient(135deg, #F9FAFB 0%, #E0E7FF 50%, #F9FAFB 100%);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-surface);
+            border-right: 2px solid var(--border-color);
+            z-index: 1000;
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 2px solid var(--border-color);
+    transition: border-color 0.3s ease;
+}
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .logo-img {
+            color: #0F172A;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(30, 64, 175, 0.05);
+            color: var(--primary-blue);
+        }
+
+        body.dark-mode .nav-link:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        body.dark-mode .nav-link.active {
+            color: #0F172A;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .user-section {
+            padding: 1.5rem;
+            background: var(--bg-surface);
+            border-top: 2px solid var(--border-color);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.05), rgba(59, 130, 246, 0.05));
+            border-radius: 12px;
+            transition: background 0.3s ease;
+        }
+
+        body.dark-mode .user-info {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(201, 162, 39, 0.1));
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .user-avatar {
+            color: #0F172A;
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-details h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+
+        .user-details p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--warning), #EF4444);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        body.dark-mode .admin-badge {
+            background: linear-gradient(135deg, #E0C15A, #D4AF37);
+            color: #0F172A;
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .btn-logout:hover {
+            background: #DC2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 2.5rem;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .page-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            transition: color 0.3s ease;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(30, 64, 175, 0.15);
+        }
+
+        body.dark-mode .card:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.1), rgba(59, 130, 246, 0.1));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .card-icon {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(201, 162, 39, 0.1));
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .card-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            transition: color 0.3s ease;
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        /* Plan Card */
+        .plan-card {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+        }
+
+        body.dark-mode .plan-card {
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .plan-card::before {
+            display: none;
+        }
+
+        .plan-card .card-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .plan-card .card-title,
+        .plan-card .card-value,
+        .plan-card .card-description {
+            color: white;
+        }
+
+        body.dark-mode .plan-card .card-title,
+        body.dark-mode .plan-card .card-value,
+        body.dark-mode .plan-card .card-description {
+            color: #0F172A;
+        }
+
+        .plan-badge {
+            display: inline-block;
+            background: var(--gold-accent);
+            color: var(--text-primary);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 1rem;
+        }
+
+        body.dark-mode .plan-badge {
+            background: #E0C15A;
+            color: #0F172A;
+        }
+
+        .plan-badge.suspended {
+            background: var(--error);
+            color: white;
+        }
+
+        .plan-badge.expiring {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* Warning Card - Conta Suspensa */
+        .warning-card {
+            background: linear-gradient(135deg, var(--error), #DC2626);
+            border: none;
+        }
+
+        .warning-card::before {
+            background: linear-gradient(90deg, #DC2626, #B91C1C);
+        }
+
+        /* CONTINUA NA PARTE 2... */
+    </style>
+</head>
+<body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <span style="font-size: 1.5rem;">☰</span>
+    </button>
+
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <div class="logo-img">ND</div>
+                <span class="logo-text">NatanDEV</span>
+            </a>
+        </div>
+
+        <div class="sidebar-content">
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link active">
+                            <span class="nav-icon">🏠</span>
+                            <span>Início</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="websites.html" class="nav-link">
+                            <span class="nav-icon">🌐</span>
+                            <span>WebSites</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="suporte.html" class="nav-link">
+                            <span class="nav-icon">💬</span>
+                            <span>Suporte</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="natanai.html" class="nav-link">
+                            <span class="nav-icon">🤖</span>
+                            <span>NatanAI</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            <span>Configurações</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">ND</div>
+                <div class="user-details">
+                    <h4 id="userName">Carregando...</h4>
+                    <p id="userPlan">Verificando...</p>
+                </div>
+            </div>
+            <button class="btn-logout" id="logoutBtn">🚪 Sair</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Bem-vindo ao Dashboard! 👋</h1>
+            <p>Gerencie seus projetos e acompanhe o desempenho da sua plataforma</p>
+        </div>
+
+        <!-- Alerta de Suspensão -->
+        <div class="suspension-alert" id="suspensionAlert">
+            <h3>⚠️ Conta Suspensa</h3>
+            <p>Sua conta foi suspensa devido ao vencimento do período de 1 ano. Entre em contato com o suporte para reativar sua conta e continuar usando nossos serviços.</p>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card" id="timeCard">
+                <div class="card-icon">⏱️</div>
+                <p class="card-title">Tempo de Uso</p>
+                <h3 class="card-value" id="timeValue">Calculando...</h3>
+                <p class="card-description" id="timeDescription">Verificando...</p>
+            </div>
+
+            <div class="card plan-card">
+                <div class="card-icon">💎</div>
+                <p class="card-title">Seu Plano</p>
+                <h3 class="card-value" id="planName">Carregando...</h3>
+                <p class="card-description" id="planPrice">Verificando...</p>
+                <span class="plan-badge" id="planStatus">Ativo</span>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">🌐</div>
+                <p class="card-title">Sites Criados</p>
+                <h3 class="card-value" id="websitesCount">0</h3>
+                <p class="card-description">Total de projetos ativos</p>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <p class="card-title">Visitas ao Dashboard</p>
+                <h3 class="card-value" id="visitsCount">0</h3>
+                <p class="card-description" id="visitsDescription">Total de acessos</p>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>Informações do Plano</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h3>💳 Pagamento Mensal</h3>
+                    <p><strong>Valor:</strong> <span id="infoPrice">R$ 79,99/mês</span></p>
+                    <p><strong>Próximo vencimento:</strong> <span id="nextDueDate">Calculando...</span></p>
+                    <p><strong>Método:</strong> Cartão de crédito</p>
+                </div>
+
+                <div class="info-item">
+                    <h3>📦 Recursos Inclusos</h3>
+                    <p id="feature1">✓ Design personalizado avançado</p>
+                    <p id="feature2">✓ SEO otimizado</p>
+                    <p id="feature3">✓ Suporte prioritário 24/7</p>
+                    <p id="feature4">✓ IA Inclusa (opcional)</p>
+                </div>
+
+                <div class="info-item">
+                    <h3>🔒 Segurança</h3>
+                    <p>✓ SSL Certificado ativo</p>
+                    <p>✓ Backup automático diário</p>
+                    <p>✓ Proteção DDoS</p>
+                </div>
+
+                <div class="info-item">
+                    <h3>📈 Estatísticas</h3>
+                    <p><strong>Uptime:</strong> 99.9%</p>
+                    <p><strong>Velocidade:</strong> 1.2s</p>
+                    <p><strong>Performance:</strong> Excelente</p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="#" class="btn btn-primary">💳 Gerenciar Pagamento</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
+        const ADMIN_EMAIL = 'natan@natandev.com';
+
+        let supabase = null;
+        let currentUser = null;
+        
+        try {
+            if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                console.log('✅ Supabase inicializado');
+            }
+        } catch (error) {
+            console.error('❌ Erro ao inicializar Supabase:', error);
+        }
+
+        const DEFAULT_SETTINGS = {
+            darkMode: false,
+            typingSound: false,
+            sendSound: true,
+            deleteSound: false,
+            clickSound: true,
+            desktopNotif: true,
+            dataSaver: false
+        };
+
+        // ============================================
+        // 🎨 CARREGA E APLICA TEMA
+        // ============================================
+        async function loadAndApplyTheme() {
+            if (!supabase || !currentUser) {
+                const savedSettings = localStorage.getItem(`natandev_settings_${currentUser?.id || 'guest'}`);
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    applyDarkMode(settings.darkMode);
+                }
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('user_settings')
+                    .select('settings')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (!error && data?.settings) {
+                    applyDarkMode(data.settings.darkMode);
+                    console.log('✅ Tema aplicado:', data.settings.darkMode ? 'Escuro' : 'Claro');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar tema:', error);
+            }
+        }
+
+        function applyDarkMode(enabled) {
+            if (enabled) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // ============================================
+        // 🔐 VERIFICA AUTENTICAÇÃO E ADMIN
+        // ============================================
+        async function checkAuth() {
+            if (!supabase) {
+                console.error('⚠️ Supabase não configurado');
+                window.location.href = 'login.html';
+                return null;
+            }
+
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) throw error;
+                
+                if (!session || !session.user) {
+                    console.log('❌ Nenhuma sessão ativa');
+                    window.location.href = 'login.html';
+                    return null;
+                }
+
+                currentUser = session.user;
+                console.log('✅ Usuário autenticado:', currentUser.email);
+                
+                const isAdmin = currentUser.email === ADMIN_EMAIL;
+                localStorage.setItem('natandev_is_admin', isAdmin.toString());
+                
+                console.log('👑 Status Admin:', isAdmin);
+                
+                return {
+                    email: currentUser.email,
+                    id: currentUser.id,
+                    is_admin: isAdmin
+                };
+                
+            } catch (error) {
+                console.error('Erro ao verificar autenticação:', error);
+                window.location.href = 'login.html';
+                return null;
+            }
+        }
+
+        // ============================================
+        // 📊 REGISTRA VISITA AO DASHBOARD
+        // ============================================
+        async function registerVisit() {
+            if (!supabase || !currentUser) return;
+
+            try {
+                // Busca visitas atuais
+                const { data: existingData, error: fetchError } = await supabase
+                    .from('user_accounts')
+                    .select('dashboard_visits, last_visit_at')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (fetchError && fetchError.code !== 'PGRST116') {
+                    console.error('Erro ao buscar visitas:', fetchError);
+                    return;
+                }
+
+                const currentVisits = existingData?.dashboard_visits || 0;
+                const newVisits = currentVisits + 1;
+
+                // Atualiza contador de visitas
+                const { error: updateError } = await supabase
+                    .from('user_accounts')
+                    .upsert({
+                        user_id: currentUser.id,
+                        user_email: currentUser.email,
+                        dashboard_visits: newVisits,
+                        last_visit_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+
+                if (updateError) throw updateError;
+
+                // Exibe no dashboard
+                document.getElementById('visitsCount').textContent = newVisits.toLocaleString('pt-BR');
+                
+                const lastVisit = existingData?.last_visit_at;
+                if (lastVisit) {
+                    const lastVisitDate = new Date(lastVisit);
+                    const now = new Date();
+                    const diffMs = now - lastVisitDate;
+                    const diffMins = Math.floor(diffMs / (1000 * 60));
+                    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    
+                    let lastVisitText = 'Última visita há ';
+                    if (diffMins < 60) {
+                        lastVisitText += `${diffMins} minuto${diffMins !== 1 ? 's' : ''}`;
+                    } else if (diffHours < 24) {
+                        lastVisitText += `${diffHours} hora${diffHours !== 1 ? 's' : ''}`;
+                    } else {
+                        lastVisitText += `${diffDays} dia${diffDays !== 1 ? 's' : ''}`;
+                    }
+                    
+                    document.getElementById('visitsDescription').textContent = lastVisitText;
+                }
+
+                console.log('✅ Visita registrada:', newVisits);
+
+            } catch (error) {
+                console.error('❌ Erro ao registrar visita:', error);
+            }
+        }
+
+        // ============================================
+        // 🌐 CONTA SITES CADASTRADOS DO USUÁRIO
+        // ============================================
+        async function countUserWebsites() {
+            if (!supabase || !currentUser) return;
+
+            try {
+                const { data: sites, error } = await supabase
+                    .from('user_websites')
+                    .select('id', { count: 'exact' })
+                    .eq('user_email', currentUser.email);
+
+                if (error) throw error;
+
+                const websiteCount = sites ? sites.length : 0;
+                document.getElementById('websitesCount').textContent = websiteCount;
+
+                console.log('✅ Sites contados:', websiteCount);
+
+            } catch (error) {
+                console.error('❌ Erro ao contar sites:', error);
+                document.getElementById('websitesCount').textContent = '0';
+            }
+        }
+
+        // CONTINUAÇÃO DA PARTE 2...
+
+        // ============================================
+        // ⏱️ REGISTRA PRIMEIRO LOGIN E CALCULA TEMPO
+        // ============================================
+        async function registerFirstLogin() {
+            if (!supabase || !currentUser) return null;
+
+            try {
+                const { data: existingData, error: fetchError } = await supabase
+                    .from('user_accounts')
+                    .select('first_login_at, account_expires_at, is_suspended')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (existingData && existingData.first_login_at) {
+                    console.log('✅ Primeiro login já registrado:', existingData.first_login_at);
+                    return existingData;
+                }
+
+                const now = new Date();
+                const expiryDate = new Date(now);
+                expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                expiryDate.setHours(23, 59, 59, 999);
+
+                const { data: insertData, error: insertError } = await supabase
+                    .from('user_accounts')
+                    .upsert({
+                        user_id: currentUser.id,
+                        user_email: currentUser.email,
+                        first_login_at: now.toISOString(),
+                        account_expires_at: expiryDate.toISOString(),
+                        is_suspended: false,
+                        created_at: now.toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    })
+                    .select()
+                    .single();
+
+                if (insertError) throw insertError;
+
+                console.log('✅ Primeiro login registrado!');
+                console.log('📅 Data de expiração:', expiryDate.toLocaleDateString('pt-BR'));
+                
+                return insertData;
+
+            } catch (error) {
+                console.error('❌ Erro ao registrar primeiro login:', error);
+                return null;
+            }
+        }
+
+        function calculateTimeUsed(firstLoginDate) {
+            const now = new Date();
+            const firstLogin = new Date(firstLoginDate);
+            
+            const diffMs = now - firstLogin;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffMonths = Math.floor(diffDays / 30);
+            const remainingDays = diffDays % 30;
+
+            if (diffDays < 30) {
+                return {
+                    value: `${diffDays} ${diffDays === 1 ? 'Dia' : 'Dias'}`,
+                    description: `Cliente desde ${firstLogin.toLocaleDateString('pt-BR')}`
+                };
+            } else if (diffMonths < 12) {
+                return {
+                    value: `${diffMonths} ${diffMonths === 1 ? 'Mês' : 'Meses'}`,
+                    description: remainingDays > 0 ? `e ${remainingDays} dias` : `Cliente desde ${firstLogin.toLocaleDateString('pt-BR')}`
+                };
+            } else {
+                const years = Math.floor(diffMonths / 12);
+                const months = diffMonths % 12;
+                return {
+                    value: `${years} ${years === 1 ? 'Ano' : 'Anos'}`,
+                    description: months > 0 ? `e ${months} ${months === 1 ? 'mês' : 'meses'}` : `Cliente desde ${firstLogin.toLocaleDateString('pt-BR')}`
+                };
+            }
+        }
+
+        function calculateTimeRemaining(expiryDate) {
+            const now = new Date();
+            const expiry = new Date(expiryDate);
+            
+            const diffMs = expiry - now;
+            
+            if (diffMs <= 0) {
+                return { expired: true, days: 0, months: 0 };
+            }
+
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffMonths = Math.floor(diffDays / 30);
+
+            return {
+                expired: false,
+                days: diffDays,
+                months: diffMonths,
+                expiryDate: expiry.toLocaleDateString('pt-BR')
+            };
+        }
+
+        async function checkAccountStatus() {
+            if (!supabase || !currentUser) return;
+
+            try {
+                const accountData = await registerFirstLogin();
+                
+                if (!accountData) {
+                    console.warn('⚠️ Não foi possível carregar dados da conta');
+                    return;
+                }
+
+                const { first_login_at, account_expires_at, is_suspended } = accountData;
+                const timeRemaining = calculateTimeRemaining(account_expires_at);
+
+                if (timeRemaining.expired && !is_suspended) {
+                    await supabase
+                        .from('user_accounts')
+                        .update({ is_suspended: true })
+                        .eq('user_id', currentUser.id);
+                    
+                    console.log('❌ Conta suspensa automaticamente');
+                }
+
+                if (is_suspended || timeRemaining.expired) {
+                    document.getElementById('suspensionAlert').classList.add('show');
+                    document.getElementById('planStatus').textContent = 'SUSPENSA';
+                    document.getElementById('planStatus').classList.add('suspended');
+                    
+                    const timeCard = document.getElementById('timeCard');
+                    timeCard.classList.add('warning-card');
+                    
+                    console.log('⚠️ CONTA SUSPENSA');
+                    return true;
+                }
+
+                const timeUsed = calculateTimeUsed(first_login_at);
+                document.getElementById('timeValue').textContent = timeUsed.value;
+                document.getElementById('timeDescription').textContent = timeUsed.description;
+                document.getElementById('nextDueDate').textContent = timeRemaining.expiryDate;
+
+                if (timeRemaining.days <= 30 && timeRemaining.days > 0) {
+                    document.getElementById('planStatus').textContent = `${timeRemaining.days} dias restantes`;
+                    document.getElementById('planStatus').classList.add('expiring');
+                    console.log(`⚠️ Conta expira em ${timeRemaining.days} dias`);
+                }
+
+                return false;
+
+            } catch (error) {
+                console.error('❌ Erro ao verificar status da conta:', error);
+                return false;
+            }
+        }
+
+        async function loadUserInfo() {
+            const userData = await checkAuth();
+            if (!userData) return;
+
+            const username = userData.email.split('@')[0];
+            document.getElementById('userName').textContent = username;
+            
+            const initials = username.substring(0, 2).toUpperCase();
+            document.getElementById('userAvatar').textContent = initials;
+
+            if (userData.is_admin) {
+                document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
+            } else {
+                document.getElementById('userPlan').textContent = '✨ Cliente';
+            }
+            
+            const isSuspended = await checkAccountStatus();
+            
+            if (!isSuspended) {
+                await loadUserPlan();
+            }
+            
+            // ✅ REGISTRA VISITA E CONTA SITES
+            await registerVisit();
+            await countUserWebsites();
+            
+            await loadAndApplyTheme();
+        }
+
+        async function loadUserPlan() {
+            if (!supabase || !currentUser) return;
+
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error) throw error;
+
+                const PLANS = {
+                    starter: {
+                        name: 'Starter',
+                        price: 'R$ 39,99/mês',
+                        icon: '✨'
+                    },
+                    professional: {
+                        name: 'Professional',
+                        price: 'R$ 79,99/mês',
+                        icon: '💎'
+                    }
+                };
+
+                const userPlan = user?.user_metadata?.plan || 'starter';
+                const planInfo = PLANS[userPlan] || PLANS.starter;
+
+                const planNameElement = document.getElementById('planName');
+                const planPriceElement = document.getElementById('planPrice');
+                const planCard = planNameElement.closest('.plan-card');
+                
+                if (planNameElement) {
+                    planNameElement.textContent = planInfo.name;
+                }
+
+                if (planPriceElement) {
+                    planPriceElement.textContent = planInfo.price;
+                }
+
+                const planIcon = planCard.querySelector('.card-icon');
+                if (planIcon) {
+                    planIcon.textContent = planInfo.icon;
+                }
+
+                updatePlanInfoSection(userPlan, planInfo);
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar plano:', error);
+            }
+        }
+
+        function updatePlanInfoSection(planKey, planInfo) {
+            const planFeatures = {
+                starter: {
+                    features: [
+                        '✓ Site responsivo básico',
+                        '✓ Design moderno e limpo',
+                        '✓ Otimização para mobile',
+                        '✓ SEO básico otimizado'
+                    ],
+                    payment: 'R$ 39,99/mês'
+                },
+                professional: {
+                    features: [
+                        '✓ Design personalizado avançado',
+                        '✓ SEO otimizado',
+                        '✓ Suporte prioritário 24/7',
+                        '✓ IA Inclusa (opcional)'
+                    ],
+                    payment: 'R$ 79,99/mês'
+                }
+            };
+
+            const currentPlan = planFeatures[planKey] || planFeatures.starter;
+
+            document.getElementById('infoPrice').textContent = currentPlan.payment;
+            document.getElementById('feature1').textContent = currentPlan.features[0];
+            document.getElementById('feature2').textContent = currentPlan.features[1];
+            document.getElementById('feature3').textContent = currentPlan.features[2];
+            document.getElementById('feature4').textContent = currentPlan.features[3] || '';
+        }
+
+        // LOGOUT
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            if (!confirm('Deseja realmente sair?')) return;
+
+            if (supabase) {
+                try {
+                    const { error } = await supabase.auth.signOut();
+                    if (error) throw error;
+                } catch (error) {
+                    console.error('Erro ao fazer logout:', error);
+                }
+            }
+            
+            localStorage.removeItem('natandev_is_admin');
+            if (currentUser) {
+                localStorage.removeItem(`natandev_settings_${currentUser.id}`);
+            }
+            
+            window.location.href = 'login.html';
+        });
+
+        // MENU MOBILE
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+
+        mobileOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+        });
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                    mobileOverlay.classList.remove('active');
+                }
+            });
+        });
+
+        // SINCRONIZAÇÃO DE TEMA
+        window.addEventListener('storage', function(e) {
+            if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
+                try {
+                    const settings = JSON.parse(e.newValue);
+                    applyDarkMode(settings.darkMode);
+                } catch (error) {
+                    console.error('Erro ao processar storage event:', error);
+                }
+            }
+        });
+
+        let lastSettingsCheck = null;
+        setInterval(async function() {
+            if (!currentUser) return;
+            
+            const settingsKey = `natandev_settings_${currentUser.id}`;
+            const currentSettings = localStorage.getItem(settingsKey);
+            
+            if (currentSettings !== lastSettingsCheck) {
+                lastSettingsCheck = currentSettings;
+                if (currentSettings) {
+                    try {
+                        const settings = JSON.parse(currentSettings);
+                        applyDarkMode(settings.darkMode);
+                    } catch (error) {
+                        console.error('Erro ao aplicar configurações:', error);
+                    }
+                }
+            }
+        }, 1000);
+
+        // INICIALIZAÇÃO
+        async function init() {
+            console.log('🚀 Inicializando Dashboard...');
+            await loadUserInfo();
+            console.log('✅ Dashboard carregado!');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+
+<!-- ============================================ -->
+<!-- CSS RESPONSIVO (ADICIONAR NO <style>) -->
+<!-- ============================================ -->
+<style>
+    /* Info Section */
+    .info-section {
+        background: var(--bg-surface);
+        border-radius: 20px;
+        border: 2px solid var(--border-color);
+        padding: 2.5rem;
+        margin-bottom: 2.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .info-section h2 {
+        font-family: 'Sora', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        line-height: 1.3;
+        transition: color 0.3s ease;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        padding: 1.5rem;
+        background: var(--bg-main);
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        transition: all 0.3s ease;
+    }
+
+    .info-item h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: color 0.3s ease;
+    }
+
+    .info-item p {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        font-size: 0.95rem;
+        margin-bottom: 0.3rem;
+        transition: color 0.3s ease;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        font-family: 'Sora', sans-serif;
+        letter-spacing: -0.01em;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+        color: white;
+        box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
+    }
+
+    body.dark-mode .btn-primary {
+        color: #0F172A;
+        box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+    }
+
+    .mobile-menu-toggle {
+        display: none;
+        position: fixed;
+        top: 1.5rem;
+        left: 1.5rem;
+        z-index: 1001;
+        background: var(--primary-blue);
+        color: white;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        backdrop-filter: blur(5px);
+    }
+
+    .suspension-alert {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+        border: 2px solid var(--error);
+        border-radius: 16px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        display: none;
+    }
+
+    .suspension-alert.show {
+        display: block;
+    }
+
+    .suspension-alert h3 {
+        color: var(--error);
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .suspension-alert p {
+        color: var(--text-primary);
+        line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .cards-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+            gap: 1.3rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .mobile-menu-toggle {
+            display: flex;
+        }
+
+        .sidebar {
+            transform: translateX(-100%);
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        .main-content {
+            margin-left: 0;
+            padding: 6rem 1.5rem 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+        }
+
+        .page-header p {
+            font-size: 1rem;
+        }
+
+        .cards-grid {
+            gap: 1.3rem;
+        }
+
+        .card {
+            padding: 1.8rem;
+        }
+
+        .card-icon {
+            width: 55px;
+            height: 55px;
+            font-size: 1.6rem;
+        }
+
+        .card-value {
+            font-size: 1.8rem;
+        }
+
+        .info-section {
+            padding: 2rem 1.5rem;
+        }
+
+        .info-section h2 {
+            font-size: 1.6rem;
+        }
+
+        .info-item {
+            padding: 1.3rem;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .mobile-menu-toggle {
+            top: 1rem;
+            left: 1rem;
+            width: 45px;
+            height: 45px;
+        }
+
+        .main-content {
+            padding: 5.5rem 1rem 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .card {
+            padding: 1.5rem;
+        }
+
+        .card-value {
+            font-size: 1.7rem;
+        }
+    }
+</style>
+</body>
+</html>

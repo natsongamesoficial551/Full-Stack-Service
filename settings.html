@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - NatanDEV</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #1E40AF;
+            --secondary-blue: #3B82F6;
+            --bg-main: #F9FAFB;
+            --bg-surface: #FFFFFF;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body.dark-mode {
+            --primary-blue: #D4AF37;
+            --secondary-blue: #C9A227;
+            --bg-main: #0F172A;
+            --bg-surface: #1E293B;
+            --text-primary: #F9FAFB;
+            --text-secondary: #94A3B8;
+            --border-color: #334155;
+            --success: #22C55E;
+            --error: #F87171;
+            --warning: #E0C15A;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+        }
+
+        body:not(.dark-mode) {
+            background: linear-gradient(135deg, #F9FAFB 0%, #E0E7FF 50%, #F9FAFB 100%);
+        }
+
+        .settings-container {
+            max-width: 900px;
+            margin: 0 auto;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.8rem;
+            margin: 0 auto 1.2rem;
+            font-family: 'Sora', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .logo-img {
+            color: #0F172A;
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .settings-card {
+            background: var(--bg-surface);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(30, 64, 175, 0.1);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .settings-card {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-bottom: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info {
+            flex: 1;
+        }
+
+        .setting-label {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .setting-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: var(--border-color);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::after {
+            left: 32px;
+        }
+
+        .alert {
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            display: none;
+            animation: slideDown 0.3s ease;
+            text-align: center;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+
+        body.dark-mode .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border: 2px solid var(--error);
+        }
+
+        body.dark-mode .alert-error {
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+            border: 2px solid var(--warning);
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--warning), #EF4444);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        body.dark-mode .admin-badge {
+            background: linear-gradient(135deg, #E0C15A, #D4AF37);
+            color: #0F172A;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        input[type="url"] {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            background: var(--bg-surface);
+        }
+
+        body.dark-mode input[type="email"],
+        body.dark-mode input[type="password"],
+        body.dark-mode input[type="text"],
+        body.dark-mode input[type="url"] {
+            background: #0F172A;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        body.dark-mode input:focus {
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+        }
+
+        input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Sora', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: -0.01em;
+            box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
+        }
+
+        body.dark-mode .btn {
+            color: #0F172A;
+            box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
+
+        body.dark-mode .btn:hover:not(:disabled) {
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #E0C15A, #D4AF37);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: var(--error);
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #DC2626;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .back-link a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+        }
+
+        .back-link a:hover {
+            color: var(--secondary-blue);
+        }
+
+        body.dark-mode .back-link a:hover {
+            color: var(--warning);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            background: var(--bg-surface);
+            cursor: pointer;
+        }
+
+        body.dark-mode select {
+            background: #0F172A;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+        }
+
+        body.dark-mode select:focus {
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+        }
+
+        .plan-details {
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .plan-details.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .plan-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .plan-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .plan-price small {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .plan-features {
+            list-style: none;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .plan-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .recommended-badge {
+            background: linear-gradient(135deg, var(--success), #10B981);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .account-details-card {
+            background: var(--bg-main);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .account-details-card.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        .account-detail-item {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .account-detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .account-detail-item strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .account-detail-item span {
+            color: var(--text-secondary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1.5rem;
+            }
+
+            .settings-card {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .setting-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            .settings-card {
+                padding: 1.5rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <div class="header">
+            <div class="logo-img">ND</div>
+            <h1>Configurações</h1>
+            <p class="subtitle">Personalize sua experiência</p>
+        </div>
+
+        <div id="alertBox" class="alert"></div>
+        <div id="loadingMsg" class="loading" style="display: none;">Carregando suas configurações...</div>
+
+        <!-- APARÊNCIA -->
+        <div class="settings-card">
+            <h2 class="section-title">🎨 Aparência</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Tema Escuro</div>
+                    <div class="setting-description">Ative o modo escuro com detalhes dourados</div>
+                </div>
+                <div class="toggle-switch" id="darkModeToggle"></div>
+            </div>
+        </div>
+
+        <!-- SONS -->
+        <div class="settings-card">
+            <h2 class="section-title">🔊 Sons e Notificações</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Som ao Digitar</div>
+                    <div class="setting-description">Reproduz um som suave ao digitar mensagens</div>
+                </div>
+                <div class="toggle-switch" id="typingSoundToggle"></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Som ao Enviar Mensagem</div>
+                    <div class="setting-description">Reproduz um som ao enviar mensagens</div>
+                </div>
+                <div class="toggle-switch active" id="sendSoundToggle"></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Som ao Apagar</div>
+                    <div class="setting-description">Reproduz um som ao apagar conteúdo</div>
+                </div>
+                <div class="toggle-switch" id="deleteSoundToggle"></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Som ao Clicar em Botões</div>
+                    <div class="setting-description">Feedback sonoro ao interagir com botões</div>
+                </div>
+                <div class="toggle-switch active" id="clickSoundToggle"></div>
+            </div>
+        </div>
+
+        <!-- PREFERÊNCIAS -->
+        <div class="settings-card">
+            <h2 class="section-title">⚙️ Preferências</h2>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Notificações Desktop</div>
+                    <div class="setting-description">Receba notificações mesmo com a aba minimizada</div>
+                </div>
+                <div class="toggle-switch active" id="desktopNotifToggle"></div>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <div class="setting-label">Economia de Dados</div>
+                    <div class="setting-description">Reduz o consumo de dados comprimindo imagens e vídeos</div>
+                </div>
+                <div class="toggle-switch" id="dataSaverToggle"></div>
+            </div>
+        </div>
+ 
+        <!-- SEÇÃO ADMIN - CRIAR CONTA -->
+        <div class="settings-card admin-section" id="adminSection">
+            <h2 class="section-title">
+                👑 Administração
+                <span class="admin-badge">ADMIN</span>
+            </h2>
+            
+            <div id="adminAlertBox" class="alert"></div>
+
+            <form id="createAccountForm">
+                <div class="form-group">
+                    <label for="newEmail">E-mail do Novo Usuário</label>
+                    <input type="email" id="newEmail" placeholder="usuario@exemplo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">Senha</label>
+                    <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="newName">Nome do Usuário (opcional)</label>
+                    <input type="text" id="newName" placeholder="Nome completo">
+                </div>
+
+                <div class="form-group">
+                    <label for="planSelect">Plano de Assinatura</label>
+                    <select id="planSelect" required>
+                        <option value="">Selecione um plano</option>
+                        <option value="starter">Starter - R$ 39,99/mês</option>
+                        <option value="professional">Professional - R$ 79,99/mês (Recomendado)</option>
+                    </select>
+                </div>
+
+                <div id="planDetails" class="plan-details"></div>
+
+                <button type="submit" class="btn" id="createAccountBtn">
+                    Cadastrar Nova Conta
+                </button>
+            </form>
+        </div>
+
+        <!-- SEÇÃO ADMIN - GERENCIAR CONTAS -->
+        <div class="settings-card admin-section" id="manageAccountsSection" style="display: none;">
+            <h2 class="section-title">
+                🔧 Gerenciar Contas
+                <span class="admin-badge">ADMIN</span>
+            </h2>
+            
+            <div id="manageAlertBox" class="alert"></div>
+
+            <form id="searchAccountForm">
+                <div class="form-group">
+                    <label for="searchEmail">Buscar Conta por E-mail</label>
+                    <input type="email" id="searchEmail" placeholder="email@exemplo.com" required>
+                </div>
+                <button type="submit" class="btn" id="searchAccountBtn">
+                    🔍 Buscar Conta
+                </button>
+            </form>
+
+            <div id="accountDetailsCard" class="account-details-card">
+                <div class="plan-title" id="accountEmail">📧 Email da Conta</div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <div class="account-detail-item">
+                        <strong>Status:</strong> <span id="accountStatus"></span>
+                    </div>
+                    <div class="account-detail-item">
+                        <strong>Plano:</strong> <span id="accountPlan"></span>
+                    </div>
+                    <div class="account-detail-item">
+                        <strong>Primeiro Login:</strong> <span id="accountFirstLogin"></span>
+                    </div>
+                    <div class="account-detail-item">
+                        <strong>Data de Expiração:</strong> <span id="accountExpiry"></span>
+                    </div>
+                    <div class="account-detail-item">
+                        <strong>Tempo de Uso:</strong> <span id="accountTimeUsed"></span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn btn-success" id="reactivateBtn" style="display: none;">
+                        ✅ Reativar Conta (+ 1 Ano)
+                    </button>
+                    <button class="btn btn-danger" id="suspendBtn" style="display: none;">
+                        🚫 Suspender Conta
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO ADMIN - ADICIONAR SITES -->
+        <div class="settings-card admin-section" id="addWebsiteSection" style="display: none;">
+            <h2 class="section-title">
+                🌐 Adicionar Site ao Cliente
+                <span class="admin-badge">ADMIN</span>
+            </h2>
+            
+            <div id="websiteAlertBox" class="alert"></div>
+
+            <form id="addWebsiteForm">
+                <div class="form-group">
+                    <label for="websiteUserEmail">E-mail do Cliente</label>
+                    <input type="email" id="websiteUserEmail" placeholder="cliente@exemplo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="websiteName">Nome do Site</label>
+                    <input type="text" id="websiteName" placeholder="Ex: Meu Portfólio Profissional" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="websiteUrl">URL do Site</label>
+                    <input type="url" id="websiteUrl" placeholder="https://seusite.com.br" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="websiteImage">URL da Imagem (Print do Site)</label>
+                    <input type="url" id="websiteImage" placeholder="https://exemplo.com/imagem.jpg">
+                    <small style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+                        💡 Dica: Carregue a imagem no Imgur, ImgBB ou outro serviço e cole o link aqui
+                    </small>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn" id="addWebsiteBtn">
+                        ➕ Adicionar Site ao Cliente
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- SEÇÃO ADMIN - LISTAR E REMOVER SITES -->
+        <div class="settings-card admin-section" id="listWebsitesSection" style="display: none;">
+            <h2 class="section-title">
+                📋 Gerenciar Sites Cadastrados
+                <span class="admin-badge">ADMIN</span>
+            </h2>
+            
+            <div id="listWebsiteAlertBox" class="alert"></div>
+
+            <form id="searchWebsiteForm">
+                <div class="form-group">
+                    <label for="searchWebsiteEmail">Buscar Sites por E-mail do Cliente</label>
+                    <input type="email" id="searchWebsiteEmail" placeholder="cliente@exemplo.com" required>
+                </div>
+                <button type="submit" class="btn" id="searchWebsiteBtn">
+                    🔍 Buscar Sites
+                </button>
+            </form>
+
+            <div id="websitesListCard" class="account-details-card">
+                <div class="plan-title" id="websitesUserEmail">📧 Sites do Cliente</div>
+                
+                <div id="websitesList" style="margin: 1.5rem 0;">
+                    <!-- Lista de sites será inserida aqui -->
+                </div>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="dashboard.html">← Voltar para o Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // 🔧 CONFIGURAÇÃO DO SUPABASE
+        // ============================================
+        const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
+        const ADMIN_EMAIL = 'natan@natandev.com';
+
+        let supabase = null;
+        let currentUser = null;
+        
+        try {
+            if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (error) {
+            console.error('Erro ao inicializar Supabase:', error);
+        }
+
+        // Configurações padrão
+        const DEFAULT_SETTINGS = {
+            darkMode: false,
+            typingSound: false,
+            sendSound: true,
+            deleteSound: false,
+            clickSound: true,
+            desktopNotif: true,
+            dataSaver: false
+        };
+
+        // Dados dos planos
+        const PLANS = {
+            starter: {
+                name: 'Starter',
+                price: 'R$ 39,99',
+                priceMonthly: 'R$ 39,99/mês',
+                setup: 'R$ 320,00',
+                features: [
+                    'Site responsivo básico',
+                    'Design moderno e limpo',
+                    'Otimização para mobile',
+                    'Hospedagem incluída',
+                    'Suporte pela plataforma 24/7',
+                    'SEO básico otimizado',
+                    'Contrato de 1 ano'
+                ]
+            },
+            professional: {
+                name: 'Professional',
+                price: 'R$ 79,99',
+                priceMonthly: 'R$ 79,99/mês',
+                setup: 'R$ 530,00',
+                recommended: true,
+                features: [
+                    'Design personalizado avançado',
+                    'Animações e interatividade',
+                    'SEO avançado otimizado',
+                    'Integração de APIs',
+                    'SEO avançado com keywords',
+                    'Domínio personalizado',
+                    '5 revisões incluídas',
+                    'Formulários de contato',
+                    'Suporte prioritário',
+                    'IA Inclusa - Opcional',
+                    'Contrato de 1 ano'
+                ]
+            }
+        };
+
+        // ============================================
+        // 🎨 FUNÇÕES DE CONFIGURAÇÕES
+        // ============================================
+
+        function showAlert(message, type, isAdmin = false) {
+            const alertBox = isAdmin ? document.getElementById('adminAlertBox') : document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        function showManageAlert(message, type) {
+            const alertBox = document.getElementById('manageAlertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 7000);
+        }
+
+        function applyDarkMode(enabled) {
+            if (enabled) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // Carrega configurações do Supabase
+        async function loadUserSettings() {
+            if (!supabase || !currentUser) {
+                return DEFAULT_SETTINGS;
+            }
+
+            document.getElementById('loadingMsg').style.display = 'block';
+
+            try {
+                const { data, error } = await supabase
+                    .from('user_settings')
+                    .select('settings')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                document.getElementById('loadingMsg').style.display = 'none';
+
+                if (error && error.code !== 'PGRST116') {
+                    console.error('Erro ao carregar configurações:', error);
+                    return DEFAULT_SETTINGS;
+                }
+
+                return data?.settings || DEFAULT_SETTINGS;
+            } catch (error) {
+                console.error('Erro ao carregar configurações:', error);
+                document.getElementById('loadingMsg').style.display = 'none';
+                return DEFAULT_SETTINGS;
+            }
+        }
+
+        // Salva configurações no Supabase E localStorage
+        async function saveUserSettings(settings) {
+            if (!currentUser) {
+                console.error('Usuário não identificado');
+                return;
+            }
+
+            const settingsKey = `natandev_settings_${currentUser.id}`;
+            localStorage.setItem(settingsKey, JSON.stringify(settings));
+            console.log('✅ Configurações salvas no localStorage');
+
+            if (!supabase) {
+                console.warn('⚠️ Supabase não disponível, apenas localStorage foi atualizado');
+                return;
+            }
+
+            try {
+                const { error } = await supabase
+                    .from('user_settings')
+                    .upsert({
+                        user_id: currentUser.id,
+                        settings: settings,
+                        updated_at: new Date().toISOString()
+                    }, {
+                        onConflict: 'user_id'
+                    });
+
+                if (error) throw error;
+                
+                console.log('✅ Configurações salvas no Supabase');
+            } catch (error) {
+                console.error('❌ Erro ao salvar configurações no Supabase:', error);
+                showAlert('Configurações salvas localmente', 'success');
+            }
+        }
+
+        // Aplica as configurações nos toggles
+        function applySettings(settings) {
+            applyDarkMode(settings.darkMode);
+
+            document.getElementById('darkModeToggle').classList.toggle('active', settings.darkMode);
+            document.getElementById('typingSoundToggle').classList.toggle('active', settings.typingSound);
+            document.getElementById('sendSoundToggle').classList.toggle('active', settings.sendSound);
+            document.getElementById('deleteSoundToggle').classList.toggle('active', settings.deleteSound);
+            document.getElementById('clickSoundToggle').classList.toggle('active', settings.clickSound);
+            document.getElementById('desktopNotifToggle').classList.toggle('active', settings.desktopNotif);
+            document.getElementById('dataSaverToggle').classList.toggle('active', settings.dataSaver);
+        }
+
+        // Pega configurações atuais dos toggles
+        function getCurrentSettings() {
+            return {
+                darkMode: document.getElementById('darkModeToggle').classList.contains('active'),
+                typingSound: document.getElementById('typingSoundToggle').classList.contains('active'),
+                sendSound: document.getElementById('sendSoundToggle').classList.contains('active'),
+                deleteSound: document.getElementById('deleteSoundToggle').classList.contains('active'),
+                clickSound: document.getElementById('clickSoundToggle').classList.contains('active'),
+                desktopNotif: document.getElementById('desktopNotifToggle').classList.contains('active'),
+                dataSaver: document.getElementById('dataSaverToggle').classList.contains('active')
+            };
+        }
+
+        // Configura os toggles
+        function setupToggles() {
+            const toggleIds = [
+                'darkModeToggle',
+                'typingSoundToggle',
+                'sendSoundToggle',
+                'deleteSoundToggle',
+                'clickSoundToggle',
+                'desktopNotifToggle',
+                'dataSaverToggle'
+            ];
+
+            toggleIds.forEach(toggleId => {
+                document.getElementById(toggleId).addEventListener('click', async function() {
+                    this.classList.toggle('active');
+                    
+                    const settings = getCurrentSettings();
+                    
+                    if (toggleId === 'darkModeToggle') {
+                        applyDarkMode(settings.darkMode);
+                    }
+                    
+                    await saveUserSettings(settings);
+                    showAlert('✓ Configuração salva!', 'success');
+                });
+            });
+        }
+
+        // ============================================
+        // 👑 VERIFICAÇÃO DE ADMIN
+        // ============================================
+
+        async function checkAdminAccess() {
+            if (!currentUser) return;
+
+            const isAdmin = currentUser.email === ADMIN_EMAIL;
+            localStorage.setItem('natandev_is_admin', isAdmin.toString());
+            
+            if (isAdmin) {
+                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('manageAccountsSection').style.display = 'block';
+                await showWebsiteAdminSections();
+                console.log('✅ Acesso admin habilitado para:', currentUser.email);
+            } else {
+                console.log('ℹ️ Usuário não é admin:', currentUser.email);
+            }
+        }
+
+        // ============================================
+        // 📝 CRIAR NOVA CONTA (APENAS ADMIN)
+        // ============================================
+
+        // Mostra detalhes do plano selecionado
+        document.getElementById('planSelect').addEventListener('change', function() {
+            const planKey = this.value;
+            const planDetails = document.getElementById('planDetails');
+
+            if (!planKey) {
+                planDetails.classList.remove('show');
+                return;
+            }
+
+            const plan = PLANS[planKey];
+            
+            let html = `
+                <div class="plan-title">
+                    ${plan.name}
+                    ${plan.recommended ? '<span class="recommended-badge">RECOMENDADO</span>' : ''}
+                </div>
+                <div class="plan-price">
+                    ${plan.priceMonthly}
+                    <br>
+                    <small style="font-size: 0.8rem;">Setup: ${plan.setup}</small>
+                </div>
+                <ul class="plan-features">
+                    ${plan.features.map(f => `<li>${f}</li>`).join('')}
+                </ul>
+            `;
+
+            planDetails.innerHTML = html;
+            planDetails.classList.add('show');
+        });
+
+        document.getElementById('createAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!supabase) {
+                showAlert('⚠️ Supabase não configurado!', 'error', true);
+                return;
+            }
+
+            const email = document.getElementById('newEmail').value.trim();
+            const password = document.getElementById('newPassword').value;
+            const name = document.getElementById('newName').value.trim();
+            const plan = document.getElementById('planSelect').value;
+            const btn = document.getElementById('createAccountBtn');
+
+            if (!email || !password) {
+                showAlert('⚠️ Preencha e-mail e senha!', 'error', true);
+                return;
+            }
+
+            if (!plan) {
+                showAlert('⚠️ Selecione um plano!', 'error', true);
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('⚠️ A senha deve ter no mínimo 6 caracteres!', 'error', true);
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Criando conta...';
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            name: name || null,
+                            plan: plan,
+                            plan_name: PLANS[plan].name,
+                            created_by: currentUser.email
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+                if (data.user) {
+                    // Calcula data de expiração (1 ano)
+                    const expiryDate = new Date();
+                    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
+                    expiryDate.setHours(23, 59, 59, 999);
+
+                    await supabase.from('user_settings').insert({
+                        user_id: data.user.id,
+                        settings: DEFAULT_SETTINGS,
+                        created_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    });
+
+                    // ✅ Adiciona registro na tabela user_accounts
+                    await supabase.from('user_accounts').insert({
+                        user_id: data.user.id,
+                        user_email: email,
+                        plan_name: PLANS[plan].name,
+                        is_suspended: false,
+                        account_expires_at: expiryDate.toISOString(),
+                        first_login_at: null,
+                        created_at: new Date().toISOString()
+                    });
+                }
+
+                showAlert(`✓ Conta criada! E-mail: ${email} | Plano: ${PLANS[plan].name}`, 'success', true);
+                document.getElementById('createAccountForm').reset();
+                document.getElementById('planDetails').classList.remove('show');
+
+            } catch (error) {
+                console.error('Erro ao criar conta:', error);
+                
+                let errorMessage = '❌ Erro ao criar conta!';
+                
+                if (error.message.includes('already registered')) {
+                    errorMessage = '⚠️ Este e-mail já está cadastrado!';
+                } else {
+                    errorMessage = `❌ ${error.message}`;
+                }
+                
+                showAlert(errorMessage, 'error', true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Cadastrar Nova Conta';
+            }
+        });
+
+        // ============================================
+        // 🔍 BUSCAR E GERENCIAR CONTAS (ADMIN)
+        // ============================================
+
+        // Calcula tempo usado
+        function calculateTimeUsed(firstLoginDate) {
+            const now = new Date();
+            const firstLogin = new Date(firstLoginDate);
+            
+            const diffMs = now - firstLogin;
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffMonths = Math.floor(diffDays / 30);
+            const remainingDays = diffDays % 30;
+
+            if (diffDays < 30) {
+                return {
+                    value: `${diffDays} ${diffDays === 1 ? 'Dia' : 'Dias'}`,
+                    description: `Cliente desde ${firstLogin.toLocaleDateString('pt-BR')}`
+                };
+            } else if (diffMonths < 12) {
+                return {
+                    value: `${diffMonths} ${diffMonths === 1 ? 'Mês' : 'Meses'}`,
+                    description: remainingDays > 0 ? `e ${remainingDays} dias` : `Cliente desde ${firstLogin.toLocaleDateString('pt-BR')}`
+                };
+            } else {
+                const years = Math.floor(diffMonths / 12);
+                const months = diffMonths % 12;
+                return {
+                    value: `${years} ${years === 1 ? 'Ano' : 'Anos'}`,
+                    description: months > 0 ? `e ${months} ${months === 1 ? 'mês' : 'meses'}` : `Cliente desde ${firstLogin.toLocaleDateString('pt-BR')}`
+                };
+            }
+        }
+
+        // Busca conta
+        document.getElementById('searchAccountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!supabase) {
+                showManageAlert('⚠️ Supabase não configurado!', 'error');
+                return;
+            }
+
+            const email = document.getElementById('searchEmail').value.trim();
+            const btn = document.getElementById('searchAccountBtn');
+
+            if (!email) {
+                showManageAlert('⚠️ Digite um e-mail!', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Buscando...';
+
+            try {
+                // ✅ Busca pela tabela user_accounts usando o email
+                const { data: accountData, error: accountError } = await supabase
+                    .from('user_accounts')
+                    .select('*')
+                    .eq('user_email', email)
+                    .single();
+
+                if (accountError || !accountData) {
+                    throw new Error('Conta não encontrada');
+                }
+
+                displayAccountDetails(accountData);
+                showManageAlert('✓ Conta encontrada!', 'success');
+
+            } catch (error) {
+                console.error('Erro ao buscar conta:', error);
+                showManageAlert(`❌ ${error.message || 'Erro ao buscar conta'}`, 'error');
+                document.getElementById('accountDetailsCard').classList.remove('show');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔍 Buscar Conta';
+            }
+        });
+
+        // ✅ Exibe detalhes da conta (atualizado)
+        function displayAccountDetails(accountData) {
+            const card = document.getElementById('accountDetailsCard');
+            
+            document.getElementById('accountEmail').textContent = `📧 ${accountData.user_email}`;
+            
+            const isSuspended = accountData.is_suspended;
+            const firstLogin = accountData.first_login_at ? new Date(accountData.first_login_at) : null;
+            const expiry = accountData.account_expires_at ? new Date(accountData.account_expires_at) : null;
+            
+            document.getElementById('accountStatus').innerHTML = isSuspended 
+                ? '<span style="color: var(--error); font-weight: bold;">🚫 SUSPENSA</span>' 
+                : '<span style="color: var(--success); font-weight: bold;">✅ ATIVA</span>';
+            
+            document.getElementById('accountPlan').textContent = accountData.plan_name || 'Não definido';
+            document.getElementById('accountFirstLogin').textContent = firstLogin 
+                ? firstLogin.toLocaleString('pt-BR') 
+                : 'Nunca fez login';
+            document.getElementById('accountExpiry').textContent = expiry 
+                ? expiry.toLocaleDateString('pt-BR') 
+                : 'Não definido';
+            
+            if (firstLogin) {
+                const timeUsed = calculateTimeUsed(firstLogin);
+                document.getElementById('accountTimeUsed').textContent = `${timeUsed.value} - ${timeUsed.description}`;
+            } else {
+                document.getElementById('accountTimeUsed').textContent = 'Conta nunca foi usada';
+            }
+
+            if (isSuspended) {
+                document.getElementById('reactivateBtn').style.display = 'block';
+                document.getElementById('suspendBtn').style.display = 'none';
+            } else {
+                document.getElementById('reactivateBtn').style.display = 'none';
+                document.getElementById('suspendBtn').style.display = 'block';
+            }
+
+            card.dataset.userId = accountData.user_id;
+            card.classList.add('show');
+        }
+
+        // Reativa conta
+        document.getElementById('reactivateBtn').addEventListener('click', async function() {
+            if (!confirm('Deseja realmente REATIVAR esta conta por mais 1 ano?')) return;
+
+            const card = document.getElementById('accountDetailsCard');
+            const userId = card.dataset.userId;
+            const btn = this;
+
+            if (!userId) {
+                showManageAlert('❌ ID do usuário não encontrado', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Reativando...';
+
+            try {
+                const now = new Date();
+                const newExpiry = new Date(now);
+                newExpiry.setFullYear(newExpiry.getFullYear() + 1);
+                newExpiry.setHours(23, 59, 59, 999);
+
+                const { error } = await supabase
+                    .from('user_accounts')
+                    .update({
+                        is_suspended: false,
+                        account_expires_at: newExpiry.toISOString()
+                    })
+                    .eq('user_id', userId);
+
+                if (error) throw error;
+
+                showManageAlert('✓ Conta reativada com sucesso! Nova data de expiração: ' + newExpiry.toLocaleDateString('pt-BR'), 'success');
+                
+                document.getElementById('accountStatus').innerHTML = '<span style="color: var(--success); font-weight: bold;">✅ ATIVA</span>';
+                document.getElementById('accountExpiry').textContent = newExpiry.toLocaleDateString('pt-BR');
+                btn.style.display = 'none';
+                document.getElementById('suspendBtn').style.display = 'block';
+
+            } catch (error) {
+                console.error('Erro ao reativar conta:', error);
+                showManageAlert(`❌ Erro ao reativar conta: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✅ Reativar Conta (+ 1 Ano)';
+            }
+        });
+
+        // Suspende conta
+        document.getElementById('suspendBtn').addEventListener('click', async function() {
+            if (!confirm('Deseja realmente SUSPENDER esta conta?')) return;
+
+            const card = document.getElementById('accountDetailsCard');
+            const userId = card.dataset.userId;
+            const btn = this;
+
+            if (!userId) {
+                showManageAlert('❌ ID do usuário não encontrado', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Suspendendo...';
+
+            try {
+                const { error } = await supabase
+                    .from('user_accounts')
+                    .update({ is_suspended: true })
+                    .eq('user_id', userId);
+
+                if (error) throw error;
+
+                showManageAlert('✓ Conta suspensa com sucesso!', 'success');
+                
+                document.getElementById('accountStatus').innerHTML = '<span style="color: var(--error); font-weight: bold;">🚫 SUSPENSA</span>';
+                btn.style.display = 'none';
+                document.getElementById('reactivateBtn').style.display = 'block';
+
+            } catch (error) {
+                console.error('Erro ao suspender conta:', error);
+                showManageAlert(`❌ Erro ao suspender conta: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🚫 Suspender Conta';
+            }
+        });
+
+        // ============================================
+        // 🌐 ADICIONAR SITE AO CLIENTE (ADMIN)
+        // ============================================
+        
+        function showWebsiteAlert(message, type) {
+            const alertBox = document.getElementById('websiteAlertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        function showListWebsiteAlert(message, type) {
+            const alertBox = document.getElementById('listWebsiteAlertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 7000);
+        }
+
+        // Mostra seções admin de websites
+        async function showWebsiteAdminSections() {
+            if (!currentUser) return;
+            
+            const isAdmin = currentUser.email === ADMIN_EMAIL;
+            
+            if (isAdmin) {
+                document.getElementById('addWebsiteSection').style.display = 'block';
+                document.getElementById('listWebsitesSection').style.display = 'block';
+                console.log('✅ Seções admin de websites habilitadas');
+            }
+        }
+
+        // Adicionar site
+        document.getElementById('addWebsiteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!supabase) {
+                showWebsiteAlert('⚠️ Supabase não configurado!', 'error');
+                return;
+            }
+
+            const userEmail = document.getElementById('websiteUserEmail').value.trim();
+            const siteName = document.getElementById('websiteName').value.trim();
+            const siteUrl = document.getElementById('websiteUrl').value.trim();
+            const imageUrl = document.getElementById('websiteImage').value.trim();
+            const btn = document.getElementById('addWebsiteBtn');
+
+            if (!userEmail || !siteName || !siteUrl) {
+                showWebsiteAlert('⚠️ Preencha todos os campos obrigatórios!', 'error');
+                return;
+            }
+
+            // Valida formato de URL
+            try {
+                new URL(siteUrl);
+                if (imageUrl) {
+                    new URL(imageUrl);
+                }
+            } catch (error) {
+                showWebsiteAlert('⚠️ URL inválida! Certifique-se de incluir https://', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Adicionando site...';
+
+            try {
+                // ✅ Busca o user_id pela tabela user_accounts
+                const { data: accountData, error: accountError } = await supabase
+                    .from('user_accounts')
+                    .select('user_id')
+                    .eq('user_email', userEmail)
+                    .single();
+
+                if (accountError || !accountData) {
+                    throw new Error('Cliente não encontrado. Verifique o e-mail.');
+                }
+
+                const userId = accountData.user_id;
+
+                // Adiciona o site ao banco de dados
+                const { data, error } = await supabase
+                    .from('user_websites')
+                    .insert({
+                        user_email: userEmail,
+                        user_id: userId,
+                        site_name: siteName,
+                        site_url: siteUrl,
+                        image_url: imageUrl || null,
+                        created_at: new Date().toISOString(),
+                        created_by: currentUser.email
+                    })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                showWebsiteAlert(`✓ Site "${siteName}" adicionado com sucesso para ${userEmail}!`, 'success');
+                document.getElementById('addWebsiteForm').reset();
+                console.log('✅ Site adicionado:', data);
+
+            } catch (error) {
+                console.error('Erro ao adicionar site:', error);
+                
+                let errorMessage = '❌ Erro ao adicionar site!';
+                
+                if (error.message.includes('Cliente não encontrado')) {
+                    errorMessage = '⚠️ Cliente não encontrado! Verifique o e-mail.';
+                } else if (error.message.includes('duplicate key')) {
+                    errorMessage = '⚠️ Este site já está cadastrado para este cliente!';
+                } else {
+                    errorMessage = `❌ ${error.message}`;
+                }
+                
+                showWebsiteAlert(errorMessage, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '➕ Adicionar Site ao Cliente';
+            }
+        });
+
+        // ============================================
+        // 📋 BUSCAR E LISTAR SITES DO CLIENTE
+        // ============================================
+        
+        document.getElementById('searchWebsiteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!supabase) {
+                showListWebsiteAlert('⚠️ Supabase não configurado!', 'error');
+                return;
+            }
+
+            const email = document.getElementById('searchWebsiteEmail').value.trim();
+            const btn = document.getElementById('searchWebsiteBtn');
+
+            if (!email) {
+                showListWebsiteAlert('⚠️ Digite um e-mail!', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Buscando...';
+
+            try {
+                const { data: sites, error } = await supabase
+                    .from('user_websites')
+                    .select('*')
+                    .eq('user_email', email)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                const websitesList = document.getElementById('websitesList');
+                const websitesListCard = document.getElementById('websitesListCard');
+                
+                document.getElementById('websitesUserEmail').textContent = `📧 Sites de ${email}`;
+
+                if (!sites || sites.length === 0) {
+                    websitesList.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                            <p>🌐 Nenhum site encontrado para este cliente.</p>
+                        </div>
+                    `;
+                    websitesListCard.classList.add('show');
+                    showListWebsiteAlert('ℹ️ Nenhum site encontrado para este cliente', 'warning');
+                    return;
+                }
+
+                websitesList.innerHTML = sites.map(site => `
+                    <div class="account-detail-item" style="padding: 1.5rem; border: 2px solid var(--border-color); border-radius: 12px; margin-bottom: 1rem;">
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem; justify-content: space-between;">
+                                <strong style="font-size: 1.1rem; color: var(--text-primary);">🌐 ${site.site_name}</strong>
+                                <button onclick="deleteWebsite('${site.id}', '${site.site_name}')" 
+                                        class="btn-danger" 
+                                        style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 8px; cursor: pointer; border: none; background: var(--error); color: white; font-weight: 600; transition: all 0.3s ease;">
+                                    🗑️ Remover
+                                </button>
+                            </div>
+                            <span style="color: var(--text-secondary); word-break: break-all;">
+                                <strong>URL:</strong> <a href="${site.site_url}" target="_blank" style="color: var(--primary-blue); text-decoration: none;">${site.site_url}</a>
+                            </span>
+                            ${site.image_url ? `<span style="color: var(--text-secondary); word-break: break-all;"><strong>Imagem:</strong> ${site.image_url}</span>` : ''}
+                            <span style="color: var(--text-secondary); font-size: 0.85rem;">
+                                <strong>Adicionado em:</strong> ${new Date(site.created_at).toLocaleString('pt-BR')}
+                            </span>
+                            ${site.created_by ? `<span style="color: var(--text-secondary); font-size: 0.85rem;"><strong>Por:</strong> ${site.created_by}</span>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+
+                websitesListCard.classList.add('show');
+                showListWebsiteAlert(`✓ ${sites.length} site(s) encontrado(s)!`, 'success');
+
+            } catch (error) {
+                console.error('Erro ao buscar sites:', error);
+                showListWebsiteAlert(`❌ ${error.message || 'Erro ao buscar sites'}`, 'error');
+                document.getElementById('websitesListCard').classList.remove('show');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔍 Buscar Sites';
+            }
+        });
+
+        // ============================================
+        // 🗑️ REMOVER SITE
+        // ============================================
+        
+        async function deleteWebsite(siteId, siteName) {
+            if (!confirm(`Deseja realmente REMOVER o site "${siteName}"?`)) return;
+
+            try {
+                const { error } = await supabase
+                    .from('user_websites')
+                    .delete()
+                    .eq('id', siteId);
+
+                if (error) throw error;
+
+                showListWebsiteAlert(`✓ Site "${siteName}" removido com sucesso!`, 'success');
+                
+                // Recarrega a lista
+                document.getElementById('searchWebsiteForm').dispatchEvent(new Event('submit'));
+
+            } catch (error) {
+                console.error('Erro ao remover site:', error);
+                showListWebsiteAlert(`❌ Erro ao remover site: ${error.message}`, 'error');
+            }
+        }
+
+        // ============================================
+        // 🚀 INICIALIZAÇÃO
+        // ============================================
+
+        async function init() {
+            if (!supabase) {
+                console.error('⚠️ Supabase não configurado');
+                applySettings(DEFAULT_SETTINGS);
+                setupToggles();
+                return;
+            }
+
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    console.warn('⚠️ Usuário não está logado');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                currentUser = session.user;
+                console.log('✅ Usuário logado:', currentUser.email);
+
+                const settings = await loadUserSettings();
+                applySettings(settings);
+                
+                setupToggles();
+                await checkAdminAccess();
+
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
+                applySettings(DEFAULT_SETTINGS);
+                setupToggles();
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
