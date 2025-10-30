@@ -74,10 +74,10 @@
         }
 
         .sidebar-header {
-    padding: 2rem 2rem 1.5rem;
-    border-bottom: 2px solid var(--border-color);
-    transition: border-color 0.3s ease;
-}
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            transition: border-color 0.3s ease;
+        }
 
         .logo {
             display: flex;
@@ -437,6 +437,17 @@
             color: white;
         }
 
+        .plan-badge.free {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
         /* Warning Card - Conta Suspensa */
         .warning-card {
             background: linear-gradient(135deg, var(--error), #DC2626);
@@ -447,7 +458,324 @@
             background: linear-gradient(90deg, #DC2626, #B91C1C);
         }
 
-        /* CONTINUA NA PARTE 2... */
+        /* Free Access Card */
+        .free-access-card {
+            background: linear-gradient(135deg, var(--success), #059669);
+            border: none;
+        }
+
+        .free-access-card::before {
+            background: linear-gradient(90deg, #059669, #047857);
+        }
+
+        /* Info Section */
+        .info-section {
+            background: var(--bg-surface);
+            border-radius: 20px;
+            border: 2px solid var(--border-color);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .info-section h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            padding: 1.5rem;
+            background: var(--bg-main);
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .info-item h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .info-item p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'Sora', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
+        }
+
+        body.dark-mode .btn-primary {
+            color: #0F172A;
+            box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1001;
+            background: var(--primary-blue);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        .suspension-alert {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            border: 2px solid var(--error);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .suspension-alert.show {
+            display: block;
+        }
+
+        .suspension-alert h3 {
+            color: var(--error);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suspension-alert p {
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ============================================ */
+        /* 🎁 ALERTA DE ACESSO GRÁTIS */
+        /* ============================================ */
+        .free-access-alert {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            border: 2px solid var(--success);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .free-access-alert.show {
+            display: block;
+        }
+
+        .free-access-alert h3 {
+            color: var(--success);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+        }
+
+        .free-access-alert p {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .free-access-alert strong {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                margin-left: 280px;
+                padding: 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .mobile-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 6rem 1.5rem 2rem;
+            }
+
+            .page-header {
+                margin-bottom: 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .cards-grid {
+                gap: 1.3rem;
+            }
+
+            .card {
+                padding: 1.8rem;
+            }
+
+            .card-icon {
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+
+            .card-value {
+                font-size: 1.8rem;
+            }
+
+            .info-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .info-section h2 {
+                font-size: 1.6rem;
+            }
+
+            .info-item {
+                padding: 1.3rem;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-menu-toggle {
+                top: 1rem;
+                left: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+
+            .main-content {
+                padding: 5.5rem 1rem 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .card-value {
+                font-size: 1.7rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -518,6 +846,21 @@
         <div class="page-header">
             <h1>Bem-vindo ao Dashboard! 👋</h1>
             <p>Gerencie seus projetos e acompanhe o desempenho da sua plataforma</p>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 🎁 ALERTA DE ACESSO GRÁTIS ATIVO -->
+        <!-- ============================================ -->
+        <div class="free-access-alert" id="freeAccessAlert">
+            <h3>🎁 Acesso Grátis Ativo!</h3>
+            <p>
+                Você está usando a plataforma com <strong>acesso grátis por tempo limitado</strong>! 
+                Aproveite todos os recursos disponíveis: <strong>Dashboard, IA, Suporte</strong> e muito mais.
+            </p>
+            <p style="margin-bottom: 0;">
+                <strong>⚠️ Observação:</strong> Durante o período grátis, você não pode solicitar criação de sites. 
+                Para ter sites personalizados, entre em contato para contratar um plano pago.
+            </p>
         </div>
 
         <!-- Alerta de Suspensão -->
@@ -604,6 +947,7 @@
 
         let supabase = null;
         let currentUser = null;
+        let isFreeAccessUser = false;
         
         try {
             if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
@@ -662,46 +1006,267 @@
         }
 
         // ============================================
+        // 🎁 VERIFICA SE ACESSO GRÁTIS ESTÁ ATIVO
+        // ============================================
+        async function checkFreeAccessActive() {
+            if (!supabase) return false;
+
+            try {
+                const { data, error } = await supabase
+                    .from('free_access_config')
+                    .select('*')
+                    .single();
+
+                if (error) throw error;
+
+                if (data.is_active) {
+                    const now = new Date();
+                    const expiry = new Date(data.expires_at);
+                    
+                    if (now > expiry) {
+                        console.log('⏰ Período de acesso grátis expirou');
+                        return false;
+                    }
+
+                    console.log('✅ Acesso grátis está ativo até:', expiry.toLocaleString('pt-BR'));
+                    return true;
+                }
+
+                return false;
+            } catch (error) {
+                console.error('❌ Erro ao verificar acesso grátis:', error);
+                return false;
+            }
+        }
+
+        // ============================================
+        // 🆓 REGISTRA USUÁRIO COMO FREE ACCESS
+        // ============================================
+        async function registerAsFreeAccessUser() {
+    if (!supabase || !currentUser) return false;
+
+    try {
+        const isFreeAccessActive = await checkFreeAccessActive();
+        
+        if (!isFreeAccessActive) {
+            console.log('ℹ️ Acesso grátis não está ativo no momento');
+            return false;
+        }
+
+        const { data: freeConfig, error: configError } = await supabase
+            .from('free_access_config')
+            .select('expires_at, free_account_email')
+            .single();
+
+        if (configError) throw configError;
+
+        // 🆕 VERIFICA SE É A CONTA FREE OFICIAL
+        const isFreeAccount = currentUser.email === freeConfig.free_account_email;
+
+        console.log('🔍 Verificando conta:', {
+            userEmail: currentUser.email,
+            freeEmail: freeConfig.free_account_email,
+            isFreeAccount: isFreeAccount
+        });
+
+        // 🆕 SE FOR A CONTA FREE OFICIAL, SEMPRE FORÇA ATUALIZAÇÃO PARA FREE
+        if (isFreeAccount) {
+            console.log('🎁 Conta FREE OFICIAL detectada, FORÇANDO conversão para FREE...');
+            
+            // Primeiro, registra na tabela free_access_users
+            const { error: freeUserError } = await supabase
+                .from('free_access_users')
+                .upsert({
+                    user_id: currentUser.id,
+                    user_email: currentUser.email,
+                    joined_at: new Date().toISOString(),
+                    expires_at: freeConfig.expires_at,
+                    is_expired: false
+                }, {
+                    onConflict: 'user_email'
+                });
+
+            if (freeUserError) {
+                console.warn('⚠️ Erro ao registrar em free_access_users:', freeUserError);
+            }
+
+            // Depois, FORÇA atualização em user_accounts
+            const { data: updateData, error: updateAccountError } = await supabase
+    .from('user_accounts')
+    .update({
+        plan_name: 'Free',
+        plan_type: 'free',
+        is_suspended: false,
+        account_expires_at: freeConfig.expires_at,
+        updated_at: new Date().toISOString()
+    })
+    .eq('user_id', currentUser.id)
+    .select();
+
+// Se não existir, cria
+if (!updateData || updateData.length === 0) {
+    const { error: insertError } = await supabase
+        .from('user_accounts')
+        .insert({
+            user_id: currentUser.id,
+            user_email: currentUser.email,
+            plan_name: 'Free',
+            plan_type: 'free',
+            is_suspended: false,
+            account_expires_at: freeConfig.expires_at,
+            first_login_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        });
+    
+    if (insertError) throw insertError;
+    console.log('✅ Novo registro FREE criado');
+} else {
+    console.log('✅ Registro FREE atualizado');
+}
+
+            console.log('✅ Conta FREE OFICIAL registrada/atualizada COM SUCESSO');
+            console.log('📧 Email:', currentUser.email);
+            console.log('🎯 plan_type: FREE');
+            console.log('⏰ Expira em:', freeConfig.expires_at);
+            return true;
+        }
+
+        // Para usuários normais (não free@natandev.com)
+        const { data: existingAccount, error: accountError } = await supabase
+            .from('user_accounts')
+            .select('plan_type')
+            .eq('user_id', currentUser.id)
+            .single();
+
+        if (existingAccount && existingAccount.plan_type === 'paid') {
+            console.log('ℹ️ Usuário já possui plano pago, não será convertido para free');
+            return false;
+        }
+
+        // Registra usuário comum como free
+        const { error: freeUserError } = await supabase
+            .from('free_access_users')
+            .upsert({
+                user_id: currentUser.id,
+                user_email: currentUser.email,
+                joined_at: new Date().toISOString(),
+                expires_at: freeConfig.expires_at,
+                is_expired: false
+            }, {
+                onConflict: 'user_email'
+            });
+
+        if (freeUserError) throw freeUserError;
+
+        const { error: updateAccountError } = await supabase
+            .from('user_accounts')
+            .upsert({
+                user_id: currentUser.id,
+                user_email: currentUser.email,
+                plan_name: 'Free',
+                plan_type: 'free',
+                is_suspended: false,
+                account_expires_at: freeConfig.expires_at,
+                first_login_at: new Date().toISOString(),
+                created_at: new Date().toISOString()
+            }, {
+                onConflict: 'user_id'
+            });
+
+        if (updateAccountError) throw updateAccountError;
+
+        console.log('✅ Usuário registrado como Free Access');
+        console.log('📧 Email:', currentUser.email);
+        console.log('⏰ Expira em:', freeConfig.expires_at);
+        return true;
+
+    } catch (error) {
+        console.error('❌ Erro ao registrar usuário free:', error);
+        return false;
+    }
+}
+
+        // ============================================
         // 🔐 VERIFICA AUTENTICAÇÃO E ADMIN
         // ============================================
         async function checkAuth() {
-            if (!supabase) {
-                console.error('⚠️ Supabase não configurado');
-                window.location.href = 'login.html';
-                return null;
-            }
+    if (!supabase) {
+        console.error('⚠️ Supabase não configurado');
+        window.location.href = 'login.html';
+        return null;
+    }
 
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) throw error;
+        
+        if (!session || !session.user) {
+            console.log('❌ Nenhuma sessão ativa');
+            window.location.href = 'login.html';
+            return null;
+        }
+
+        currentUser = session.user;
+        console.log('✅ Usuário autenticado:', currentUser.email);
+        console.log('📋 Metadata do usuário:', currentUser.user_metadata);
+        
+        const isAdmin = currentUser.email === ADMIN_EMAIL;
+        localStorage.setItem('natandev_is_admin', isAdmin.toString());
+        
+        console.log('👑 Status Admin:', isAdmin);
+
+        if (!isAdmin) {
+            // 🆕 VERIFICA SE O EMAIL É DA CONTA FREE
+            const { data: freeConfig } = await supabase
+                .from('free_access_config')
+                .select('free_account_email, is_active')
+                .single();
+            
+            console.log('🔍 Config Free Access:', freeConfig);
+            
+            if (freeConfig && freeConfig.is_active && currentUser.email === freeConfig.free_account_email) {
+                console.log('🎁 EMAIL DETECTADO COMO FREE:', currentUser.email);
+                isFreeAccessUser = true;
                 
-                if (error) throw error;
+                // Registra como free
+                await registerAsFreeAccessUser();
+            } else {
+                console.log('ℹ️ Email não é free, verificando banco...');
                 
-                if (!session || !session.user) {
-                    console.log('❌ Nenhuma sessão ativa');
-                    window.location.href = 'login.html';
-                    return null;
+                // Verifica se já está cadastrado como free no banco
+                const { data: accountData } = await supabase
+                    .from('user_accounts')
+                    .select('plan_type')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                
+                console.log('📊 Dados da conta no banco:', accountData);
+                
+                if (accountData && accountData.plan_type === 'free') {
+                    console.log('🎁 CONTA FREE IDENTIFICADA NO BANCO');
+                    isFreeAccessUser = true;
+                } else {
+                    console.log('💳 Conta PAGA identificada');
                 }
-
-                currentUser = session.user;
-                console.log('✅ Usuário autenticado:', currentUser.email);
-                
-                const isAdmin = currentUser.email === ADMIN_EMAIL;
-                localStorage.setItem('natandev_is_admin', isAdmin.toString());
-                
-                console.log('👑 Status Admin:', isAdmin);
-                
-                return {
-                    email: currentUser.email,
-                    id: currentUser.id,
-                    is_admin: isAdmin
-                };
-                
-            } catch (error) {
-                console.error('Erro ao verificar autenticação:', error);
-                window.location.href = 'login.html';
-                return null;
             }
         }
+        
+        console.log('🏁 isFreeAccessUser =', isFreeAccessUser);
+        
+        return {
+            email: currentUser.email,
+            id: currentUser.id,
+            is_admin: isAdmin
+        };
+        
+    } catch (error) {
+        console.error('Erro ao verificar autenticação:', error);
+        window.location.href = 'login.html';
+        return null;
+    }
+}
 
         // ============================================
         // 📊 REGISTRA VISITA AO DASHBOARD
@@ -710,7 +1275,6 @@
             if (!supabase || !currentUser) return;
 
             try {
-                // Busca visitas atuais
                 const { data: existingData, error: fetchError } = await supabase
                     .from('user_accounts')
                     .select('dashboard_visits, last_visit_at')
@@ -725,7 +1289,6 @@
                 const currentVisits = existingData?.dashboard_visits || 0;
                 const newVisits = currentVisits + 1;
 
-                // Atualiza contador de visitas
                 const { error: updateError } = await supabase
                     .from('user_accounts')
                     .upsert({
@@ -739,7 +1302,6 @@
 
                 if (updateError) throw updateError;
 
-                // Exibe no dashboard
                 document.getElementById('visitsCount').textContent = newVisits.toLocaleString('pt-BR');
                 
                 const lastVisit = existingData?.last_visit_at;
@@ -795,8 +1357,6 @@
             }
         }
 
-        // CONTINUAÇÃO DA PARTE 2...
-
         // ============================================
         // ⏱️ REGISTRA PRIMEIRO LOGIN E CALCULA TEMPO
         // ============================================
@@ -806,13 +1366,29 @@
             try {
                 const { data: existingData, error: fetchError } = await supabase
                     .from('user_accounts')
-                    .select('first_login_at, account_expires_at, is_suspended')
+                    .select('first_login_at, account_expires_at, is_suspended, plan_type')
                     .eq('user_id', currentUser.id)
                     .single();
 
                 if (existingData && existingData.first_login_at) {
                     console.log('✅ Primeiro login já registrado:', existingData.first_login_at);
+                    
+                    if (existingData.plan_type === 'free') {
+                        isFreeAccessUser = true;
+                        console.log('🎁 Usuário identificado como Free Access');
+                    }
+                    
                     return existingData;
+                }
+
+                if (isFreeAccessUser) {
+                    const { data: freeData } = await supabase
+                        .from('user_accounts')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .single();
+                    
+                    return freeData;
                 }
 
                 const now = new Date();
@@ -825,6 +1401,7 @@
                     .upsert({
                         user_id: currentUser.id,
                         user_email: currentUser.email,
+                        plan_type: 'paid',
                         first_login_at: now.toISOString(),
                         account_expires_at: expiryDate.toISOString(),
                         is_suspended: false,
@@ -906,10 +1483,53 @@
                 
                 if (!accountData) {
                     console.warn('⚠️ Não foi possível carregar dados da conta');
-                    return;
+                    return null;
                 }
 
-                const { first_login_at, account_expires_at, is_suspended } = accountData;
+                const { first_login_at, account_expires_at, is_suspended, plan_type } = accountData;
+
+console.log('📊 Dados da conta carregados:', {
+    plan_type: plan_type,
+    is_suspended: is_suspended,
+    email: currentUser.email
+});
+
+// ✅ PRIORIDADE MÁXIMA: Se é FREE, configura IMEDIATAMENTE
+if (plan_type === 'free') {
+    isFreeAccessUser = true;
+    
+    console.log('🎁 PLANO FREE DETECTADO!');
+    console.log('🎁 Email:', currentUser.email);
+    console.log('🎁 Plan Type:', plan_type);
+    
+    // 🆕 FORÇA ATUALIZAÇÃO DO BADGE IMEDIATAMENTE
+    const userPlanElement = document.getElementById('userPlan');
+    if (userPlanElement && !userPlanElement.innerHTML.includes('ADMIN')) {
+        userPlanElement.textContent = '🎁 Free';
+        console.log('✅ Badge atualizado para FREE');
+    }
+    
+    // Exibe alerta de acesso grátis
+    document.getElementById('freeAccessAlert').classList.add('show');
+    
+    // Estiliza card de tempo
+    const timeCard = document.getElementById('timeCard');
+    timeCard.classList.add('free-access-card');
+    
+    // Calcula tempo restante
+    const timeRemaining = calculateTimeRemaining(account_expires_at);
+    document.getElementById('timeValue').textContent = `${timeRemaining.days} Dias`;
+    document.getElementById('timeDescription').textContent = `Acesso grátis expira em ${timeRemaining.expiryDate}`;
+    
+    // 🆕 CHAMA configureFreeInterface() AQUI PARA ATUALIZAR O CARD "SEU PLANO"
+    configureFreeInterface();
+    
+    console.log('🎁 Dashboard configurado para usuário FREE');
+    console.log('🎁 Dias restantes:', timeRemaining.days);
+    
+    return 'free';
+}
+
                 const timeRemaining = calculateTimeRemaining(account_expires_at);
 
                 if (timeRemaining.expired && !is_suspended) {
@@ -930,7 +1550,7 @@
                     timeCard.classList.add('warning-card');
                     
                     console.log('⚠️ CONTA SUSPENSA');
-                    return true;
+                    return 'suspended';
                 }
 
                 const timeUsed = calculateTimeUsed(first_login_at);
@@ -944,45 +1564,141 @@
                     console.log(`⚠️ Conta expira em ${timeRemaining.days} dias`);
                 }
 
-                return false;
+                console.log('✅ Conta PAGA ativa - plan_type:', plan_type);
+                return 'paid';
 
             } catch (error) {
                 console.error('❌ Erro ao verificar status da conta:', error);
-                return false;
+                return null;
             }
         }
+
+        // ============================================
+        // 🎁 CONFIGURA INTERFACE PARA USUÁRIO FREE
+        // ============================================
+        function configureFreeInterface() {
+    console.log('🔄 Configurando interface FREE...');
+    
+    // Limpa qualquer estilo anterior do card
+    const planCard = document.querySelector('.plan-card');
+    planCard.style.removeProperty('background');
+    planCard.style.removeProperty('box-shadow');
+    
+    // Atualiza card do plano
+    document.getElementById('planName').textContent = 'Free';
+    document.getElementById('planPrice').textContent = 'Acesso Temporário Grátis';
+    document.getElementById('planStatus').textContent = 'GRÁTIS';
+    document.getElementById('planStatus').className = 'plan-badge free'; // Remove outras classes
+    
+    const planIcon = planCard.querySelector('.card-icon');
+    if (planIcon) {
+        planIcon.textContent = '🎁';
+    }
+    
+    // Força estilo verde para o card FREE
+    planCard.style.background = 'linear-gradient(135deg, var(--success), #059669)';
+    planCard.style.boxShadow = '0 10px 30px rgba(16, 185, 129, 0.3)';
+    
+    // Força cor branca para textos dentro do card FREE
+    planCard.querySelectorAll('.card-title, .card-value, .card-description').forEach(el => {
+        el.style.color = 'white';
+    });
+    
+    // Atualiza seção de informações do plano
+    document.getElementById('infoPrice').textContent = 'R$ 0,00 (Gratuito)';
+    document.getElementById('feature1').textContent = '✓ Acesso ao Dashboard';
+    document.getElementById('feature2').textContent = '✓ NatanAI Inclusa';
+    document.getElementById('feature3').textContent = '✓ Suporte via plataforma';
+    document.getElementById('feature4').textContent = '⚠️ Criação de sites BLOQUEADA';
+
+    // 🆕 ATUALIZA A DATA DE VENCIMENTO PARA FREE
+const nextDueDateElement = document.getElementById('nextDueDate');
+if (nextDueDateElement) {
+    nextDueDateElement.textContent = 'Não aplicável (Acesso Grátis)';
+}
+
+// 🆕 ATUALIZA O MÉTODO DE PAGAMENTO
+const paymentMethodElements = document.querySelectorAll('.info-item p');
+paymentMethodElements.forEach(el => {
+    if (el.innerHTML.includes('Método:')) {
+        el.innerHTML = '<strong>Método:</strong> Não aplicável';
+    }
+});
+    
+    // Atualiza título da seção
+    const infoSection = document.querySelector('.info-section');
+    if (infoSection) {
+        const infoTitle = infoSection.querySelector('h2');
+        if (infoTitle) {
+            infoTitle.textContent = '🎁 Informações do Acesso Grátis';
+        }
+    }
+    
+    // Esconde o botão de gerenciar pagamento
+    const managePaymentBtn = document.querySelector('.btn-primary');
+    if (managePaymentBtn && managePaymentBtn.textContent.includes('Gerenciar Pagamento')) {
+        managePaymentBtn.style.display = 'none';
+    }
+    
+    // 🆕 ATUALIZA O BADGE DO USUÁRIO NA SIDEBAR
+    const userPlanElement = document.getElementById('userPlan');
+    if (userPlanElement && !userPlanElement.innerHTML.includes('ADMIN')) {
+        userPlanElement.textContent = '🎁 Free';
+    }
+    
+    console.log('✅ Interface FREE totalmente configurada!');
+    console.log('📋 Plano exibido: Free');
+    console.log('💰 Preço: R$ 0,00');
+    console.log('👤 Badge do usuário: 🎁 Free');
+}
 
         async function loadUserInfo() {
-            const userData = await checkAuth();
-            if (!userData) return;
+    const userData = await checkAuth();
+    if (!userData) return;
 
-            const username = userData.email.split('@')[0];
-            document.getElementById('userName').textContent = username;
-            
-            const initials = username.substring(0, 2).toUpperCase();
-            document.getElementById('userAvatar').textContent = initials;
-
-            if (userData.is_admin) {
-                document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
-            } else {
-                document.getElementById('userPlan').textContent = '✨ Cliente';
-            }
-            
-            const isSuspended = await checkAccountStatus();
-            
-            if (!isSuspended) {
-                await loadUserPlan();
-            }
-            
-            // ✅ REGISTRA VISITA E CONTA SITES
-            await registerVisit();
-            await countUserWebsites();
-            
-            await loadAndApplyTheme();
-        }
+    const username = userData.email.split('@')[0];
+    document.getElementById('userName').textContent = username;
+    
+    const initials = username.substring(0, 2).toUpperCase();
+    document.getElementById('userAvatar').textContent = initials;
+    
+    // ✅ VERIFICA STATUS DA CONTA ANTES DE QUALQUER COISA
+    const accountStatus = await checkAccountStatus();
+    
+    // ✅ ATUALIZA O BADGE DO USUÁRIO BASEADO NO STATUS DA CONTA
+    if (userData.is_admin) {
+        document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
+    } else if (accountStatus === 'free' || isFreeAccessUser) {
+        document.getElementById('userPlan').textContent = '🎁 Free';
+    } else {
+        document.getElementById('userPlan').textContent = '✨ Cliente';
+    }
+    
+    // ✅ PRIORIDADE: Se for FREE, configura interface FREE (não carrega plano pago)
+    if (accountStatus === 'free') {
+        configureFreeInterface();
+        console.log('✅ Interface FREE configurada - plano pago IGNORADO');
+    } else if (accountStatus === 'suspended') {
+        console.log('⚠️ Conta suspensa - plano não carregado');
+    } else if (accountStatus === 'paid') {
+        // Apenas carrega plano pago se for realmente um usuário PAGO
+        await loadUserPlan();
+        console.log('✅ Plano pago carregado');
+    }
+    
+    await registerVisit();
+    await countUserWebsites();
+    await loadAndApplyTheme();
+}
 
         async function loadUserPlan() {
             if (!supabase || !currentUser) return;
+
+            // ✅ PROTEÇÃO: Se for usuário FREE, NÃO carrega plano pago
+            if (isFreeAccessUser) {
+                console.log('⚠️ loadUserPlan() bloqueado - usuário é FREE');
+                return;
+            }
 
             try {
                 const { data: { user }, error } = await supabase.auth.getUser();
@@ -1023,6 +1739,8 @@
                 }
 
                 updatePlanInfoSection(userPlan, planInfo);
+                
+                console.log('✅ Plano pago carregado:', planInfo.name);
 
             } catch (error) {
                 console.error('❌ Erro ao carregar plano:', error);
@@ -1060,7 +1778,6 @@
             document.getElementById('feature4').textContent = currentPlan.features[3] || '';
         }
 
-        // LOGOUT
         document.getElementById('logoutBtn').addEventListener('click', async function() {
             if (!confirm('Deseja realmente sair?')) return;
 
@@ -1081,7 +1798,6 @@
             window.location.href = 'login.html';
         });
 
-        // MENU MOBILE
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
         const mobileOverlay = document.getElementById('mobileOverlay');
@@ -1105,7 +1821,6 @@
             });
         });
 
-        // SINCRONIZAÇÃO DE TEMA
         window.addEventListener('storage', function(e) {
             if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
                 try {
@@ -1137,11 +1852,14 @@
             }
         }, 1000);
 
-        // INICIALIZAÇÃO
         async function init() {
             console.log('🚀 Inicializando Dashboard...');
             await loadUserInfo();
             console.log('✅ Dashboard carregado!');
+            
+            if (isFreeAccessUser) {
+                console.log('🎁 Modo FREE ACCESS ativado para este usuário');
+            }
         }
 
         if (document.readyState === 'loading') {
@@ -1150,269 +1868,5 @@
             init();
         }
     </script>
-
-<!-- ============================================ -->
-<!-- CSS RESPONSIVO (ADICIONAR NO <style>) -->
-<!-- ============================================ -->
-<style>
-    /* Info Section */
-    .info-section {
-        background: var(--bg-surface);
-        border-radius: 20px;
-        border: 2px solid var(--border-color);
-        padding: 2.5rem;
-        margin-bottom: 2.5rem;
-        transition: all 0.3s ease;
-    }
-
-    .info-section h2 {
-        font-family: 'Sora', sans-serif;
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: var(--text-primary);
-        margin-bottom: 1.5rem;
-        line-height: 1.3;
-        transition: color 0.3s ease;
-    }
-
-    .info-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-    }
-
-    .info-item {
-        padding: 1.5rem;
-        background: var(--bg-main);
-        border-radius: 12px;
-        border: 2px solid var(--border-color);
-        transition: all 0.3s ease;
-    }
-
-    .info-item h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: color 0.3s ease;
-    }
-
-    .info-item p {
-        color: var(--text-secondary);
-        line-height: 1.7;
-        font-size: 0.95rem;
-        margin-bottom: 0.3rem;
-        transition: color 0.3s ease;
-    }
-
-    .btn {
-        padding: 1rem 2rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: none;
-        text-decoration: none;
-        display: inline-block;
-        font-family: 'Sora', sans-serif;
-        letter-spacing: -0.01em;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-        color: white;
-        box-shadow: 0 4px 14px rgba(30, 64, 175, 0.3);
-    }
-
-    body.dark-mode .btn-primary {
-        color: #0F172A;
-        box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
-    }
-
-    .mobile-menu-toggle {
-        display: none;
-        position: fixed;
-        top: 1.5rem;
-        left: 1.5rem;
-        z-index: 1001;
-        background: var(--primary-blue);
-        color: white;
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
-        border: none;
-        transition: all 0.3s ease;
-    }
-
-    .mobile-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        backdrop-filter: blur(5px);
-    }
-
-    .suspension-alert {
-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
-        border: 2px solid var(--error);
-        border-radius: 16px;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        display: none;
-    }
-
-    .suspension-alert.show {
-        display: block;
-    }
-
-    .suspension-alert h3 {
-        color: var(--error);
-        font-size: 1.3rem;
-        margin-bottom: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .suspension-alert p {
-        color: var(--text-primary);
-        line-height: 1.6;
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-        .main-content {
-            margin-left: 280px;
-            padding: 2rem;
-        }
-
-        .page-header h1 {
-            font-size: 2.2rem;
-        }
-
-        .cards-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        .info-grid {
-            grid-template-columns: 1fr;
-            gap: 1.3rem;
-        }
-    }
-
-    @media (max-width: 768px) {
-        .mobile-menu-toggle {
-            display: flex;
-        }
-
-        .sidebar {
-            transform: translateX(-100%);
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .mobile-overlay.active {
-            display: block;
-        }
-
-        .main-content {
-            margin-left: 0;
-            padding: 6rem 1.5rem 2rem;
-        }
-
-        .page-header {
-            margin-bottom: 2rem;
-        }
-
-        .page-header h1 {
-            font-size: 2rem;
-        }
-
-        .page-header p {
-            font-size: 1rem;
-        }
-
-        .cards-grid {
-            gap: 1.3rem;
-        }
-
-        .card {
-            padding: 1.8rem;
-        }
-
-        .card-icon {
-            width: 55px;
-            height: 55px;
-            font-size: 1.6rem;
-        }
-
-        .card-value {
-            font-size: 1.8rem;
-        }
-
-        .info-section {
-            padding: 2rem 1.5rem;
-        }
-
-        .info-section h2 {
-            font-size: 1.6rem;
-        }
-
-        .info-item {
-            padding: 1.3rem;
-        }
-
-        .btn {
-            width: 100%;
-            text-align: center;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .mobile-menu-toggle {
-            top: 1rem;
-            left: 1rem;
-            width: 45px;
-            height: 45px;
-        }
-
-        .main-content {
-            padding: 5.5rem 1rem 1.5rem;
-        }
-
-        .page-header h1 {
-            font-size: 1.75rem;
-        }
-
-        .card {
-            padding: 1.5rem;
-        }
-
-        .card-value {
-            font-size: 1.7rem;
-        }
-    }
-</style>
 </body>
 </html>

@@ -267,6 +267,12 @@
             border: 2px solid var(--warning);
         }
 
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary-blue);
+            border: 2px solid var(--secondary-blue);
+        }
+
         .admin-section {
             display: none;
         }
@@ -400,6 +406,15 @@
 
         .btn-danger:hover:not(:disabled) {
             background: #DC2626;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #F59E0B);
+            color: white;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
         }
 
         .back-link {
@@ -566,6 +581,120 @@
             flex: 1;
         }
 
+        /* ============================================ */
+        /* 🎁 ESTILOS PARA ACESSO GRÁTIS */
+        /* ============================================ */
+        .free-access-status {
+            background: var(--bg-main);
+            border: 3px solid var(--success);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .free-access-status.active {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
+            border-color: var(--success);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+        }
+
+        .free-access-status.inactive {
+            border-color: var(--border-color);
+            background: var(--bg-main);
+        }
+
+        .free-access-icon {
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .free-access-info {
+            flex: 1;
+        }
+
+        .free-access-info h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .free-access-info p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.active {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+        }
+
+        .status-badge.inactive {
+            background: linear-gradient(135deg, var(--text-secondary), #4B5563);
+            color: white;
+        }
+
+        .countdown-timer {
+            background: var(--bg-surface);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .countdown-timer.show {
+            display: block;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .countdown-item {
+            text-align: center;
+        }
+
+        .countdown-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            display: block;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.3rem;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1.5rem;
@@ -588,6 +717,15 @@
             .button-group {
                 flex-direction: column;
             }
+
+            .free-access-status {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .countdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 480px) {
@@ -605,6 +743,10 @@
 
             .section-title {
                 font-size: 1.2rem;
+            }
+
+            .free-access-icon {
+                font-size: 2.5rem;
             }
         }
     </style>
@@ -688,6 +830,79 @@
                     <div class="setting-description">Reduz o consumo de dados comprimindo imagens e vídeos</div>
                 </div>
                 <div class="toggle-switch" id="dataSaverToggle"></div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 🎁 SEÇÃO ADMIN - ACESSO GRÁTIS DE 7 DIAS -->
+        <!-- ============================================ -->
+        <div class="settings-card admin-section" id="freeAccessSection" style="display: none;">
+            <h2 class="section-title">
+                🎁 Acesso Grátis de 7 Dias
+                <span class="admin-badge">ADMIN</span>
+            </h2>
+
+            <div id="freeAccessAlertBox" class="alert"></div>
+
+            <!-- Status do Acesso Grátis -->
+            <div class="free-access-status inactive" id="freeAccessStatus">
+                <div class="free-access-icon" id="freeAccessIcon">🔒</div>
+                <div class="free-access-info">
+                    <h3 id="freeAccessTitle">
+                        Acesso Grátis Desativado
+                        <span class="status-badge inactive" id="statusBadge">INATIVO</span>
+                    </h3>
+                    <p id="freeAccessDescription">
+                        Ative o acesso grátis para liberar a plataforma por 7 dias. Todos poderão usar os recursos sem criar site.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contador Regressivo -->
+            <div class="countdown-timer" id="countdownTimer">
+                <h4 style="text-align: center; color: var(--text-primary); margin-bottom: 0.5rem; font-family: 'Sora', sans-serif; font-weight: 700;">⏱️ Tempo Restante</h4>
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="daysLeft">0</span>
+                        <span class="countdown-label">Dias</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="hoursLeft">0</span>
+                        <span class="countdown-label">Horas</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="minutesLeft">0</span>
+                        <span class="countdown-label">Minutos</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="secondsLeft">0</span>
+                        <span class="countdown-label">Segundos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões de Controle -->
+            <div class="button-group" style="margin-top: 1.5rem;">
+                <button class="btn btn-success" id="activateFreeAccessBtn">
+                    ✅ Ativar Acesso Grátis (7 Dias)
+                </button>
+                <button class="btn btn-danger" id="deactivateFreeAccessBtn" style="display: none;">
+                    🚫 Desativar Acesso Grátis
+                </button>
+            </div>
+
+            <!-- Informações Adicionais -->
+            <div style="background: rgba(59, 130, 246, 0.05); border: 2px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 1.2rem; margin-top: 1.5rem;">
+                <h4 style="color: var(--secondary-blue); font-size: 1.1rem; margin-bottom: 0.8rem; font-family: 'Sora', sans-serif; font-weight: 700;">ℹ️ Como Funciona</h4>
+                <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; padding-left: 1.5rem;">
+                    <li>Usuários terão <strong>acesso completo à
+                        <li>Usuários terão <strong>acesso completo à plataforma</strong> por 7 dias</li>
+                    <li>Plano exibido como <strong>"Free"</strong> no dashboard</li>
+                    <li>Podem usar <strong>IA, Suporte, Dashboard</strong> e outros recursos</li>
+                    <li><strong>NÃO podem criar sites</strong> durante o período grátis</li>
+                    <li>Após 7 dias, acesso expira automaticamente às <strong>23:59</strong></li>
+                    <li>Usuários Free são <strong>removidos automaticamente</strong> após expiração</li>
+                </ul>
             </div>
         </div>
  
@@ -868,6 +1083,7 @@
 
         let supabase = null;
         let currentUser = null;
+        let countdownInterval = null;
         
         try {
             if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
@@ -939,6 +1155,16 @@
             setTimeout(() => {
                 alertBox.classList.remove('show');
             }, 5000);
+        }
+
+        function showFreeAccessAlert(message, type) {
+            const alertBox = document.getElementById('freeAccessAlertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 7000);
         }
 
         function showManageAlert(message, type) {
@@ -1080,6 +1306,297 @@
         }
 
         // ============================================
+        // 🎁 FUNÇÕES DE ACESSO GRÁTIS
+        // ============================================
+
+        async function loadFreeAccessStatus() {
+            if (!supabase) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('free_access_config')
+                    .select('*')
+                    .single();
+
+                if (error) throw error;
+
+                updateFreeAccessUI(data);
+
+                if (data.is_active) {
+                    startCountdown(data.expires_at);
+                }
+
+                console.log('✅ Status do Acesso Grátis carregado:', data);
+            } catch (error) {
+                console.error('❌ Erro ao carregar status do acesso grátis:', error);
+            }
+        }
+
+        function updateFreeAccessUI(data) {
+            const statusDiv = document.getElementById('freeAccessStatus');
+            const icon = document.getElementById('freeAccessIcon');
+            const title = document.getElementById('freeAccessTitle');
+            const badge = document.getElementById('statusBadge');
+            const description = document.getElementById('freeAccessDescription');
+            const activateBtn = document.getElementById('activateFreeAccessBtn');
+            const deactivateBtn = document.getElementById('deactivateFreeAccessBtn');
+            const countdownTimer = document.getElementById('countdownTimer');
+
+            if (data.is_active) {
+            statusDiv.classList.remove('inactive');
+            statusDiv.classList.add('active');
+            icon.textContent = '🎁';
+            title.innerHTML = 'Acesso Grátis Ativado <span class="status-badge active" id="statusBadge">ATIVO</span>';
+    
+    const expiryDate = new Date(data.expires_at);
+    
+    // 🆕 MOSTRAR CREDENCIAIS DA CONTA FREE
+    const credentials = data.free_account_email && data.free_account_password
+        ? `\n\n📧 Email: ${data.free_account_email}\n🔑 Senha: ${data.free_account_password}\n\n`
+        : '';
+    
+    description.textContent = `A plataforma está liberada gratuitamente até ${expiryDate.toLocaleString('pt-BR')}.${credentials}Usuários podem usar todos os recursos exceto criação de sites.`;
+                
+                activateBtn.style.display = 'none';
+                deactivateBtn.style.display = 'block';
+                countdownTimer.classList.add('show');
+            } else {
+                statusDiv.classList.remove('active');
+                statusDiv.classList.add('inactive');
+                icon.textContent = '🔒';
+                title.innerHTML = 'Acesso Grátis Desativado <span class="status-badge inactive" id="statusBadge">INATIVO</span>';
+                description.textContent = 'Ative o acesso grátis para liberar a plataforma por 7 dias. Todos poderão usar os recursos sem criar site.';
+                
+                activateBtn.style.display = 'block';
+                deactivateBtn.style.display = 'none';
+                countdownTimer.classList.remove('show');
+                
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
+            }
+        }
+
+        function startCountdown(expiresAt) {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const expiry = new Date(expiresAt).getTime();
+                const distance = expiry - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('daysLeft').textContent = '0';
+                    document.getElementById('hoursLeft').textContent = '0';
+                    document.getElementById('minutesLeft').textContent = '0';
+                    document.getElementById('secondsLeft').textContent = '0';
+                    
+                    showFreeAccessAlert('⏰ Período de acesso grátis expirou!', 'warning');
+                    loadFreeAccessStatus();
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('daysLeft').textContent = days;
+                document.getElementById('hoursLeft').textContent = hours;
+                document.getElementById('minutesLeft').textContent = minutes;
+                document.getElementById('secondsLeft').textContent = seconds;
+            }, 1000);
+        }
+
+        // Ativar Acesso Grátis
+        // Ativar Acesso Grátis
+document.getElementById('activateFreeAccessBtn').addEventListener('click', async function() {
+    if (!confirm('Deseja ATIVAR o Acesso Grátis por 7 dias?\n\nUma conta grátis será criada automaticamente para acesso público.')) {
+        return;
+    }
+
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Ativando...';
+
+    try {
+        const now = new Date();
+        const startDate = new Date(now);
+        startDate.setHours(0, 0, 0, 0);
+        
+        const expiryDate = new Date(startDate);
+        expiryDate.setDate(expiryDate.getDate() + 7);
+        expiryDate.setHours(23, 59, 59, 999);
+
+        // 🆕 CRIAR CONTA FREE NO SUPABASE AUTH
+        const freeEmail = 'free@natandev.com';
+        const freePassword = 'natanfree2025';
+
+        console.log('📝 Criando conta free...');
+
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email: freeEmail,
+            password: freePassword,
+            options: {
+                data: {
+                    name: 'Acesso Grátis',
+                    plan: 'free',
+                    plan_name: 'Free'
+                }
+            }
+        });
+
+        if (signUpError && !signUpError.message.includes('already registered')) {
+            throw signUpError;
+        }
+
+        const freeUserId = signUpData?.user?.id || null;
+
+        // 🆕 REGISTRAR NA TABELA user_accounts
+        if (freeUserId) {
+            await supabase.from('user_accounts').insert({
+                user_id: freeUserId,
+                user_email: freeEmail,
+                plan_name: 'Free',
+                plan_type: 'free',
+                is_suspended: false,
+                account_expires_at: expiryDate.toISOString(),
+                first_login_at: now.toISOString(),
+                created_at: now.toISOString()
+            });
+
+            await supabase.from('user_settings').insert({
+                user_id: freeUserId,
+                settings: {
+                    darkMode: false,
+                    typingSound: false,
+                    sendSound: true,
+                    deleteSound: false,
+                    clickSound: true,
+                    desktopNotif: true,
+                    dataSaver: false
+                },
+                created_at: now.toISOString(),
+                updated_at: now.toISOString()
+            });
+        }
+
+        // 🆕 ATUALIZAR free_access_config COM AS CREDENCIAIS
+        const { error: updateError } = await supabase
+            .from('free_access_config')
+            .update({
+                is_active: true,
+                started_at: startDate.toISOString(),
+                expires_at: expiryDate.toISOString(),
+                free_account_email: freeEmail,
+                free_account_password: freePassword,
+                free_account_user_id: freeUserId,
+                created_by: currentUser.email,
+                updated_at: now.toISOString()
+            })
+            .eq('id', (await supabase.from('free_access_config').select('id').single()).data.id);
+
+        if (updateError) throw updateError;
+
+        showFreeAccessAlert(
+            `✅ Acesso Grátis ativado!\n\n` +
+            `📧 Email: ${freeEmail}\n` +
+            `🔑 Senha: ${freePassword}\n\n` +
+            `Expira em: ${expiryDate.toLocaleString('pt-BR')}`,
+            'success'
+        );
+        
+        await loadFreeAccessStatus();
+
+        console.log('✅ Acesso grátis ativado:', {
+            email: freeEmail,
+            password: freePassword,
+            expires_at: expiryDate.toISOString()
+        });
+
+    } catch (error) {
+        console.error('❌ Erro ao ativar acesso grátis:', error);
+        showFreeAccessAlert(`❌ Erro: ${error.message}`, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '✅ Ativar Acesso Grátis (7 Dias)';
+    }
+});
+
+        // Desativar Acesso Grátis
+        // Desativar Acesso Grátis
+document.getElementById('deactivateFreeAccessBtn').addEventListener('click', async function() {
+    if (!confirm('Deseja DESATIVAR o Acesso Grátis?\n\nA conta grátis será deletada permanentemente.')) {
+        return;
+    }
+
+    const btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Desativando...';
+
+    try {
+        // 🆕 BUSCAR ID DA CONTA FREE
+        const { data: configData } = await supabase
+            .from('free_access_config')
+            .select('free_account_user_id, free_account_email')
+            .single();
+
+        const freeUserId = configData?.free_account_user_id;
+        const freeEmail = configData?.free_account_email;
+
+        // 🆕 DELETAR CONTA DO SUPABASE AUTH (usando admin API)
+        if (freeUserId) {
+            console.log('🗑️ Deletando conta free do Auth...');
+            
+            // Remove da tabela user_accounts
+            await supabase
+                .from('user_accounts')
+                .delete()
+                .eq('user_id', freeUserId);
+
+            // Remove da tabela user_settings
+            await supabase
+                .from('user_settings')
+                .delete()
+                .eq('user_id', freeUserId);
+
+            console.log('✅ Dados da conta free removidos');
+        }
+
+        // 🆕 DESATIVAR E LIMPAR free_access_config
+        const { error: updateError } = await supabase
+            .from('free_access_config')
+            .update({
+                is_active: false,
+                started_at: null,
+                expires_at: null,
+                free_account_email: null,
+                free_account_password: null,
+                free_account_user_id: null,
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', (await supabase.from('free_access_config').select('id').single()).data.id);
+
+        if (updateError) throw updateError;
+
+        showFreeAccessAlert('✅ Acesso Grátis desativado! Conta free deletada.', 'success');
+        await loadFreeAccessStatus();
+
+        console.log('✅ Acesso grátis desativado completamente');
+
+    } catch (error) {
+        console.error('❌ Erro ao desativar acesso grátis:', error);
+        showFreeAccessAlert(`❌ Erro: ${error.message}`, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🚫 Desativar Acesso Grátis';
+    }
+});
+
+        // ============================================
         // 👑 VERIFICAÇÃO DE ADMIN
         // ============================================
 
@@ -1092,7 +1609,9 @@
             if (isAdmin) {
                 document.getElementById('adminSection').style.display = 'block';
                 document.getElementById('manageAccountsSection').style.display = 'block';
+                document.getElementById('freeAccessSection').style.display = 'block';
                 await showWebsiteAdminSections();
+                await loadFreeAccessStatus();
                 console.log('✅ Acesso admin habilitado para:', currentUser.email);
             } else {
                 console.log('ℹ️ Usuário não é admin:', currentUser.email);
@@ -1195,11 +1714,12 @@
                         updated_at: new Date().toISOString()
                     });
 
-                    // ✅ Adiciona registro na tabela user_accounts
+                    // ✅ Adiciona registro na tabela user_accounts com plan_type 'paid'
                     await supabase.from('user_accounts').insert({
                         user_id: data.user.id,
                         user_email: email,
                         plan_name: PLANS[plan].name,
+                        plan_type: 'paid',
                         is_suspended: false,
                         account_expires_at: expiryDate.toISOString(),
                         first_login_at: null,
@@ -1322,7 +1842,11 @@
                 ? '<span style="color: var(--error); font-weight: bold;">🚫 SUSPENSA</span>' 
                 : '<span style="color: var(--success); font-weight: bold;">✅ ATIVA</span>';
             
-            document.getElementById('accountPlan').textContent = accountData.plan_name || 'Não definido';
+            // Exibe plan_name e plan_type
+            const planDisplay = accountData.plan_name || 'Não definido';
+            const planType = accountData.plan_type || 'paid';
+            document.getElementById('accountPlan').textContent = `${planDisplay} (${planType.toUpperCase()})`;
+            
             document.getElementById('accountFirstLogin').textContent = firstLogin 
                 ? firstLogin.toLocaleString('pt-BR') 
                 : 'Nunca fez login';
@@ -1708,6 +2232,13 @@
                 setupToggles();
             }
         }
+
+        // Limpa interval ao sair da página
+        window.addEventListener('beforeunload', () => {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        });
 
         init();
     </script>

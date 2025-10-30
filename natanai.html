@@ -26,6 +26,7 @@
             --success: #10B981;
             --error: #EF4444;
             --warning: #F59E0B;
+            --orange: #F97316;
             --ai-bubble: #EEF2FF;
             --user-bubble: #DBEAFE;
         }
@@ -41,6 +42,7 @@
             --success: #22C55E;
             --error: #F87171;
             --warning: #E0C15A;
+            --orange: #FB923C;
             --ai-bubble: #1E293B;
             --user-bubble: #334155;
         }
@@ -62,7 +64,6 @@
             background: linear-gradient(135deg, #F9FAFB 0%, #E0E7FF 50%, #F9FAFB 100%);
         }
 
-        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
@@ -262,7 +263,6 @@
             transform: translateY(-2px);
         }
 
-        /* Chat Container */
         .chat-container {
             margin-left: 280px;
             height: 100vh;
@@ -329,6 +329,138 @@
         .status-dot.offline {
             background: var(--error);
             animation: none;
+        }
+
+        /* ============================================ */
+        /* 🎁 CONTADOR DE TOKENS (APENAS FREE USERS) */
+        /* ============================================ */
+        .tokens-counter {
+            background: var(--bg-surface);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 2rem 0;
+            display: none;
+            animation: slideDown 0.5s ease;
+        }
+
+        .tokens-counter.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tokens-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .tokens-label {
+            font-family: 'Sora', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .tokens-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--success);
+            transition: color 0.3s ease;
+        }
+
+        .tokens-value.warning {
+            color: var(--warning);
+        }
+
+        .tokens-value.orange {
+            color: var(--orange);
+        }
+
+        .tokens-value.danger {
+            color: var(--error);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .tokens-bar-container {
+            width: 100%;
+            height: 12px;
+            background: var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tokens-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #059669);
+            border-radius: 10px;
+            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .tokens-bar.warning {
+            background: linear-gradient(90deg, var(--warning), #F59E0B);
+        }
+
+        .tokens-bar.orange {
+            background: linear-gradient(90deg, var(--orange), #EA580C);
+        }
+
+        .tokens-bar.danger {
+            background: linear-gradient(90deg, var(--error), #DC2626);
+        }
+
+        .tokens-percentage {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        .tokens-reset-timer {
+            margin-top: 0.8rem;
+            padding: 0.8rem;
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--error);
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .tokens-reset-timer.show {
+            display: block;
+        }
+
+        .tokens-reset-timer p {
+            font-size: 0.85rem;
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        .tokens-reset-timer .timer {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--error);
+            margin-top: 0.3rem;
         }
 
         .chat-messages {
@@ -519,6 +651,11 @@
             box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
         }
 
+        .chat-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .btn-send {
             padding: 1rem 2rem;
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
@@ -620,17 +757,6 @@
             text-align: center;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .alert.show {
             display: block;
         }
@@ -711,6 +837,11 @@
 
             .welcome-message p {
                 font-size: 1rem;
+            }
+
+            .tokens-counter {
+                margin: 1rem;
+                padding: 0.8rem 1rem;
             }
         }
 
@@ -823,6 +954,26 @@
             </div>
         </div>
 
+        <!-- ============================================ -->
+        <!-- 🎁 CONTADOR DE TOKENS (SÓ APARECE PARA FREE) -->
+        <!-- ============================================ -->
+        <div class="tokens-counter" id="tokensCounter">
+            <div class="tokens-header">
+                <span class="tokens-label">🎁 Tokens Restantes</span>
+                <span class="tokens-value" id="tokensValue">10.000</span>
+            </div>
+            <div class="tokens-bar-container">
+                <div class="tokens-bar" id="tokensBar" style="width: 100%;"></div>
+            </div>
+            <div class="tokens-percentage" id="tokensPercentage">100% disponível</div>
+            
+            <!-- Timer de Reset (só aparece quando zerar) -->
+            <div class="tokens-reset-timer" id="tokensResetTimer">
+                <p>🔄 Tokens resetam em:</p>
+                <div class="timer" id="resetTimerDisplay">--:--:--</div>
+            </div>
+        </div>
+
         <div id="alertBox" class="alert"></div>
 
         <div class="chat-messages" id="chatMessages">
@@ -855,16 +1006,15 @@
         const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
         const ADMIN_EMAIL = 'natan@natandev.com';
-
-        // ⚠️ ALTERE PARA A URL DA SUA API PYTHON
-        const API_URL = 'http://127.0.0.1:5000/api/chat';
-        // Em produção: const API_URL = 'https://sua-api.render.com/api/chat';
+        const API_URL = 'https://natanai-dev.onrender.com/api/chat';
 
         let supabase = null;
         let currentUser = null;
         let userPlan = 'starter';
         let isAdmin = false;
+        let isFreeUser = false;
         let apiConnected = false;
+        let resetTimerInterval = null;
         
         try {
             if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
@@ -917,6 +1067,272 @@
         }
 
         // ============================================
+        // 🎁 FUNÇÕES DE TOKENS
+        // ============================================
+
+        async function checkIfFreeUser() {
+            if (!supabase || !currentUser) return false;
+
+            try {
+                const { data, error } = await supabase
+                    .from('user_accounts')
+                    .select('plan_type')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (error) throw error;
+
+                return data?.plan_type === 'free';
+            } catch (error) {
+                console.error('Erro ao verificar tipo de usuário:', error);
+                return false;
+            }
+        }
+
+        async function initializeTokens() {
+            if (!supabase || !currentUser || !isFreeUser) return;
+
+            try {
+                const { data: existing, error: fetchError } = await supabase
+                    .from('free_user_tokens')
+                    .select('*')
+                    .eq('user_email', currentUser.email)
+                    .single();
+
+                if (fetchError && fetchError.code !== 'PGRST116') {
+                    throw fetchError;
+                }
+
+                if (!existing) {
+                    // Cria registro inicial com 10.000 tokens
+                    const { error: insertError } = await supabase
+                        .from('free_user_tokens')
+                        .insert({
+                            user_id: currentUser.id,
+                            user_email: currentUser.email,
+                            total_tokens: 10000,
+                            used_tokens: 0,
+                            remaining_tokens: 10000,
+                            created_at: new Date().toISOString(),
+                            updated_at: new Date().toISOString()
+                        });
+
+                    if (insertError) throw insertError;
+
+                    console.log('✅ Tokens inicializados: 10.000');
+                    await updateTokensDisplay(10000, 10000);
+                } else {
+                    // Verifica se precisa resetar (após 24h)
+                    await checkAndResetTokens(existing);
+                    await updateTokensDisplay(existing.remaining_tokens, existing.total_tokens);
+                }
+
+                document.getElementById('tokensCounter').classList.add('show');
+            } catch (error) {
+                console.error('Erro ao inicializar tokens:', error);
+            }
+        }
+
+        async function checkAndResetTokens(tokenData) {
+            if (!tokenData.tokens_reset_at) return;
+
+            const now = new Date();
+            const resetTime = new Date(tokenData.tokens_reset_at);
+
+            // Se passou de 24h, reseta os tokens
+            if (now >= resetTime) {
+                console.log('🔄 Resetando tokens após 24h...');
+
+                const { error } = await supabase
+                    .from('free_user_tokens')
+                    .update({
+                        used_tokens: 0,
+                        remaining_tokens: 10000,
+                        tokens_reset_at: null,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('user_email', currentUser.email);
+
+                if (error) throw error;
+
+                await updateTokensDisplay(10000, 10000);
+                showAlert('✅ Seus tokens foram resetados! Você tem 10.000 tokens novamente.', 'success');
+                
+                // Esconde timer de reset
+                document.getElementById('tokensResetTimer').classList.remove('show');
+                if (resetTimerInterval) {
+                    clearInterval(resetTimerInterval);
+                }
+            } else {
+                // Inicia contagem regressiva
+                startResetTimer(resetTime);
+            }
+        }
+
+        function startResetTimer(resetTime) {
+            const timerDisplay = document.getElementById('resetTimerDisplay');
+            const timerContainer = document.getElementById('tokensResetTimer');
+            
+            timerContainer.classList.add('show');
+
+            if (resetTimerInterval) {
+                clearInterval(resetTimerInterval);
+            }
+
+            resetTimerInterval = setInterval(() => {
+                const now = new Date();
+                const diff = resetTime - now;
+
+                if (diff <= 0) {
+                    clearInterval(resetTimerInterval);
+                    timerDisplay.textContent = '00:00:00';
+                    // Recarrega tokens
+                    initializeTokens();
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                timerDisplay.textContent = 
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function updateTokensDisplay(remaining, total) {
+            const tokensValue = document.getElementById('tokensValue');
+            const tokensBar = document.getElementById('tokensBar');
+            const tokensPercentage = document.getElementById('tokensPercentage');
+
+            const percentage = (remaining / total) * 100;
+
+            tokensValue.textContent = remaining.toLocaleString('pt-BR');
+            tokensBar.style.width = percentage + '%';
+            tokensPercentage.textContent = `${Math.round(percentage)}% disponível`;
+
+            // Remove classes antigas
+            tokensValue.classList.remove('warning', 'orange', 'danger');
+            tokensBar.classList.remove('warning', 'orange', 'danger');
+
+            // Aplica cores baseado na porcentagem
+            if (percentage >= 75) {
+                // Verde (padrão)
+            } else if (percentage >= 30) {
+                // Amarelo
+                tokensValue.classList.add('warning');
+                tokensBar.classList.add('warning');
+            } else if (percentage >= 10) {
+                // Laranja
+                tokensValue.classList.add('orange');
+                tokensBar.classList.add('orange');
+            } else {
+                // Vermelho
+                tokensValue.classList.add('danger');
+                tokensBar.classList.add('danger');
+            }
+        }
+
+        async function deductTokens(userMessageLength, aiResponseLength) {
+            if (!supabase || !currentUser || !isFreeUser) return true;
+
+            const totalUsed = userMessageLength + aiResponseLength;
+
+            try {
+                const { data: current, error: fetchError } = await supabase
+                    .from('free_user_tokens')
+                    .select('*')
+                    .eq('user_email', currentUser.email)
+                    .single();
+
+                if (fetchError) throw fetchError;
+
+                const newUsed = current.used_tokens + totalUsed;
+                const newRemaining = current.total_tokens - newUsed;
+
+                // Se zerou os tokens, inicia contagem de 24h
+                let resetAt = current.tokens_reset_at;
+                if (newRemaining <= 0 && !resetAt) {
+                    const resetTime = new Date();
+                    resetTime.setHours(resetTime.getHours() + 24);
+                    resetAt = resetTime.toISOString();
+                    
+                    console.log('⏱️ Tokens zerados! Reset em 24h:', resetAt);
+                    startResetTimer(resetTime);
+                }
+
+                const { error: updateError } = await supabase
+                    .from('free_user_tokens')
+                    .update({
+                        used_tokens: newUsed,
+                        remaining_tokens: Math.max(0, newRemaining),
+                        tokens_reset_at: resetAt,
+                        last_message_at: new Date().toISOString(),
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('user_email', currentUser.email);
+
+                if (updateError) throw updateError;
+
+                await updateTokensDisplay(Math.max(0, newRemaining), current.total_tokens);
+
+                console.log(`📊 Tokens descontados: ${totalUsed} (User: ${userMessageLength} + IA: ${aiResponseLength})`);
+                console.log(`💰 Tokens restantes: ${Math.max(0, newRemaining)}`);
+
+                return newRemaining > 0;
+            } catch (error) {
+                console.error('Erro ao descontar tokens:', error);
+                return true;
+            }
+        }
+
+        async function checkTokensBeforeSend(messageLength) {
+            if (!isFreeUser) return true;
+
+            try {
+                const { data, error } = await supabase
+                    .from('free_user_tokens')
+                    .select('remaining_tokens, tokens_reset_at')
+                    .eq('user_email', currentUser.email)
+                    .single();
+
+                if (error) throw error;
+
+                if (data.remaining_tokens <= 0) {
+                    if (data.tokens_reset_at) {
+                        const resetTime = new Date(data.tokens_reset_at);
+                        const now = new Date();
+                        const hoursLeft = Math.ceil((resetTime - now) / (1000 * 60 * 60));
+                        
+                        showAlert(
+                            `🚫 Seus tokens acabaram! Eles serão resetados em aproximadamente ${hoursLeft}h. ` +
+                            `Ou contrate um plano pago para uso ilimitado.`,
+                            'error'
+                        );
+                    } else {
+                        showAlert('🚫 Seus tokens acabaram! Contrate um plano pago para continuar.', 'error');
+                    }
+                    return false;
+                }
+
+                if (data.remaining_tokens < messageLength) {
+                    showAlert(
+                        `⚠️ Você tem apenas ${data.remaining_tokens} tokens restantes, ` +
+                        `mas sua mensagem tem ${messageLength} caracteres. ` +
+                        `Tente uma mensagem mais curta.`,
+                        'warning'
+                    );
+                    return false;
+                }
+
+                return true;
+            } catch (error) {
+                console.error('Erro ao verificar tokens:', error);
+                return false;
+            }
+        }
+
+        // ============================================
         // 🔐 VERIFICA AUTENTICAÇÃO
         // ============================================
         async function checkAuth() {
@@ -941,17 +1357,26 @@
                 userPlan = currentUser.user_metadata?.plan || 'starter';
                 isAdmin = currentUser.email === ADMIN_EMAIL;
                 
+                // Verifica se é usuário free
+                isFreeUser = await checkIfFreeUser();
+                
                 localStorage.setItem('natandev_is_admin', isAdmin.toString());
                 
                 console.log('✅ Usuário autenticado:', {
                     email: currentUser.email,
                     plan: userPlan,
-                    isAdmin: isAdmin
+                    isAdmin: isAdmin,
+                    isFree: isFreeUser
                 });
 
                 await loadUserInfo();
                 await loadAndApplyTheme();
                 await checkAPIConnection();
+                
+                // Se for free, inicializa sistema de tokens
+                if (isFreeUser) {
+                    await initializeTokens();
+                }
                 
                 return true;
                 
@@ -963,11 +1388,10 @@
         }
 
         // ============================================
-        // 🔌 VERIFICA CONEXÃO COM API (SEM USAR OPENAI)
+        // 🔌 VERIFICA CONEXÃO COM API
         // ============================================
         async function checkAPIConnection() {
             try {
-                // Usa /ping ao invés de /health para não chamar OpenAI
                 const response = await fetch(API_URL.replace('/api/chat', '/ping'), {
                     method: 'GET',
                     headers: {
@@ -986,7 +1410,6 @@
                 apiConnected = false;
                 updateConnectionStatus(false);
                 console.error('❌ API Python offline:', error);
-                // Remove alert automático para não incomodar
                 console.warn('⚠️ API offline. Tentará reconectar ao enviar mensagem.');
             }
         }
@@ -1018,28 +1441,34 @@
 
             const PLAN_NAMES = {
                 starter: 'Starter',
-                professional: 'Professional'
+                professional: 'Professional',
+                free: 'Free'
             };
 
             const PLAN_ICONS = {
                 starter: '🌱',
-                professional: '💎'
+                professional: '💎',
+                free: '🎁'
             };
 
             if (isAdmin) {
                 document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
                 document.getElementById('headerPlanBadge').textContent = '👑 ADMIN';
                 
-                // Mensagem de boas-vindas personalizada para admin
                 document.getElementById('welcomeText').textContent = 
                     'Olá Natan! Como dono da NatanDEV, você tem acesso total. Posso te ajudar com informações técnicas, dados de clientes e sistema. Como posso te ajudar hoje?';
+            } else if (isFreeUser) {
+                document.getElementById('userPlan').textContent = '🎁 Free';
+                document.getElementById('headerPlanBadge').textContent = '🎁 Free Access';
+                
+                document.getElementById('welcomeText').textContent = 
+                    'Você está usando o acesso grátis! Tem 10.000 tokens (caracteres) que resetam a cada 24h. Aproveite para testar a IA e conhecer nossos serviços!';
             } else {
                 const planName = PLAN_NAMES[userPlan] || 'Starter';
                 const planIcon = PLAN_ICONS[userPlan] || '🌱';
                 document.getElementById('userPlan').textContent = `${planIcon} ${planName}`;
                 document.getElementById('headerPlanBadge').textContent = `${planIcon} ${planName}`;
                 
-                // Mensagem de boas-vindas personalizada por plano
                 if (userPlan === 'professional') {
                     document.getElementById('welcomeText').textContent = 
                         'Como cliente Professional, você tem suporte prioritário! Estou aqui para te ajudar com tudo sobre desenvolvimento web, SEO avançado, APIs e muito mais. Como posso te ajudar hoje?';
@@ -1087,7 +1516,8 @@
                     const icons = {
                         admin: '👑',
                         professional: '💎',
-                        starter: '🌱'
+                        starter: '🌱',
+                        free: '🎁'
                     };
                     tags.push(`${icons[metadata.tipo_usuario] || '👤'} ${metadata.tipo_usuario}`);
                 }
@@ -1160,6 +1590,14 @@
                 return;
             }
 
+            // ✅ VERIFICA TOKENS ANTES DE ENVIAR (SÓ PARA FREE)
+            if (isFreeUser) {
+                const canSend = await checkTokensBeforeSend(message.length);
+                if (!canSend) {
+                    return;
+                }
+            }
+
             if (!apiConnected) {
                 showAlert('⚠️ API offline. Tentando reconectar...', 'warning');
                 await checkAPIConnection();
@@ -1180,19 +1618,18 @@
             showTypingIndicator();
 
             try {
-                // Pega o token de sessão do Supabase
                 const { data: { session } } = await supabase.auth.getSession();
                 
                 if (!session) {
                     throw new Error('Sessão expirada. Faça login novamente.');
                 }
 
-                // Prepara os dados do usuário para enviar à API
                 const userData = {
                     user_id: currentUser.id,
                     email: currentUser.email,
                     plan: userPlan,
                     is_admin: isAdmin,
+                    is_free: isFreeUser,
                     name: currentUser.user_metadata?.name || currentUser.email.split('@')[0]
                 };
 
@@ -1201,7 +1638,6 @@
                     userData: userData
                 });
 
-                // Envia para API Python
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
@@ -1226,6 +1662,12 @@
                 if (data.response || data.resposta) {
                     const aiResponse = data.response || data.resposta;
                     addMessage(aiResponse, false, data.metadata);
+                    
+                    // ✅ DESCONTA TOKENS (SÓ PARA FREE)
+                    if (isFreeUser) {
+                        await deductTokens(message.length, aiResponse.length);
+                    }
+                    
                     console.log('✅ Resposta da IA recebida');
                 } else {
                     throw new Error('Resposta inválida da IA');
@@ -1292,6 +1734,11 @@
             localStorage.removeItem('natandev_is_admin');
             if (currentUser) {
                 localStorage.removeItem(`natandev_settings_${currentUser.id}`);
+            }
+            
+            // Limpa timer de reset
+            if (resetTimerInterval) {
+                clearInterval(resetTimerInterval);
             }
             
             window.location.href = 'login.html';
@@ -1368,6 +1815,27 @@
         }, 1000);
 
         // ============================================
+        // ⏱️ VERIFICA RESET DE TOKENS PERIODICAMENTE
+        // ============================================
+        setInterval(async function() {
+            if (!isFreeUser || !currentUser) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('free_user_tokens')
+                    .select('*')
+                    .eq('user_email', currentUser.email)
+                    .single();
+
+                if (error) return;
+
+                await checkAndResetTokens(data);
+            } catch (error) {
+                console.error('Erro ao verificar reset de tokens:', error);
+            }
+        }, 60000); // Verifica a cada 1 minuto
+
+        // ============================================
         // 🚀 INICIALIZAÇÃO
         // ============================================
         async function init() {
@@ -1381,12 +1849,20 @@
                     email: currentUser.email,
                     plan: userPlan,
                     is_admin: isAdmin,
+                    is_free: isFreeUser,
                     api_url: API_URL
                 });
                 
                 document.getElementById('chatInput').focus();
             }
         }
+
+        // Limpa timer ao sair da página
+        window.addEventListener('beforeunload', function() {
+            if (resetTimerInterval) {
+                clearInterval(resetTimerInterval);
+            }
+        });
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
