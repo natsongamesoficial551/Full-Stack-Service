@@ -48,8 +48,7 @@
         html, body {
             width: 100%;
             height: 100%;
-            overflow-x: hidden;
-            overflow-y: auto;
+            overflow: hidden;
             position: relative;
         }
 
@@ -58,7 +57,6 @@
             background: var(--bg-main);
             color: var(--text-primary);
             transition: background 0.3s ease, color 0.3s ease;
-            min-height: 100vh;
         }
 
         body.dark-mode {
@@ -84,6 +82,7 @@
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .sidebar-header {
@@ -93,6 +92,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .logo {
@@ -134,6 +134,7 @@
         .sidebar-content {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 1.5rem 0;
         }
 
@@ -319,15 +320,16 @@
             backdrop-filter: blur(5px);
         }
 
-        /* Chat Layout */
+        /* Chat Layout - CORRIGIDO */
         .chat-layout {
             margin-left: 280px;
-            min-height: 100vh;
+            height: 100vh;
             display: flex;
+            overflow: hidden;
             transition: margin-left 0.3s ease;
         }
 
-        /* Lista de Conversas (Admin) */
+        /* Lista de Conversas (Admin) - CORRIGIDO */
         .conversations-list {
             width: 320px;
             background: var(--bg-surface);
@@ -335,9 +337,9 @@
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
-            min-height: 100vh;
-            max-height: 100vh;
+            height: 100vh;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .conversations-header {
@@ -348,6 +350,7 @@
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
+            flex-shrink: 0;
         }
 
         .conversations-header-content {
@@ -373,6 +376,7 @@
         .conversations-scroll {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 1rem;
         }
 
@@ -465,12 +469,13 @@
             flex-shrink: 0;
         }
 
-        /* Chat Container */
+        /* Chat Container - CORRIGIDO */
         .chat-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .chat-header {
@@ -584,7 +589,6 @@
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
-            min-height: 400px;
             transition: all 0.3s ease;
         }
 
@@ -926,7 +930,6 @@
                 width: 100%;
                 height: 100vh;
                 z-index: 800;
-                overflow-y: auto;
             }
 
             .chat-header {
@@ -1212,6 +1215,7 @@
     </div>
 
     <script>
+
         // ============================================
         // 🔧 CONFIGURAÇÃO DO SUPABASE
         // ============================================
@@ -1282,93 +1286,92 @@
         // 🔐 VERIFICA AUTENTICAÇÃO
         // ============================================
         async function checkAuth() {
-    if (!supabase) {
-        console.error('⚠️ Supabase não configurado');
-        window.location.href = 'login.html';
-        return false;
-    }
-
-    try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) throw error;
-        
-        if (!session || !session.user) {
-            console.log('❌ Nenhuma sessão ativa');
-            window.location.href = 'login.html';
-            return false;
-        }
-
-        currentUser = session.user;
-        
-        // 🔒 VERIFICAÇÃO DE PLANO
-        try {
-            const { data: accountData, error: accountError } = await supabase
-                .from('user_accounts')
-                .select('plan_type')
-                .eq('user_id', currentUser.id)
-                .single();
-
-            if (accountError || !accountData) {
-                console.log('⚠️ Erro ao verificar plano - Bloqueando por segurança');
-                showAlert('⚠️ Erro ao verificar seu plano. Redirecionando...', 'error');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
+            if (!supabase) {
+                console.error('⚠️ Supabase não configurado');
+                window.location.href = 'login.html';
                 return false;
             }
 
-            const planType = (accountData.plan_type || '').toLowerCase().trim();
-            
-            // Aceita tanto 'free' quanto 'livre' para compatibilidade
-            if (planType === 'free' || planType === 'livre') {
-                console.log('🚫 Acesso negado - Usuário FREE');
-                showAlert('🚫 Acesso negado! Esta página é exclusiva para clientes Premium.', 'error');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) throw error;
+                
+                if (!session || !session.user) {
+                    console.log('❌ Nenhuma sessão ativa');
+                    window.location.href = 'login.html';
+                    return false;
+                }
+
+                currentUser = session.user;
+                
+                // 🔒 VERIFICAÇÃO DE PLANO
+                try {
+                    const { data: accountData, error: accountError } = await supabase
+                        .from('user_accounts')
+                        .select('plan_type')
+                        .eq('user_id', currentUser.id)
+                        .single();
+
+                    if (accountError || !accountData) {
+                        console.log('⚠️ Erro ao verificar plano - Bloqueando por segurança');
+                        showAlert('⚠️ Erro ao verificar seu plano. Redirecionando...', 'error');
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                        return false;
+                    }
+
+                    const planType = (accountData.plan_type || '').toLowerCase().trim();
+                    
+                    if (planType === 'free' || planType === 'livre') {
+                        console.log('🚫 Acesso negado - Usuário FREE');
+                        showAlert('🚫 Acesso negado! Esta página é exclusiva para clientes Premium.', 'error');
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                        return false;
+                    }
+
+                    console.log('✅ Plano verificado:', planType);
+                    
+                } catch (planCheckError) {
+                    console.error('❌ Erro na verificação de plano:', planCheckError);
+                    showAlert('⚠️ Erro ao verificar permissões. Redirecionando...', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                    return false;
+                }
+
+                isAdmin = currentUser.email === ADMIN_EMAIL;
+                localStorage.setItem('natandev_is_admin', isAdmin.toString());
+                
+                console.log('✅ Usuário autenticado:', {
+                    email: currentUser.email,
+                    isAdmin: isAdmin
+                });
+
+                await loadUserInfo();
+                await loadAndApplyTheme();
+                
+                if (isAdmin) {
+                    await loadConversations();
+                } else {
+                    currentChatWith = ADMIN_EMAIL;
+                    await loadMessages();
+                }
+
+                subscribeToMessages();
+                
+                return true;
+                
+            } catch (error) {
+                console.error('Erro ao verificar autenticação:', error);
+                window.location.href = 'login.html';
                 return false;
             }
-
-            console.log('✅ Plano verificado:', planType);
-            
-        } catch (planCheckError) {
-            console.error('❌ Erro na verificação de plano:', planCheckError);
-            showAlert('⚠️ Erro ao verificar permissões. Redirecionando...', 'error');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-            return false;
         }
-
-        isAdmin = currentUser.email === ADMIN_EMAIL;
-        localStorage.setItem('natandev_is_admin', isAdmin.toString());
-        
-        console.log('✅ Usuário autenticado:', {
-            email: currentUser.email,
-            isAdmin: isAdmin
-        });
-
-        await loadUserInfo();
-        await loadAndApplyTheme();
-        
-        if (isAdmin) {
-            await loadConversations();
-        } else {
-            currentChatWith = ADMIN_EMAIL;
-            await loadMessages();
-        }
-
-        subscribeToMessages();
-        
-        return true;
-        
-    } catch (error) {
-        console.error('Erro ao verificar autenticação:', error);
-        window.location.href = 'login.html';
-        return false;
-    }
-}
 
         // ============================================
         // 👤 CARREGA INFORMAÇÕES DO USUÁRIO
