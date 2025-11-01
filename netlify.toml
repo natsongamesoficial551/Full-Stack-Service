@@ -4,10 +4,10 @@
   functions = "netlify/functions"
   command = "npm run build"
 
-  [[build.processing.post]]
-# Injeta as variáveis do Netlify dentro de todas .html
+[[build.processing.post]]
 pattern = "**/*.html"
 command = "echo '<script>window.env={SUPABASE_URL:\"$SUPABASE_URL\",SUPABASE_ANON_KEY:\"$SUPABASE_ANON_KEY\"};</script>' >> {file}"
 
 [build.environment]
   NODE_VERSION = "18"
+
