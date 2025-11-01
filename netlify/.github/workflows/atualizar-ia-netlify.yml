@@ -1,0 +1,24 @@
+name: Atualizar IA (Netlify)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  trigger-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aguardar deploy Netlify (90s)
+        run: sleep 90
+
+      - name: Chamar função Netlify
+        run: |
+          curl -X POST \
+            https://natansites.com.br/.netlify/functions/atualizar-ia \
+            -H "Authorization: Bearer ${{ secrets.1e3f6161ed2412732e3604ed3ce100ea93a29141c3dcb500b76a46cc085b182e }}" \
+            -H "Content-Type: application/json"
+
+      - name: Confirmar atualização
+        run: echo "✅ IA atualizada via Netlify Function!"
