@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suporte - NatanDEV</title>
+    <title>Suporte - NatanSites</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -48,8 +48,9 @@
         html, body {
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            position: fixed;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
         }
 
         body {
@@ -57,14 +58,17 @@
             background: var(--bg-main);
             color: var(--text-primary);
             transition: background 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
         }
 
         body.dark-mode {
             background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+            background-attachment: fixed;
         }
 
         body:not(.dark-mode) {
             background: linear-gradient(135deg, #F9FAFB 0%, #E0E7FF 50%, #F9FAFB 100%);
+            background-attachment: fixed;
         }
 
         /* Sidebar */
@@ -110,6 +114,7 @@
             font-weight: 700;
             font-size: 1.2rem;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         body.dark-mode .logo-img {
@@ -175,12 +180,14 @@
 
         .nav-icon {
             font-size: 1.3rem;
+            flex-shrink: 0;
         }
 
         .user-section {
             padding: 1.5rem;
             border-top: 2px solid var(--border-color);
             transition: border-color 0.3s ease;
+            flex-shrink: 0;
         }
 
         .user-info {
@@ -210,6 +217,7 @@
             font-weight: 700;
             font-size: 1.1rem;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         body.dark-mode .user-avatar {
@@ -270,13 +278,53 @@
             transform: translateY(-2px);
         }
 
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            z-index: 1001;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .mobile-menu-toggle {
+            color: #0F172A;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .mobile-menu-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
         /* Chat Layout */
         .chat-layout {
             margin-left: 280px;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             transition: margin-left 0.3s ease;
-            overflow: hidden;
         }
 
         /* Lista de Conversas (Admin) */
@@ -287,7 +335,8 @@
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
-            height: 100vh;
+            min-height: 100vh;
+            max-height: 100vh;
             overflow: hidden;
         }
 
@@ -371,6 +420,7 @@
             color: white;
             font-weight: 700;
             font-size: 1rem;
+            flex-shrink: 0;
         }
 
         body.dark-mode .conversation-avatar {
@@ -412,6 +462,7 @@
             justify-content: center;
             font-size: 0.75rem;
             font-weight: 700;
+            flex-shrink: 0;
         }
 
         /* Chat Container */
@@ -419,8 +470,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         .chat-header {
@@ -447,6 +497,7 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         .back-to-conversations-btn:hover {
@@ -459,13 +510,6 @@
         body.dark-mode .back-to-conversations-btn:hover {
             border-color: var(--warning);
             color: var(--warning);
-        }
-
-        /* Mostra o botão apenas no mobile quando tem conversa ativa */
-        @media (max-width: 768px) {
-            body.admin-mobile-chat-open .back-to-conversations-btn {
-                display: flex;
-            }
         }
 
         .chat-header-info {
@@ -485,6 +529,7 @@
             color: white;
             font-weight: 700;
             font-size: 1.2rem;
+            flex-shrink: 0;
         }
 
         body.dark-mode .chat-header-avatar {
@@ -538,14 +583,15 @@
             padding: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
+            min-height: 400px;
+            transition: all 0.3s ease;
         }
 
         .message {
             display: flex;
             gap: 1rem;
             animation: slideUp 0.4s ease;
-            max-width: 70%;
         }
 
         @keyframes slideUp {
@@ -560,7 +606,6 @@
         }
 
         .message.sent {
-            align-self: flex-end;
             flex-direction: row-reverse;
         }
 
@@ -575,7 +620,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
         }
 
@@ -598,7 +643,8 @@
         }
 
         .message-content {
-            padding: 1rem 1.3rem;
+            max-width: 70%;
+            padding: 1.2rem 1.5rem;
             border-radius: 16px;
             line-height: 1.6;
             word-wrap: break-word;
@@ -616,15 +662,15 @@
         }
 
         .message-time {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
-            margin-top: 0.4rem;
+            margin-top: 0.5rem;
             display: block;
         }
 
         .typing-indicator {
             display: none;
-            padding: 1rem 1.3rem;
+            padding: 1rem 1.5rem;
             background: var(--admin-bubble);
             border-radius: 16px;
             width: fit-content;
@@ -672,16 +718,18 @@
 
         .chat-input-wrapper {
             display: flex;
-            gap: 1rem;
+            flex-direction: row;
+            gap: 0.8rem;
             max-width: 1200px;
             margin: 0 auto;
+            align-items: flex-end;
         }
 
         .chat-input {
             flex: 1;
             padding: 1rem 1.5rem;
             border: 2px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 25px;
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1rem;
             color: var(--text-primary);
@@ -690,6 +738,7 @@
             min-height: 50px;
             max-height: 150px;
             transition: all 0.3s ease;
+            line-height: 1.5;
         }
 
         body.dark-mode .chat-input {
@@ -707,27 +756,34 @@
         }
 
         .btn-send {
-            padding: 1rem 2rem;
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            min-height: 50px;
+            padding: 0;
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 50%;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Sora', sans-serif;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         body.dark-mode .btn-send {
             color: #0F172A;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         }
 
         .btn-send:hover:not(:disabled) {
-            transform: translateY(-2px);
+            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
         }
 
@@ -735,15 +791,31 @@
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
         }
 
+        .btn-send:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
         .btn-send:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
 
+        .btn-send svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .btn-send:hover:not(:disabled) svg {
+            transform: rotate(45deg);
+        }
+
         .welcome-message {
             text-align: center;
             padding: 3rem 2rem;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
         }
 
@@ -761,44 +833,6 @@
             font-size: 1.1rem;
             line-height: 1.6;
             transition: color 0.3s ease;
-        }
-
-        .mobile-menu-toggle {
-            width: 45px;
-            height: 45px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-            color: white;
-            font-size: 1.3rem;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
-            flex-shrink: 0;
-        }
-
-        body.dark-mode .mobile-menu-toggle {
-            color: #0F172A;
-            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-        }
-
-        .mobile-menu-toggle:hover {
-            transform: scale(1.05);
-        }
-
-        .mobile-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            backdrop-filter: blur(5px);
         }
 
         .alert {
@@ -836,10 +870,6 @@
             background: rgba(16, 185, 129, 0.1);
             color: var(--success);
             border: 2px solid var(--success);
-        }
-
-        .back-to-conversations {
-            display: none;
         }
 
         /* Responsive */
@@ -885,6 +915,10 @@
                 transform: translateX(-100%);
             }
 
+            body.admin-mobile-chat-open .back-to-conversations-btn {
+                display: flex;
+            }
+
             .chat-container {
                 position: fixed;
                 left: 0;
@@ -892,14 +926,15 @@
                 width: 100%;
                 height: 100vh;
                 z-index: 800;
+                overflow-y: auto;
             }
 
             .chat-header {
-                padding: 1rem 1.5rem;
+                padding: 1.2rem 1.5rem 1.2rem 5rem;
                 flex-wrap: wrap;
                 gap: 0.8rem;
             }
-            
+
             .back-to-conversations-btn {
                 width: 100%;
                 justify-content: center;
@@ -909,31 +944,77 @@
                 font-size: 1.2rem;
             }
 
-            .message {
+            .chat-header-avatar {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+
+            .message-content {
                 max-width: 85%;
             }
 
             .chat-messages {
                 padding: 1.5rem 1rem;
+                gap: 1rem;
             }
 
             .chat-input-wrapper {
-                flex-direction: column;
+                flex-direction: row !important;
+                gap: 0.8rem;
+                align-items: flex-end;
+            }
+
+            .chat-input {
+                flex: 1;
+                padding: 0.9rem 1.2rem;
+                font-size: 0.95rem;
+                border-radius: 22px;
+                min-height: 48px;
             }
 
             .btn-send {
-                width: 100%;
-                justify-content: center;
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                flex-shrink: 0;
+            }
+
+            .btn-send svg {
+                width: 20px;
+                height: 20px;
             }
 
             .chat-input-container {
                 padding: 1rem;
+                padding-bottom: max(1rem, env(safe-area-inset-bottom));
+            }
+
+            .conversations-header {
+                padding: 1rem;
+            }
+
+            .welcome-message {
+                padding: 2rem 1rem;
+            }
+
+            .chat-status {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
             }
         }
 
         @media (max-width: 480px) {
-            .conversations-header {
-                padding: 1rem;
+            .mobile-menu-toggle {
+                top: 1rem;
+                left: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+
+            .chat-header {
+                padding: 1rem 1rem 1rem 4.5rem;
             }
 
             .conversations-header h2 {
@@ -943,6 +1024,7 @@
             .message-content {
                 padding: 0.9rem 1.1rem;
                 font-size: 0.95rem;
+                max-width: 90%;
             }
 
             .welcome-message h2 {
@@ -952,20 +1034,72 @@
             .welcome-message p {
                 font-size: 1rem;
             }
+
+            .chat-messages {
+                padding: 1rem;
+            }
+
+            .chat-input-container {
+                padding: 0.8rem;
+                padding-bottom: max(0.8rem, calc(env(safe-area-inset-bottom) + 0.3rem));
+            }
+
+            .chat-input-wrapper {
+                flex-direction: row !important;
+                gap: 0.6rem;
+            }
+
+            .chat-input {
+                flex: 1;
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+                min-height: 45px;
+                border-radius: 20px;
+            }
+
+            .btn-send {
+                width: 45px;
+                height: 45px;
+                min-width: 45px;
+                min-height: 45px;
+                flex-shrink: 0;
+            }
+
+            .btn-send svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .chat-messages {
+                padding: 2.5rem 3rem;
+            }
+
+            .chat-input-container {
+                padding: 2rem 3rem;
+            }
+
+            .alert {
+                margin: 1rem 3rem;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+        <span style="font-size: 1.5rem;">☰</span>
+    </button>
 
     <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <a href="#" class="logo">
-            <div class="logo-img">ND</div>
-            <span class="logo-text">NatanDEV</span>
-        </a>
-    </div>
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
+                <span class="logo-text">NatanSites</span>
+            </a>
+        </div>
 
         <div class="sidebar-content">
             <nav>
@@ -1006,7 +1140,7 @@
 
         <div class="user-section">
             <div class="user-info">
-                <div class="user-avatar" id="userAvatar">ND</div>
+                <div class="user-avatar" id="userAvatar">NS</div>
                 <div class="user-details">
                     <h4 id="userName">Carregando...</h4>
                     <p id="userPlan">Verificando...</p>
@@ -1020,9 +1154,6 @@
         <!-- Lista de Conversas (Apenas Admin) -->
         <div class="conversations-list" id="conversationsList" style="display: none;">
             <div class="conversations-header">
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <span style="font-size: 1.5rem;">☰</span>
-                </button>
                 <div class="conversations-header-content">
                     <h2>💬 Conversas</h2>
                     <p>Clientes em suporte</p>
@@ -1043,7 +1174,7 @@
                 <div class="chat-header-info">
                     <div class="chat-header-avatar" id="chatHeaderAvatar">👤</div>
                     <div class="chat-header-details">
-                        <h2 id="chatHeaderName">Suporte NatanDEV</h2>
+                        <h2 id="chatHeaderName">Suporte NatanSites</h2>
                         <p id="chatHeaderStatus">Pronto para te ajudar</p>
                     </div>
                 </div>
@@ -1070,9 +1201,10 @@
                         placeholder="Digite sua mensagem..."
                         rows="1"
                     ></textarea>
-                    <button class="btn-send" id="sendBtn">
-                        <span>Enviar</span>
-                        <span>→</span>
+                    <button class="btn-send" id="sendBtn" aria-label="Enviar mensagem">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -1116,10 +1248,8 @@
                     const settings = JSON.parse(savedSettings);
                     if (settings.darkMode) {
                         document.body.classList.add('dark-mode');
-                        updateThemeIcon(true);
                     } else {
                         document.body.classList.remove('dark-mode');
-                        updateThemeIcon(false);
                     }
                 } catch (error) {
                     console.error('Erro ao aplicar tema:', error);
@@ -1138,10 +1268,8 @@
                 if (!error && data?.settings) {
                     if (data.settings.darkMode) {
                         document.body.classList.add('dark-mode');
-                        updateThemeIcon(true);
                     } else {
                         document.body.classList.remove('dark-mode');
-                        updateThemeIcon(false);
                     }
                     localStorage.setItem(settingsKey, JSON.stringify(data.settings));
                 }
@@ -1150,105 +1278,97 @@
             }
         }
 
-        function updateThemeIcon(isDark) {
-            const themeIcon = document.getElementById('themeIcon');
-            if (themeIcon) {
-                themeIcon.textContent = isDark ? '☀️' : '🌙';
-            }
-        }
-
-        async function toggleTheme() {
-            if (!currentUser) return;
-
-            const isDarkMode = document.body.classList.toggle('dark-mode');
-            updateThemeIcon(isDarkMode);
-
-            const settingsKey = `natandev_settings_${currentUser.id}`;
-            let settings = {};
-
-            try {
-                const savedSettings = localStorage.getItem(settingsKey);
-                if (savedSettings) {
-                    settings = JSON.parse(savedSettings);
-                }
-            } catch (error) {
-                console.error('Erro ao ler configurações:', error);
-            }
-
-            settings.darkMode = isDarkMode;
-            localStorage.setItem(settingsKey, JSON.stringify(settings));
-
-            if (!supabase) return;
-
-            try {
-                const { error } = await supabase
-                    .from('user_settings')
-                    .upsert({
-                        user_id: currentUser.id,
-                        settings: settings,
-                        updated_at: new Date().toISOString()
-                    }, {
-                        onConflict: 'user_id'
-                    });
-
-                if (error) throw error;
-                console.log('✅ Tema salvo no banco de dados');
-            } catch (error) {
-                console.error('❌ Erro ao salvar tema:', error);
-            }
-        }
-
         // ============================================
         // 🔐 VERIFICA AUTENTICAÇÃO
         // ============================================
         async function checkAuth() {
-            if (!supabase) {
-                console.error('⚠️ Supabase não configurado');
-                window.location.href = 'login.html';
-                return false;
-            }
+    if (!supabase) {
+        console.error('⚠️ Supabase não configurado');
+        window.location.href = 'login.html';
+        return false;
+    }
 
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                
-                if (error) throw error;
-                
-                if (!session || !session.user) {
-                    console.log('❌ Nenhuma sessão ativa');
-                    window.location.href = 'login.html';
-                    return false;
-                }
-
-                currentUser = session.user;
-                isAdmin = currentUser.email === ADMIN_EMAIL;
-                
-                localStorage.setItem('natandev_is_admin', isAdmin.toString());
-                
-                console.log('✅ Usuário autenticado:', {
-                    email: currentUser.email,
-                    isAdmin: isAdmin
-                });
-
-                await loadUserInfo();
-                await loadAndApplyTheme();
-                
-                if (isAdmin) {
-                    await loadConversations();
-                } else {
-                    currentChatWith = ADMIN_EMAIL;
-                    await loadMessages();
-                }
-
-                subscribeToMessages();
-                
-                return true;
-                
-            } catch (error) {
-                console.error('Erro ao verificar autenticação:', error);
-                window.location.href = 'login.html';
-                return false;
-            }
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) throw error;
+        
+        if (!session || !session.user) {
+            console.log('❌ Nenhuma sessão ativa');
+            window.location.href = 'login.html';
+            return false;
         }
+
+        currentUser = session.user;
+        
+        // 🔒 VERIFICAÇÃO DE PLANO
+        try {
+            const { data: accountData, error: accountError } = await supabase
+                .from('user_accounts')
+                .select('plan_type')
+                .eq('user_id', currentUser.id)
+                .single();
+
+            if (accountError || !accountData) {
+                console.log('⚠️ Erro ao verificar plano - Bloqueando por segurança');
+                showAlert('⚠️ Erro ao verificar seu plano. Redirecionando...', 'error');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                return false;
+            }
+
+            const planType = (accountData.plan_type || '').toLowerCase().trim();
+            
+            // Aceita tanto 'free' quanto 'livre' para compatibilidade
+            if (planType === 'free' || planType === 'livre') {
+                console.log('🚫 Acesso negado - Usuário FREE');
+                showAlert('🚫 Acesso negado! Esta página é exclusiva para clientes Premium.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+                return false;
+            }
+
+            console.log('✅ Plano verificado:', planType);
+            
+        } catch (planCheckError) {
+            console.error('❌ Erro na verificação de plano:', planCheckError);
+            showAlert('⚠️ Erro ao verificar permissões. Redirecionando...', 'error');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+            return false;
+        }
+
+        isAdmin = currentUser.email === ADMIN_EMAIL;
+        localStorage.setItem('natandev_is_admin', isAdmin.toString());
+        
+        console.log('✅ Usuário autenticado:', {
+            email: currentUser.email,
+            isAdmin: isAdmin
+        });
+
+        await loadUserInfo();
+        await loadAndApplyTheme();
+        
+        if (isAdmin) {
+            await loadConversations();
+        } else {
+            currentChatWith = ADMIN_EMAIL;
+            await loadMessages();
+        }
+
+        subscribeToMessages();
+        
+        return true;
+        
+    } catch (error) {
+        console.error('Erro ao verificar autenticação:', error);
+        window.location.href = 'login.html';
+        return false;
+    }
+}
 
         // ============================================
         // 👤 CARREGA INFORMAÇÕES DO USUÁRIO
@@ -1273,7 +1393,7 @@
                 document.getElementById('userPlan').textContent = '✨ Cliente';
                 document.getElementById('chatHeaderAvatar').textContent = '👑';
                 document.getElementById('chatHeaderName').textContent = 'Suporte - Natan';
-                document.getElementById('chatHeaderStatus').textContent = 'Fundador da NatanDEV';
+                document.getElementById('chatHeaderStatus').textContent = 'Fundador da NatanSites';
                 document.getElementById('welcomeText').textContent = 'Estou aqui para te ajudar! Descreva sua dúvida ou problema que irei te responder o mais rápido possível.';
             }
 
@@ -1442,7 +1562,7 @@
             if (!supabase || !currentChatWith) return;
 
             try {
-                const { data: messages, error } = await supabase
+                const { data: messages, error} = await supabase
                     .from('support_messages')
                     .select('*')
                     .or(`and(sender_email.eq.${currentUser.email},receiver_email.eq.${currentChatWith}),and(sender_email.eq.${currentChatWith},receiver_email.eq.${currentUser.email})`)
@@ -1770,27 +1890,23 @@
         // ============================================
         // 📱 MOBILE MENU
         // ============================================
-        document.addEventListener('click', function(e) {
-            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-            const sidebar = document.getElementById('sidebar');
-            const mobileOverlay = document.getElementById('mobileOverlay');
-            
-            if (e.target.closest('#mobileMenuToggle')) {
-                sidebar.classList.toggle('active');
-                mobileOverlay.classList.toggle('active');
-            }
-            
-            if (e.target === mobileOverlay) {
-                sidebar.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-            }
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        mobileMenuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+
+        mobileOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            mobileOverlay.classList.remove('active');
         });
 
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function() {
                 if (window.innerWidth <= 768) {
-                    const sidebar = document.getElementById('sidebar');
-                    const mobileOverlay = document.getElementById('mobileOverlay');
                     sidebar.classList.remove('active');
                     mobileOverlay.classList.remove('active');
                 }
@@ -1806,10 +1922,8 @@
                     const settings = JSON.parse(e.newValue);
                     if (settings.darkMode) {
                         document.body.classList.add('dark-mode');
-                        updateThemeIcon(true);
                     } else {
                         document.body.classList.remove('dark-mode');
-                        updateThemeIcon(false);
                     }
                     console.log('✅ Tema sincronizado via storage event');
                 } catch (error) {
@@ -1832,10 +1946,8 @@
                         const settings = JSON.parse(currentSettings);
                         if (settings.darkMode) {
                              document.body.classList.add('dark-mode');
-                             updateThemeIcon(true);
                         } else {
                             document.body.classList.remove('dark-mode');
-                            updateThemeIcon(false);
                         }
                         console.log('✅ Tema sincronizado via polling');
                     } catch (error) {

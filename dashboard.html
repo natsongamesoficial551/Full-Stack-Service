@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - NatanDEV</title>
+    <title>Dashboard - NatanSites</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -788,8 +788,8 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
-                <div class="logo-img">ND</div>
-                <span class="logo-text">NatanDEV</span>
+                <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
+                <span class="logo-text">NatanSites</span>
             </a>
         </div>
 
@@ -854,11 +854,11 @@
         <div class="free-access-alert" id="freeAccessAlert">
             <h3>🎁 Acesso Grátis Ativo!</h3>
             <p>
-                Você está usando a plataforma com <strong>acesso grátis por tempo limitado</strong>! 
+                Você está usando a plataforma com <strong>acesso grátis permanentemente</strong>! 
                 Aproveite todos os recursos disponíveis: <strong>Dashboard, IA, Suporte</strong> e muito mais.
             </p>
             <p style="margin-bottom: 0;">
-                <strong>⚠️ Observação:</strong> Durante o período grátis, você não pode solicitar criação de sites. 
+                <strong>⚠️ Observação:</strong> Durante o período grátis, você pode solicitar criação de sites sem uso comercial. 
                 Para ter sites personalizados, entre em contato para contratar um plano pago.
             </p>
         </div>
@@ -1496,39 +1496,53 @@ console.log('📊 Dados da conta carregados:', {
 
 // ✅ PRIORIDADE MÁXIMA: Se é FREE, configura IMEDIATAMENTE
 if (plan_type === 'free') {
-    isFreeAccessUser = true;
-    
-    console.log('🎁 PLANO FREE DETECTADO!');
-    console.log('🎁 Email:', currentUser.email);
-    console.log('🎁 Plan Type:', plan_type);
-    
-    // 🆕 FORÇA ATUALIZAÇÃO DO BADGE IMEDIATAMENTE
-    const userPlanElement = document.getElementById('userPlan');
-    if (userPlanElement && !userPlanElement.innerHTML.includes('ADMIN')) {
-        userPlanElement.textContent = '🎁 Free';
-        console.log('✅ Badge atualizado para FREE');
-    }
-    
-    // Exibe alerta de acesso grátis
-    document.getElementById('freeAccessAlert').classList.add('show');
-    
-    // Estiliza card de tempo
-    const timeCard = document.getElementById('timeCard');
-    timeCard.classList.add('free-access-card');
-    
-    // Calcula tempo restante
-    const timeRemaining = calculateTimeRemaining(account_expires_at);
-    document.getElementById('timeValue').textContent = `${timeRemaining.days} Dias`;
-    document.getElementById('timeDescription').textContent = `Acesso grátis expira em ${timeRemaining.expiryDate}`;
-    
-    // 🆕 CHAMA configureFreeInterface() AQUI PARA ATUALIZAR O CARD "SEU PLANO"
-    configureFreeInterface();
-    
-    console.log('🎁 Dashboard configurado para usuário FREE');
-    console.log('🎁 Dias restantes:', timeRemaining.days);
-    
-    return 'free';
-}
+                    isFreeAccessUser = true;
+                    
+                    console.log('🎁 PLANO FREE DETECTADO!');
+                    console.log('🎁 Email:', currentUser.email);
+                    console.log('🎁 Plan Type:', plan_type);
+                    console.log('📅 account_expires_at:', account_expires_at);
+                    
+                    // 🆕 FORÇA ATUALIZAÇÃO DO BADGE IMEDIATAMENTE
+                    const userPlanElement = document.getElementById('userPlan');
+                    if (userPlanElement && !userPlanElement.innerHTML.includes('ADMIN')) {
+                        userPlanElement.textContent = '🎁 Free';
+                        console.log('✅ Badge atualizado para FREE');
+                    }
+                    
+                    // Exibe alerta de acesso grátis
+                    document.getElementById('freeAccessAlert').classList.add('show');
+                    
+                    // Estiliza card de tempo
+                    const timeCard = document.getElementById('timeCard');
+                    timeCard.classList.add('free-access-card');
+                    
+                    // 🆕 VERIFICA SE EXPIRA OU É PERMANENTE
+                    if (account_expires_at && account_expires_at !== null) {
+                        // Se tiver data de expiração, calcula tempo restante
+                        const timeRemaining = calculateTimeRemaining(account_expires_at);
+                        
+                        if (timeRemaining.expired) {
+                            document.getElementById('timeValue').textContent = '⏰ Expirado';
+                            document.getElementById('timeDescription').textContent = 'Acesso grátis temporário encerrado';
+                        } else {
+                            document.getElementById('timeValue').textContent = `${timeRemaining.days} Dias`;
+                            document.getElementById('timeDescription').textContent = `Acesso grátis expira em ${timeRemaining.expiryDate}`;
+                        }
+                    } else {
+                        // ✅ SEM DATA DE EXPIRAÇÃO = PERMANENTE
+                        document.getElementById('timeValue').textContent = '∞ Permanente';
+                        document.getElementById('timeDescription').textContent = 'Acesso grátis ilimitado sem data de término!';
+                        console.log('✅ Acesso FREE PERMANENTE configurado');
+                    }
+                    
+                    // 🆕 CHAMA configureFreeInterface() AQUI PARA ATUALIZAR O CARD "SEU PLANO"
+                    configureFreeInterface();
+                    
+                    console.log('🎁 Dashboard configurado para usuário FREE');
+                    
+                    return 'free';
+                }
 
                 const timeRemaining = calculateTimeRemaining(account_expires_at);
 
@@ -1609,7 +1623,7 @@ if (plan_type === 'free') {
     document.getElementById('feature1').textContent = '✓ Acesso ao Dashboard';
     document.getElementById('feature2').textContent = '✓ NatanAI Inclusa';
     document.getElementById('feature3').textContent = '✓ Suporte via plataforma';
-    document.getElementById('feature4').textContent = '⚠️ Criação de sites BLOQUEADA';
+    document.getElementById('feature4').textContent = '⚠️ Criação de sites (Limitada)';
 
     // 🆕 ATUALIZA A DATA DE VENCIMENTO PARA FREE
 const nextDueDateElement = document.getElementById('nextDueDate');
@@ -1869,4 +1883,5 @@ paymentMethodElements.forEach(el => {
         }
     </script>
 </body>
+
 </html>

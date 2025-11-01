@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Sites - NatanDEV</title>
+    <title>Meus Sites - NatanSites</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -695,8 +695,8 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
-                <div class="logo-img">ND</div>
-                <span class="logo-text">NatanDEV</span>
+                <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
+                <span class="logo-text">NatanSites</span>
             </a>
         </div>
 
@@ -752,7 +752,7 @@
     <main class="main-content">
         <div class="page-header">
             <h1>Meus Sites 🌐</h1>
-            <p>Veja todos os seus projetos desenvolvidos pela NatanDEV</p>
+            <p>Veja todos os seus projetos desenvolvidos pela NatanSites</p>
         </div>
 
         <div id="alertBox" class="alert"></div>
@@ -853,6 +853,26 @@
                 }
 
                 currentUser = session.user;
+                
+                // ✅ NOVA VERIFICAÇÃO: Bloqueia acesso para usuários FREE
+                const { data: accountData, error: accountError } = await supabase
+                    .from('user_accounts')
+                    .select('plan_type')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (!accountError && accountData && accountData.plan_type === 'free') {
+                    console.log('🚫 Acesso negado - Usuário FREE');
+                    showAlert('🚫 Acesso negado! Você utiliza a conta grátis. Esta página não está disponível para usuários free.', 'error');
+                    
+                    // Redireciona para dashboard após 3 segundos
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 3000);
+                    
+                    return null;
+                }
+                
                 console.log('✅ Usuário autenticado:', currentUser.email);
                 
                 const isAdmin = currentUser.email === ADMIN_EMAIL;
@@ -1033,7 +1053,7 @@
         // 🔄 SINCRONIZAÇÃO DE TEMA
         // ============================================
         window.addEventListener('storage', function(e) {
-            if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
+            if (e.key && e.key.startsWith('natansites_settings_') && e.newValue) {
                 try {
                     const settings = JSON.parse(e.newValue);
                     if (settings.darkMode) {

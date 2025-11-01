@@ -51,8 +51,9 @@
             font-family: 'Space Grotesk', sans-serif;
             background: var(--bg-main);
             color: var(--text-primary);
-            overflow: hidden;
-            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            min-height: 100vh;
             transition: background 0.3s ease, color 0.3s ease;
         }
 
@@ -73,7 +74,7 @@
             background: var(--bg-surface);
             border-right: 2px solid var(--border-color);
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
             display: flex;
             flex-direction: column;
         }
@@ -103,6 +104,7 @@
             font-weight: 700;
             font-size: 1.2rem;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         body.dark-mode .logo-img {
@@ -168,12 +170,14 @@
 
         .nav-icon {
             font-size: 1.3rem;
+            flex-shrink: 0;
         }
 
         .user-section {
             padding: 1.5rem;
             border-top: 2px solid var(--border-color);
             transition: border-color 0.3s ease;
+            flex-shrink: 0;
         }
 
         .user-info {
@@ -203,6 +207,7 @@
             font-weight: 700;
             font-size: 1.1rem;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         body.dark-mode .user-avatar {
@@ -279,6 +284,7 @@
             justify-content: space-between;
             align-items: center;
             transition: all 0.3s ease;
+            flex-shrink: 0;
         }
 
         .chat-header h1 {
@@ -329,138 +335,6 @@
         .status-dot.offline {
             background: var(--error);
             animation: none;
-        }
-
-        /* ============================================ */
-        /* 🎁 CONTADOR DE TOKENS (APENAS FREE USERS) */
-        /* ============================================ */
-        .tokens-counter {
-            background: var(--bg-surface);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            margin: 1rem 2rem 0;
-            display: none;
-            animation: slideDown 0.5s ease;
-        }
-
-        .tokens-counter.show {
-            display: block;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .tokens-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .tokens-label {
-            font-family: 'Sora', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .tokens-value {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: var(--success);
-            transition: color 0.3s ease;
-        }
-
-        .tokens-value.warning {
-            color: var(--warning);
-        }
-
-        .tokens-value.orange {
-            color: var(--orange);
-        }
-
-        .tokens-value.danger {
-            color: var(--error);
-            animation: blink 1.5s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        .tokens-bar-container {
-            width: 100%;
-            height: 12px;
-            background: var(--border-color);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .tokens-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--success), #059669);
-            border-radius: 10px;
-            transition: all 0.5s ease;
-            position: relative;
-        }
-
-        .tokens-bar.warning {
-            background: linear-gradient(90deg, var(--warning), #F59E0B);
-        }
-
-        .tokens-bar.orange {
-            background: linear-gradient(90deg, var(--orange), #EA580C);
-        }
-
-        .tokens-bar.danger {
-            background: linear-gradient(90deg, var(--error), #DC2626);
-        }
-
-        .tokens-percentage {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            text-align: right;
-        }
-
-        .tokens-reset-timer {
-            margin-top: 0.8rem;
-            padding: 0.8rem;
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid var(--error);
-            border-radius: 8px;
-            text-align: center;
-            display: none;
-        }
-
-        .tokens-reset-timer.show {
-            display: block;
-        }
-
-        .tokens-reset-timer p {
-            font-size: 0.85rem;
-            color: var(--error);
-            font-weight: 600;
-        }
-
-        .tokens-reset-timer .timer {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--error);
-            margin-top: 0.3rem;
         }
 
         .chat-messages {
@@ -613,20 +487,25 @@
             background: var(--bg-surface);
             border-top: 2px solid var(--border-color);
             transition: all 0.3s ease;
+            flex-shrink: 0;
+            position: relative;
         }
 
         .chat-input-wrapper {
             display: flex;
-            gap: 1rem;
+            flex-direction: row;
+            gap: 0.8rem;
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
+            align-items: flex-end;
         }
 
         .chat-input {
             flex: 1;
             padding: 1rem 1.5rem;
             border: 2px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 25px;
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1rem;
             color: var(--text-primary);
@@ -635,6 +514,7 @@
             min-height: 50px;
             max-height: 150px;
             transition: all 0.3s ease;
+            line-height: 1.5;
         }
 
         body.dark-mode .chat-input {
@@ -657,27 +537,34 @@
         }
 
         .btn-send {
-            padding: 1rem 2rem;
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            min-height: 50px;
+            padding: 0;
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 50%;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Sora', sans-serif;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         body.dark-mode .btn-send {
             color: #0F172A;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         }
 
         .btn-send:hover:not(:disabled) {
-            transform: translateY(-2px);
+            transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(30, 64, 175, 0.4);
         }
 
@@ -685,9 +572,25 @@
             box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
         }
 
+        .btn-send:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
         .btn-send:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        .btn-send svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+            transform: rotate(0deg);
+            transition: transform 0.3s ease;
+        }
+
+        .btn-send:hover:not(:disabled) svg {
+            transform: rotate(45deg);
         }
 
         .mobile-menu-toggle {
@@ -706,6 +609,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
             border: none;
+            transition: all 0.3s ease;
         }
 
         body.dark-mode .mobile-menu-toggle {
@@ -761,6 +665,17 @@
             display: block;
         }
 
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .alert-error {
             background: rgba(239, 68, 68, 0.1);
             color: var(--error);
@@ -781,6 +696,31 @@
             background: rgba(224, 193, 90, 0.1);
         }
 
+        /* ============================================ */
+        /* 📱 RESPONSIVIDADE - TABLET */
+        /* ============================================ */
+        @media (max-width: 1024px) {
+            .chat-container {
+                margin-left: 280px;
+            }
+
+            .chat-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .message-content {
+                max-width: 75%;
+            }
+
+            .chat-messages {
+                padding: 1.8rem;
+                gap: 1.3rem;
+            }
+        }
+
+        /* ============================================ */
+        /* 📱 RESPONSIVIDADE - MOBILE */
+        /* ============================================ */
         @media (max-width: 768px) {
             .mobile-menu-toggle {
                 display: flex;
@@ -803,28 +743,66 @@
             }
 
             .chat-header {
-                padding-left: 5rem;
+                padding: 1.2rem 1.5rem 1.2rem 5rem;
             }
 
             .chat-header h1 {
                 font-size: 1.4rem;
+                gap: 0.5rem;
+            }
+
+            .plan-badge {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .connection-status {
+                font-size: 0.75rem;
             }
 
             .message-content {
                 max-width: 85%;
+                padding: 1rem;
             }
 
             .chat-messages {
                 padding: 1.5rem 1rem;
+                gap: 1rem;
+            }
+
+            .message-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .chat-input-container {
+                padding: 1rem;
             }
 
             .chat-input-wrapper {
-                flex-direction: column;
+                flex-direction: row;
+                gap: 0.8rem;
+            }
+
+            .chat-input {
+                padding: 0.9rem 1.2rem;
+                font-size: 0.95rem;
+                border-radius: 22px;
+                min-height: 48px;
             }
 
             .btn-send {
-                width: 100%;
-                justify-content: center;
+                width: 48px;
+                height: 48px;
+                min-width: 48px;
+                min-height: 48px;
+                flex-shrink: 0;
+            }
+
+            .btn-send svg {
+                width: 20px;
+                height: 20px;
             }
 
             .welcome-message {
@@ -839,12 +817,16 @@
                 font-size: 1rem;
             }
 
-            .tokens-counter {
+            .alert {
                 margin: 1rem;
-                padding: 0.8rem 1rem;
+                padding: 0.9rem 1rem;
+                font-size: 0.9rem;
             }
         }
 
+        /* ============================================ */
+        /* 📱 RESPONSIVIDADE - MOBILE PEQUENO */
+        /* ============================================ */
         @media (max-width: 480px) {
             .mobile-menu-toggle {
                 top: 1rem;
@@ -853,13 +835,26 @@
                 height: 45px;
             }
 
+            .chat-header {
+                padding: 1rem 1rem 1rem 4.5rem;
+            }
+
             .chat-header h1 {
                 font-size: 1.2rem;
             }
 
             .plan-badge {
+                font-size: 0.65rem;
+                padding: 0.25rem 0.5rem;
+            }
+
+            .connection-status {
                 font-size: 0.7rem;
-                padding: 0.3rem 0.6rem;
+            }
+
+            .status-dot {
+                width: 6px;
+                height: 6px;
             }
 
             .chat-messages {
@@ -868,12 +863,138 @@
             }
 
             .message-content {
-                padding: 1rem;
+                padding: 0.9rem 1rem;
                 font-size: 0.95rem;
+            }
+
+            .message-time {
+                font-size: 0.7rem;
+            }
+
+            .message-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+
+            .chat-input-container {
+                padding: 0.8rem;
+            }
+
+            .chat-input-wrapper {
+                flex-direction: row;
+                gap: 0.6rem;
+            }
+
+            .chat-input {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+                border-radius: 20px;
+                min-height: 45px;
+            }
+
+            .btn-send {
+                width: 45px;
+                height: 45px;
+                min-width: 45px;
+                min-height: 45px;
+                flex-shrink: 0;
+            }
+
+            .btn-send svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .welcome-message {
+                padding: 1.5rem 0.8rem;
             }
 
             .welcome-message h2 {
                 font-size: 1.4rem;
+            }
+
+            .welcome-message p {
+                font-size: 0.95rem;
+            }
+
+            .alert {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ============================================ */
+        /* 📱 AJUSTES PARA TELAS MUITO PEQUENAS */
+        /* ============================================ */
+        @media (max-width: 360px) {
+            .mobile-menu-toggle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .chat-header {
+                padding: 0.8rem 0.8rem 0.8rem 4rem;
+            }
+
+            .chat-header h1 {
+                font-size: 1.1rem;
+            }
+
+            .plan-badge {
+                display: none;
+            }
+
+            .message-content {
+                max-width: 90%;
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .chat-input-container {
+                padding: 0.7rem;
+            }
+
+            .chat-input-wrapper {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .chat-input {
+                padding: 0.7rem 0.9rem;
+                font-size: 0.85rem;
+                border-radius: 18px;
+                min-height: 42px;
+            }
+
+            .btn-send {
+                width: 42px;
+                height: 42px;
+                min-width: 42px;
+                min-height: 42px;
+                flex-shrink: 0;
+            }
+
+            .btn-send svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* ============================================ */
+        /* 🖥️ AJUSTES PARA TELAS GRANDES */
+        /* ============================================ */
+        @media (min-width: 1440px) {
+            .chat-messages {
+                padding: 2.5rem 3rem;
+            }
+
+            .chat-input-container {
+                padding: 2rem 3rem;
+            }
+
+            .alert {
+                margin: 1rem 3rem;
             }
         }
     </style>
@@ -888,8 +1009,8 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
-                <div class="logo-img">ND</div>
-                <span class="logo-text">NatanDEV</span>
+                <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
+                <span class="logo-text">NatanSites</span>
             </a>
         </div>
 
@@ -932,7 +1053,7 @@
 
         <div class="user-section">
             <div class="user-info">
-                <div class="user-avatar" id="userAvatar">ND</div>
+                <div class="user-avatar" id="userAvatar">NS</div>
                 <div class="user-details">
                     <h4 id="userName">Carregando...</h4>
                     <p id="userPlan">Verificando...</p>
@@ -954,26 +1075,6 @@
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- 🎁 CONTADOR DE TOKENS (SÓ APARECE PARA FREE) -->
-        <!-- ============================================ -->
-        <div class="tokens-counter" id="tokensCounter">
-            <div class="tokens-header">
-                <span class="tokens-label">🎁 Tokens Restantes</span>
-                <span class="tokens-value" id="tokensValue">10.000</span>
-            </div>
-            <div class="tokens-bar-container">
-                <div class="tokens-bar" id="tokensBar" style="width: 100%;"></div>
-            </div>
-            <div class="tokens-percentage" id="tokensPercentage">100% disponível</div>
-            
-            <!-- Timer de Reset (só aparece quando zerar) -->
-            <div class="tokens-reset-timer" id="tokensResetTimer">
-                <p>🔄 Tokens resetam em:</p>
-                <div class="timer" id="resetTimerDisplay">--:--:--</div>
-            </div>
-        </div>
-
         <div id="alertBox" class="alert"></div>
 
         <div class="chat-messages" id="chatMessages">
@@ -991,18 +1092,16 @@
                     placeholder="Digite sua mensagem..."
                     rows="1"
                 ></textarea>
-                <button class="btn-send" id="sendBtn">
-                    <span>Enviar</span>
-                    <span>→</span>
+                <button class="btn-send" id="sendBtn" aria-label="Enviar mensagem">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
                 </button>
             </div>
         </div>
     </main>
 
     <script>
-        // ============================================
-        // 🔧 CONFIGURAÇÃO DO SUPABASE
-        // ============================================
         const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
         const ADMIN_EMAIL = 'natan@natandev.com';
@@ -1012,9 +1111,7 @@
         let currentUser = null;
         let userPlan = 'starter';
         let isAdmin = false;
-        let isFreeUser = false;
         let apiConnected = false;
-        let resetTimerInterval = null;
         
         try {
             if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
@@ -1024,9 +1121,6 @@
             console.error('Erro ao inicializar Supabase:', error);
         }
 
-        // ============================================
-        // 🎨 CARREGA E APLICA TEMA
-        // ============================================
         async function loadAndApplyTheme() {
             if (!currentUser) return;
 
@@ -1066,275 +1160,6 @@
             }
         }
 
-        // ============================================
-        // 🎁 FUNÇÕES DE TOKENS
-        // ============================================
-
-        async function checkIfFreeUser() {
-            if (!supabase || !currentUser) return false;
-
-            try {
-                const { data, error } = await supabase
-                    .from('user_accounts')
-                    .select('plan_type')
-                    .eq('user_id', currentUser.id)
-                    .single();
-
-                if (error) throw error;
-
-                return data?.plan_type === 'free';
-            } catch (error) {
-                console.error('Erro ao verificar tipo de usuário:', error);
-                return false;
-            }
-        }
-
-        async function initializeTokens() {
-            if (!supabase || !currentUser || !isFreeUser) return;
-
-            try {
-                const { data: existing, error: fetchError } = await supabase
-                    .from('free_user_tokens')
-                    .select('*')
-                    .eq('user_email', currentUser.email)
-                    .single();
-
-                if (fetchError && fetchError.code !== 'PGRST116') {
-                    throw fetchError;
-                }
-
-                if (!existing) {
-                    // Cria registro inicial com 10.000 tokens
-                    const { error: insertError } = await supabase
-                        .from('free_user_tokens')
-                        .insert({
-                            user_id: currentUser.id,
-                            user_email: currentUser.email,
-                            total_tokens: 10000,
-                            used_tokens: 0,
-                            remaining_tokens: 10000,
-                            created_at: new Date().toISOString(),
-                            updated_at: new Date().toISOString()
-                        });
-
-                    if (insertError) throw insertError;
-
-                    console.log('✅ Tokens inicializados: 10.000');
-                    await updateTokensDisplay(10000, 10000);
-                } else {
-                    // Verifica se precisa resetar (após 24h)
-                    await checkAndResetTokens(existing);
-                    await updateTokensDisplay(existing.remaining_tokens, existing.total_tokens);
-                }
-
-                document.getElementById('tokensCounter').classList.add('show');
-            } catch (error) {
-                console.error('Erro ao inicializar tokens:', error);
-            }
-        }
-
-        async function checkAndResetTokens(tokenData) {
-            if (!tokenData.tokens_reset_at) return;
-
-            const now = new Date();
-            const resetTime = new Date(tokenData.tokens_reset_at);
-
-            // Se passou de 24h, reseta os tokens
-            if (now >= resetTime) {
-                console.log('🔄 Resetando tokens após 24h...');
-
-                const { error } = await supabase
-                    .from('free_user_tokens')
-                    .update({
-                        used_tokens: 0,
-                        remaining_tokens: 10000,
-                        tokens_reset_at: null,
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('user_email', currentUser.email);
-
-                if (error) throw error;
-
-                await updateTokensDisplay(10000, 10000);
-                showAlert('✅ Seus tokens foram resetados! Você tem 10.000 tokens novamente.', 'success');
-                
-                // Esconde timer de reset
-                document.getElementById('tokensResetTimer').classList.remove('show');
-                if (resetTimerInterval) {
-                    clearInterval(resetTimerInterval);
-                }
-            } else {
-                // Inicia contagem regressiva
-                startResetTimer(resetTime);
-            }
-        }
-
-        function startResetTimer(resetTime) {
-            const timerDisplay = document.getElementById('resetTimerDisplay');
-            const timerContainer = document.getElementById('tokensResetTimer');
-            
-            timerContainer.classList.add('show');
-
-            if (resetTimerInterval) {
-                clearInterval(resetTimerInterval);
-            }
-
-            resetTimerInterval = setInterval(() => {
-                const now = new Date();
-                const diff = resetTime - now;
-
-                if (diff <= 0) {
-                    clearInterval(resetTimerInterval);
-                    timerDisplay.textContent = '00:00:00';
-                    // Recarrega tokens
-                    initializeTokens();
-                    return;
-                }
-
-                const hours = Math.floor(diff / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                timerDisplay.textContent = 
-                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function updateTokensDisplay(remaining, total) {
-            const tokensValue = document.getElementById('tokensValue');
-            const tokensBar = document.getElementById('tokensBar');
-            const tokensPercentage = document.getElementById('tokensPercentage');
-
-            const percentage = (remaining / total) * 100;
-
-            tokensValue.textContent = remaining.toLocaleString('pt-BR');
-            tokensBar.style.width = percentage + '%';
-            tokensPercentage.textContent = `${Math.round(percentage)}% disponível`;
-
-            // Remove classes antigas
-            tokensValue.classList.remove('warning', 'orange', 'danger');
-            tokensBar.classList.remove('warning', 'orange', 'danger');
-
-            // Aplica cores baseado na porcentagem
-            if (percentage >= 75) {
-                // Verde (padrão)
-            } else if (percentage >= 30) {
-                // Amarelo
-                tokensValue.classList.add('warning');
-                tokensBar.classList.add('warning');
-            } else if (percentage >= 10) {
-                // Laranja
-                tokensValue.classList.add('orange');
-                tokensBar.classList.add('orange');
-            } else {
-                // Vermelho
-                tokensValue.classList.add('danger');
-                tokensBar.classList.add('danger');
-            }
-        }
-
-        async function deductTokens(userMessageLength, aiResponseLength) {
-            if (!supabase || !currentUser || !isFreeUser) return true;
-
-            const totalUsed = userMessageLength + aiResponseLength;
-
-            try {
-                const { data: current, error: fetchError } = await supabase
-                    .from('free_user_tokens')
-                    .select('*')
-                    .eq('user_email', currentUser.email)
-                    .single();
-
-                if (fetchError) throw fetchError;
-
-                const newUsed = current.used_tokens + totalUsed;
-                const newRemaining = current.total_tokens - newUsed;
-
-                // Se zerou os tokens, inicia contagem de 24h
-                let resetAt = current.tokens_reset_at;
-                if (newRemaining <= 0 && !resetAt) {
-                    const resetTime = new Date();
-                    resetTime.setHours(resetTime.getHours() + 24);
-                    resetAt = resetTime.toISOString();
-                    
-                    console.log('⏱️ Tokens zerados! Reset em 24h:', resetAt);
-                    startResetTimer(resetTime);
-                }
-
-                const { error: updateError } = await supabase
-                    .from('free_user_tokens')
-                    .update({
-                        used_tokens: newUsed,
-                        remaining_tokens: Math.max(0, newRemaining),
-                        tokens_reset_at: resetAt,
-                        last_message_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString()
-                    })
-                    .eq('user_email', currentUser.email);
-
-                if (updateError) throw updateError;
-
-                await updateTokensDisplay(Math.max(0, newRemaining), current.total_tokens);
-
-                console.log(`📊 Tokens descontados: ${totalUsed} (User: ${userMessageLength} + IA: ${aiResponseLength})`);
-                console.log(`💰 Tokens restantes: ${Math.max(0, newRemaining)}`);
-
-                return newRemaining > 0;
-            } catch (error) {
-                console.error('Erro ao descontar tokens:', error);
-                return true;
-            }
-        }
-
-        async function checkTokensBeforeSend(messageLength) {
-            if (!isFreeUser) return true;
-
-            try {
-                const { data, error } = await supabase
-                    .from('free_user_tokens')
-                    .select('remaining_tokens, tokens_reset_at')
-                    .eq('user_email', currentUser.email)
-                    .single();
-
-                if (error) throw error;
-
-                if (data.remaining_tokens <= 0) {
-                    if (data.tokens_reset_at) {
-                        const resetTime = new Date(data.tokens_reset_at);
-                        const now = new Date();
-                        const hoursLeft = Math.ceil((resetTime - now) / (1000 * 60 * 60));
-                        
-                        showAlert(
-                            `🚫 Seus tokens acabaram! Eles serão resetados em aproximadamente ${hoursLeft}h. ` +
-                            `Ou contrate um plano pago para uso ilimitado.`,
-                            'error'
-                        );
-                    } else {
-                        showAlert('🚫 Seus tokens acabaram! Contrate um plano pago para continuar.', 'error');
-                    }
-                    return false;
-                }
-
-                if (data.remaining_tokens < messageLength) {
-                    showAlert(
-                        `⚠️ Você tem apenas ${data.remaining_tokens} tokens restantes, ` +
-                        `mas sua mensagem tem ${messageLength} caracteres. ` +
-                        `Tente uma mensagem mais curta.`,
-                        'warning'
-                    );
-                    return false;
-                }
-
-                return true;
-            } catch (error) {
-                console.error('Erro ao verificar tokens:', error);
-                return false;
-            }
-        }
-
-        // ============================================
-        // 🔐 VERIFICA AUTENTICAÇÃO
-        // ============================================
         async function checkAuth() {
             if (!supabase) {
                 console.error('⚠️ Supabase não configurado');
@@ -1357,26 +1182,17 @@
                 userPlan = currentUser.user_metadata?.plan || 'starter';
                 isAdmin = currentUser.email === ADMIN_EMAIL;
                 
-                // Verifica se é usuário free
-                isFreeUser = await checkIfFreeUser();
-                
                 localStorage.setItem('natandev_is_admin', isAdmin.toString());
                 
                 console.log('✅ Usuário autenticado:', {
                     email: currentUser.email,
                     plan: userPlan,
-                    isAdmin: isAdmin,
-                    isFree: isFreeUser
+                    isAdmin: isAdmin
                 });
 
                 await loadUserInfo();
                 await loadAndApplyTheme();
                 await checkAPIConnection();
-                
-                // Se for free, inicializa sistema de tokens
-                if (isFreeUser) {
-                    await initializeTokens();
-                }
                 
                 return true;
                 
@@ -1387,9 +1203,6 @@
             }
         }
 
-        // ============================================
-        // 🔌 VERIFICA CONEXÃO COM API
-        // ============================================
         async function checkAPIConnection() {
             try {
                 const response = await fetch(API_URL.replace('/api/chat', '/ping'), {
@@ -1427,9 +1240,6 @@
             }
         }
 
-        // ============================================
-        // 👤 CARREGA INFORMAÇÕES DO USUÁRIO
-        // ============================================
         async function loadUserInfo() {
             if (!currentUser) return;
 
@@ -1456,13 +1266,7 @@
                 document.getElementById('headerPlanBadge').textContent = '👑 ADMIN';
                 
                 document.getElementById('welcomeText').textContent = 
-                    'Olá Natan! Como dono da NatanDEV, você tem acesso total. Posso te ajudar com informações técnicas, dados de clientes e sistema. Como posso te ajudar hoje?';
-            } else if (isFreeUser) {
-                document.getElementById('userPlan').textContent = '🎁 Free';
-                document.getElementById('headerPlanBadge').textContent = '🎁 Free Access';
-                
-                document.getElementById('welcomeText').textContent = 
-                    'Você está usando o acesso grátis! Tem 10.000 tokens (caracteres) que resetam a cada 24h. Aproveite para testar a IA e conhecer nossos serviços!';
+                    'Olá Natan! Como dono da NatanSites, você tem acesso total. Posso te ajudar com informações técnicas, dados de clientes e sistema. Como posso te ajudar hoje?';
             } else {
                 const planName = PLAN_NAMES[userPlan] || 'Starter';
                 const planIcon = PLAN_ICONS[userPlan] || '🌱';
@@ -1472,6 +1276,9 @@
                 if (userPlan === 'professional') {
                     document.getElementById('welcomeText').textContent = 
                         'Como cliente Professional, você tem suporte prioritário! Estou aqui para te ajudar com tudo sobre desenvolvimento web, SEO avançado, APIs e muito mais. Como posso te ajudar hoje?';
+                } else if (userPlan === 'free') {
+                    document.getElementById('welcomeText').textContent = 
+                        'Você está usando o acesso grátis! Aproveite para testar a IA e conhecer nossos serviços!';
                 } else {
                     document.getElementById('welcomeText').textContent = 
                         'Como cliente Starter, posso te ajudar com dúvidas sobre seu site, hospedagem e serviços básicos. Se precisar de recursos avançados, posso te falar sobre o plano Professional! Como posso te ajudar hoje?';
@@ -1481,9 +1288,6 @@
             console.log('✅ Interface do usuário carregada');
         }
 
-        // ============================================
-        // 💬 FUNÇÕES DE CHAT
-        // ============================================
         function showAlert(message, type) {
             const alertBox = document.getElementById('alertBox');
             alertBox.textContent = message;
@@ -1576,9 +1380,6 @@
             if (indicator) indicator.remove();
         }
 
-        // ============================================
-        // 📤 ENVIAR MENSAGEM PARA A IA
-        // ============================================
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
@@ -1588,14 +1389,6 @@
             if (!currentUser) {
                 showAlert('⚠️ Usuário não identificado', 'error');
                 return;
-            }
-
-            // ✅ VERIFICA TOKENS ANTES DE ENVIAR (SÓ PARA FREE)
-            if (isFreeUser) {
-                const canSend = await checkTokensBeforeSend(message.length);
-                if (!canSend) {
-                    return;
-                }
             }
 
             if (!apiConnected) {
@@ -1624,12 +1417,30 @@
                     throw new Error('Sessão expirada. Faça login novamente.');
                 }
 
+                let planType = 'paid';
+                if (supabase) {
+                    try {
+                        const { data: accountData, error: accountError } = await supabase
+                            .from('user_accounts')
+                            .select('plan_type')
+                            .eq('user_id', currentUser.id)
+                            .single();
+
+                        if (!accountError && accountData) {
+                            planType = accountData.plan_type || 'paid';
+                            console.log('✅ Plan type detectado:', planType);
+                        }
+                    } catch (error) {
+                        console.warn('⚠️ Erro ao buscar plan_type, assumindo paid');
+                    }
+                }
+
                 const userData = {
                     user_id: currentUser.id,
                     email: currentUser.email,
                     plan: userPlan,
+                    plan_type: planType,
                     is_admin: isAdmin,
-                    is_free: isFreeUser,
                     name: currentUser.user_metadata?.name || currentUser.email.split('@')[0]
                 };
 
@@ -1662,11 +1473,6 @@
                 if (data.response || data.resposta) {
                     const aiResponse = data.response || data.resposta;
                     addMessage(aiResponse, false, data.metadata);
-                    
-                    // ✅ DESCONTA TOKENS (SÓ PARA FREE)
-                    if (isFreeUser) {
-                        await deductTokens(message.length, aiResponse.length);
-                    }
                     
                     console.log('✅ Resposta da IA recebida');
                 } else {
@@ -1701,15 +1507,15 @@
             }
         }
 
-        // ============================================
-        // 🎮 EVENT LISTENERS
-        // ============================================
-        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        document.getElementById('sendBtn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await sendMessage();
+        });
 
-        document.getElementById('chatInput').addEventListener('keydown', function(e) {
+        document.getElementById('chatInput').addEventListener('keydown', async function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                sendMessage();
+                await sendMessage();
             }
         });
 
@@ -1736,17 +1542,9 @@
                 localStorage.removeItem(`natandev_settings_${currentUser.id}`);
             }
             
-            // Limpa timer de reset
-            if (resetTimerInterval) {
-                clearInterval(resetTimerInterval);
-            }
-            
             window.location.href = 'login.html';
         });
 
-        // ============================================
-        // 📱 MOBILE MENU
-        // ============================================
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
         const mobileOverlay = document.getElementById('mobileOverlay');
@@ -1770,9 +1568,6 @@
             });
         });
 
-        // ============================================
-        // 🔄 SINCRONIZAÇÃO DE TEMA
-        // ============================================
         window.addEventListener('storage', function(e) {
             if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
                 try {
@@ -1814,30 +1609,6 @@
             }
         }, 1000);
 
-        // ============================================
-        // ⏱️ VERIFICA RESET DE TOKENS PERIODICAMENTE
-        // ============================================
-        setInterval(async function() {
-            if (!isFreeUser || !currentUser) return;
-
-            try {
-                const { data, error } = await supabase
-                    .from('free_user_tokens')
-                    .select('*')
-                    .eq('user_email', currentUser.email)
-                    .single();
-
-                if (error) return;
-
-                await checkAndResetTokens(data);
-            } catch (error) {
-                console.error('Erro ao verificar reset de tokens:', error);
-            }
-        }, 60000); // Verifica a cada 1 minuto
-
-        // ============================================
-        // 🚀 INICIALIZAÇÃO
-        // ============================================
         async function init() {
             console.log('🚀 Inicializando NatanAI...');
             const authenticated = await checkAuth();
@@ -1849,20 +1620,12 @@
                     email: currentUser.email,
                     plan: userPlan,
                     is_admin: isAdmin,
-                    is_free: isFreeUser,
                     api_url: API_URL
                 });
                 
                 document.getElementById('chatInput').focus();
             }
         }
-
-        // Limpa timer ao sair da página
-        window.addEventListener('beforeunload', function() {
-            if (resetTimerInterval) {
-                clearInterval(resetTimerInterval);
-            }
-        });
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', init);
