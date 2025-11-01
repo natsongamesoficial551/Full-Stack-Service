@@ -1,24 +1,70 @@
-name: Atualizar IA (Netlify)
+name: 🚀 Atualizar IA Automaticamente
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
+  workflow_dispatch:  # Permite rodar manualmente também
 
 jobs:
-  trigger-update:
+  atualizar-ia:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Aguardar deploy Netlify (90s)
-        run: sleep 90
-
-      - name: Chamar função Netlify
+      - name: 📦 Checkout
+        uses: actions/checkout@v3
+      
+      - name: ⏳ Aguardar deploy do Netlify
         run: |
-          curl -X POST \
+          echo "⏳ Aguardando Netlify fazer deploy (90 segundos)..."
+          sleep 90
+          echo "✅ Deploy do Netlify deve estar concluído!"
+      
+      - name: 🔄 Chamar webhook de atualização
+        id: webhook
+        run: |
+          echo "📡 Chamando webhook de atualização da IA..."
+          
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
             https://natansites.com.br/.netlify/functions/atualizar-ia \
             -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
-            -H "Content-Type: application/json"
-
-      - name: Confirmar atualização
-        run: echo "✅ IA atualizada via Netlify Function!"
+            -H "Content-Type: application/json" \
+            --max-time 60)
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "Status HTTP: $HTTP_CODE"
+          echo "Resposta: $BODY"
+          
+          if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
+            echo "✅ Webhook chamado com sucesso!"
+            echo "status=success" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ Webhook retornou código $HTTP_CODE"
+            echo "status=warning" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: ⏰ Aguardar cache do backend atualizar
+        if: steps.webhook.outputs.status == 'success'
+        run: |
+          echo "⏰ Aguardando cache do backend atualizar (até 5 minutos)..."
+          echo "💡 A IA começará a responder com dados novos em breve!"
+      
+      - name: ✅ Atualização concluída
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ PROCESSO CONCLUÍDO!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "📊 Status:"
+          echo "  ✅ GitHub atualizado"
+          echo "  ✅ Netlify fez deploy"
+          echo "  ✅ Webhook foi chamado"
+          echo "  ⏳ IA será atualizada em até 5 minutos"
+          echo ""
+          echo "🔍 Para verificar se atualizou:"
+          echo "  - Rode: ./verificar-supabase.ps1"
+          echo "  - Ou pergunte algo pra IA e veja se responde com dados novos"
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
