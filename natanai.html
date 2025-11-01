@@ -1324,948 +1324,1029 @@
     </main>
 
     <script>
-        const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
-        const ADMIN_EMAIL = 'natan@natandev.com';
-        const API_URL = 'https://natanai-dev.onrender.com/api/chat';
+      const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
+const ADMIN_EMAIL = 'natan@natandev.com';
+const API_URL = 'https://natanai-dev.onrender.com/api/chat';
 
-        let supabase = null;
-        let currentUser = null;
-        let userPlan = 'starter';
-        let isAdmin = false;
-        let apiConnected = false;
-        let currentSessionId = null;
-        let chatSessions = [];
+let supabase = null;
+let currentUser = null;
+let userPlan = 'starter';
+let isAdmin = false;
+let apiConnected = false;
+let currentSessionId = null;
+let chatSessions = [];
+let isFreeUser = false; // Nova variável para controlar usuários free
+
+try {
+    if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+} catch (error) {
+    console.error('Erro ao inicializar Supabase:', error);
+}
+
+// ============================================
+// 💬 FUNÇÕES DE GERENCIAMENTO DE CHATS
+// ============================================
+
+async function createNewChatSession() {
+    // FREE: não cria sessões no banco
+    if (isFreeUser) {
+        console.log('🎁 Usuário FREE - sessão temporária');
+        return null;
+    }
+
+    if (!supabase || !currentUser) {
+        console.error('Supabase ou usuário não disponível');
+        return null;
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('chat_sessions')
+            .insert({
+                user_id: currentUser.id,
+                title: 'Nova Conversa',
+                is_active: true
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        console.log('✅ Nova sessão de chat criada:', data.id);
+        return data;
+    } catch (error) {
+        console.error('❌ Erro ao criar sessão de chat:', error);
+        return null;
+    }
+}
+
+async function getCurrentOrCreateSession() {
+    // FREE: não usa sessões persistentes
+    if (isFreeUser) {
+        console.log('🎁 Usuário FREE - modo temporário ativo');
+        return null;
+    }
+
+    if (!supabase || !currentUser) return null;
+
+    try {
+        // Buscar sessão ativa do usuário
+        const { data: activeSessions, error } = await supabase
+            .from('chat_sessions')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .eq('is_active', true)
+            .order('updated_at', { ascending: false })
+            .limit(1);
+
+        if (error) throw error;
+
+        // Se existe sessão ativa, usar ela
+        if (activeSessions && activeSessions.length > 0) {
+            currentSessionId = activeSessions[0].id;
+            console.log('✅ Sessão ativa encontrada:', currentSessionId);
+            return activeSessions[0];
+        }
+
+        // Se não existe, criar nova
+        const newSession = await createNewChatSession();
+        if (newSession) {
+            currentSessionId = newSession.id;
+            return newSession;
+        }
+
+        return null;
+    } catch (error) {
+        console.error('❌ Erro ao buscar/criar sessão:', error);
+        return null;
+    }
+}
+
+async function saveMessageToDatabase(content, isUser, metadata = null) {
+    // FREE: não salva mensagens no banco
+    if (isFreeUser) {
+        console.log('🎁 Usuário FREE - mensagem não persistida');
+        return false;
+    }
+
+    if (!supabase || !currentUser || !currentSessionId) {
+        console.warn('⚠️ Não foi possível salvar mensagem no banco');
+        return false;
+    }
+
+    try {
+        const { data, error } = await supabase
+            .from('chat_messages')
+            .insert({
+                session_id: currentSessionId,
+                user_id: currentUser.id,
+                content: content,
+                is_user: isUser,
+                metadata: metadata
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        console.log('✅ Mensagem salva no banco:', data.id);
         
+        // Atualizar título da sessão se for a primeira mensagem do usuário
+        if (isUser) {
+            await updateSessionTitle(currentSessionId);
+        }
+
+        return true;
+    } catch (error) {
+        console.error('❌ Erro ao salvar mensagem:', error);
+        return false;
+    }
+}
+
+async function updateSessionTitle(sessionId) {
+    if (!supabase || isFreeUser) return;
+
+    try {
+        // Usar a function do banco para gerar título
+        const { data, error } = await supabase.rpc('generate_chat_title', {
+            session_uuid: sessionId
+        });
+
+        if (error) throw error;
+
+        // Atualizar o título na sessão
+        const { error: updateError } = await supabase
+            .from('chat_sessions')
+            .update({ title: data })
+            .eq('id', sessionId);
+
+        if (updateError) throw updateError;
+
+        console.log('✅ Título da sessão atualizado:', data);
+        
+        // Recarregar lista de chats
+        await loadChatHistory();
+    } catch (error) {
+        console.error('❌ Erro ao atualizar título:', error);
+    }
+}
+
+async function loadChatHistory() {
+    // FREE: não carrega histórico
+    if (isFreeUser) {
+        renderChatHistoryForFree();
+        return;
+    }
+
+    if (!supabase || !currentUser) return;
+
+    try {
+        const { data, error } = await supabase
+            .from('chat_sessions')
+            .select('*')
+            .eq('user_id', currentUser.id)
+            .order('updated_at', { ascending: false });
+
+        if (error) throw error;
+
+        chatSessions = data || [];
+        renderChatHistory();
+        
+        console.log('✅ Histórico de chats carregado:', chatSessions.length);
+    } catch (error) {
+        console.error('❌ Erro ao carregar histórico:', error);
+    }
+}
+
+function renderChatHistoryForFree() {
+    const chatHistorySection = document.querySelector('.chat-history-section');
+    if (chatHistorySection) {
+        chatHistorySection.style.display = 'none';
+    }
+}
+
+function renderChatHistory() {
+    const chatHistoryList = document.getElementById('chatHistoryList');
+    
+    if (chatSessions.length === 0) {
+        chatHistoryList.innerHTML = '<li class="chat-history-empty">Nenhuma conversa ainda</li>';
+        return;
+    }
+
+    chatHistoryList.innerHTML = chatSessions.map(session => {
+        const isActive = session.id === currentSessionId;
+        const date = new Date(session.updated_at);
+        const timeAgo = getTimeAgo(date);
+        
+        return `
+            <li class="chat-history-item">
+                <a href="#" class="chat-history-link ${isActive ? 'active' : ''}" data-session-id="${session.id}">
+                    <div class="chat-history-info">
+                        <div class="chat-history-link-title">${session.title}</div>
+                        <div class="chat-history-meta">
+                            <span>📅 ${timeAgo}</span>
+                            <span>💬 ${session.message_count || 0}</span>
+                        </div>
+                    </div>
+                    <div class="chat-history-actions">
+                        <button class="btn-chat-action btn-rename-chat" data-session-id="${session.id}" title="Renomear">
+                            ✏️
+                        </button>
+                        <button class="btn-chat-action btn-delete-chat" data-session-id="${session.id}" title="Deletar">
+                            🗑️
+                        </button>
+                    </div>
+                </a>
+            </li>
+        `;
+    }).join('');
+
+    // Adicionar event listeners
+    attachChatHistoryListeners();
+}
+
+function attachChatHistoryListeners() {
+    // Carregar chat ao clicar
+    document.querySelectorAll('.chat-history-link').forEach(link => {
+        link.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const sessionId = this.dataset.sessionId;
+            await loadChatSession(sessionId);
+        });
+    });
+
+    // Renomear chat
+    document.querySelectorAll('.btn-rename-chat').forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const sessionId = this.dataset.sessionId;
+            await renameChatSession(sessionId);
+        });
+    });
+
+    // Deletar chat
+    document.querySelectorAll('.btn-delete-chat').forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const sessionId = this.dataset.sessionId;
+            await deleteChatSession(sessionId);
+        });
+    });
+}
+
+async function loadChatSession(sessionId) {
+    if (!supabase || !currentUser || isFreeUser) return;
+
+    try {
+        // Marcar todas as outras sessões como inativas
+        await supabase
+            .from('chat_sessions')
+            .update({ is_active: false })
+            .eq('user_id', currentUser.id);
+
+        // Marcar esta sessão como ativa
+        await supabase
+            .from('chat_sessions')
+            .update({ is_active: true })
+            .eq('id', sessionId);
+
+        currentSessionId = sessionId;
+
+        // Carregar mensagens desta sessão
+        const { data: messages, error } = await supabase
+            .from('chat_messages')
+            .select('*')
+            .eq('session_id', sessionId)
+            .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        // Limpar chat atual
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.innerHTML = '';
+
+        // Renderizar mensagens
+        messages.forEach(msg => {
+            addMessage(msg.content, msg.is_user, msg.metadata, false);
+        });
+
+        // Atualizar UI
+        await loadChatHistory();
+        
+        console.log('✅ Chat carregado:', sessionId, 'com', messages.length, 'mensagens');
+        
+        // Scroll para o final
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    } catch (error) {
+        console.error('❌ Erro ao carregar chat:', error);
+        showAlert('Erro ao carregar conversa', 'error');
+    }
+}
+
+async function renameChatSession(sessionId) {
+    if (isFreeUser) return;
+
+    const session = chatSessions.find(s => s.id === sessionId);
+    if (!session) return;
+
+    const newTitle = prompt('Digite o novo nome da conversa:', session.title);
+    if (!newTitle || newTitle.trim() === '') return;
+
+    try {
+        const { error } = await supabase
+            .from('chat_sessions')
+            .update({ title: newTitle.trim() })
+            .eq('id', sessionId);
+
+        if (error) throw error;
+
+        console.log('✅ Chat renomeado');
+        await loadChatHistory();
+        showAlert('✅ Conversa renomeada com sucesso!', 'success');
+    } catch (error) {
+        console.error('❌ Erro ao renomear chat:', error);
+        showAlert('Erro ao renomear conversa', 'error');
+    }
+}
+
+async function deleteChatSession(sessionId) {
+    if (isFreeUser) return;
+
+    const session = chatSessions.find(s => s.id === sessionId);
+    if (!session) return;
+
+    if (!confirm(`Deseja realmente deletar a conversa "${session.title}"?`)) return;
+
+    try {
+        const { error } = await supabase
+            .from('chat_sessions')
+            .delete()
+            .eq('id', sessionId);
+
+        if (error) throw error;
+
+        console.log('✅ Chat deletado');
+
+        // Se deletou o chat atual, criar novo
+        if (sessionId === currentSessionId) {
+            await handleNewChat();
+        } else {
+            await loadChatHistory();
+        }
+
+        showAlert('✅ Conversa deletada com sucesso!', 'success');
+    } catch (error) {
+        console.error('❌ Erro ao deletar chat:', error);
+        showAlert('Erro ao deletar conversa', 'error');
+    }
+}
+
+async function handleNewChat() {
+    // FREE: apenas limpa o chat atual
+    if (isFreeUser) {
+        const chatMessages = document.getElementById('chatMessages');
+        chatMessages.innerHTML = `
+            <div class="welcome-message">
+                <h2>👋 Olá! Eu sou a NatanAI</h2>
+                <p id="welcomeText">🎁 Você está no plano FREE. Suas conversas não são salvas e desaparecem ao sair da página. <br><br>Estou aqui para ajudar você com suas dúvidas sobre desenvolvimento web, SEO, design e muito mais. Como posso te ajudar hoje?</p>
+            </div>
+        `;
+        console.log('🎁 Chat limpo - usuário FREE');
+        showAlert('🎁 Chat limpo! Plano FREE não salva conversas', 'warning');
+        return;
+    }
+
+    if (!confirm('Deseja criar uma nova conversa? A conversa atual será salva.')) return;
+
+    try {
+        // Marcar sessão atual como inativa
+        if (currentSessionId) {
+            await supabase
+                .from('chat_sessions')
+                .update({ is_active: false })
+                .eq('id', currentSessionId);
+        }
+
+        // Criar nova sessão
+        const newSession = await createNewChatSession();
+        if (newSession) {
+            currentSessionId = newSession.id;
+
+            // Limpar chat
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = `
+                <div class="welcome-message">
+                    <h2>👋 Olá! Eu sou a NatanAI</h2>
+                    <p id="welcomeText">Estou aqui para ajudar você com suas dúvidas sobre desenvolvimento web, SEO, design e muito mais. Como posso te ajudar hoje?</p>
+                </div>
+            `;
+
+            // Recarregar histórico
+            await loadChatHistory();
+
+            console.log('✅ Novo chat criado');
+            showAlert('✅ Nova conversa criada!', 'success');
+        }
+    } catch (error) {
+        console.error('❌ Erro ao criar novo chat:', error);
+        showAlert('Erro ao criar nova conversa', 'error');
+    }
+}
+
+function getTimeAgo(date) {
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Agora';
+    if (diffMins < 60) return `${diffMins}min`;
+    if (diffHours < 24) return `${diffHours}h`;
+    if (diffDays < 7) return `${diffDays}d`;
+    
+    return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+}
+
+// ============================================
+// 🔐 AUTENTICAÇÃO E CARREGAMENTO
+// ============================================
+
+async function loadAndApplyTheme() {
+    if (!currentUser) return;
+
+    const settingsKey = `natandev_settings_${currentUser.id}`;
+    const savedSettings = localStorage.getItem(settingsKey);
+    
+    if (savedSettings) {
         try {
-            if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
-                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const settings = JSON.parse(savedSettings);
+            if (settings.darkMode) {
+                document.body.classList.add('dark-mode');
             }
         } catch (error) {
-            console.error('Erro ao inicializar Supabase:', error);
+            console.error('Erro ao aplicar tema:', error);
         }
-
-        // ============================================
-        // 💬 FUNÇÕES DE GERENCIAMENTO DE CHATS
-        // ============================================
-
-        async function createNewChatSession() {
-            if (!supabase || !currentUser) {
-                console.error('Supabase ou usuário não disponível');
-                return null;
-            }
-
-            try {
-                const { data, error } = await supabase
-                    .from('chat_sessions')
-                    .insert({
-                        user_id: currentUser.id,
-                        title: 'Nova Conversa',
-                        is_active: true
-                    })
-                    .select()
-                    .single();
-
-                if (error) throw error;
-
-                console.log('✅ Nova sessão de chat criada:', data.id);
-                return data;
-            } catch (error) {
-                console.error('❌ Erro ao criar sessão de chat:', error);
-                return null;
-            }
-        }
-
-        async function getCurrentOrCreateSession() {
-            if (!supabase || !currentUser) return null;
-
-            try {
-                // Buscar sessão ativa do usuário
-                const { data: activeSessions, error } = await supabase
-                    .from('chat_sessions')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .eq('is_active', true)
-                    .order('updated_at', { ascending: false })
-                    .limit(1);
-
-                if (error) throw error;
-
-                // Se existe sessão ativa, usar ela
-                if (activeSessions && activeSessions.length > 0) {
-                    currentSessionId = activeSessions[0].id;
-                    console.log('✅ Sessão ativa encontrada:', currentSessionId);
-                    return activeSessions[0];
-                }
-
-                // Se não existe, criar nova
-                const newSession = await createNewChatSession();
-                if (newSession) {
-                    currentSessionId = newSession.id;
-                    return newSession;
-                }
-
-                return null;
-            } catch (error) {
-                console.error('❌ Erro ao buscar/criar sessão:', error);
-                return null;
-            }
-        }
-
-        async function saveMessageToDatabase(content, isUser, metadata = null) {
-            if (!supabase || !currentUser || !currentSessionId) {
-                console.warn('⚠️ Não foi possível salvar mensagem no banco');
-                return false;
-            }
-
-            try {
-                const { data, error } = await supabase
-                    .from('chat_messages')
-                    .insert({
-                        session_id: currentSessionId,
-                        user_id: currentUser.id,
-                        content: content,
-                        is_user: isUser,
-                        metadata: metadata
-                    })
-                    .select()
-                    .single();
-
-                if (error) throw error;
-
-                console.log('✅ Mensagem salva no banco:', data.id);
-                
-                // Atualizar título da sessão se for a primeira mensagem do usuário
-                if (isUser) {
-                    await updateSessionTitle(currentSessionId);
-                }
-
-                return true;
-            } catch (error) {
-                console.error('❌ Erro ao salvar mensagem:', error);
-                return false;
-            }
-        }
-
-        async function updateSessionTitle(sessionId) {
-            if (!supabase) return;
-
-            try {
-                // Usar a function do banco para gerar título
-                const { data, error } = await supabase.rpc('generate_chat_title', {
-                    session_uuid: sessionId
-                });
-
-                if (error) throw error;
-
-                // Atualizar o título na sessão
-                const { error: updateError } = await supabase
-                    .from('chat_sessions')
-                    .update({ title: data })
-                    .eq('id', sessionId);
-
-                if (updateError) throw updateError;
-
-                console.log('✅ Título da sessão atualizado:', data);
-                
-                // Recarregar lista de chats
-                await loadChatHistory();
-            } catch (error) {
-                console.error('❌ Erro ao atualizar título:', error);
-            }
-        }
-
-        async function loadChatHistory() {
-            if (!supabase || !currentUser) return;
-
-            try {
-                const { data, error } = await supabase
-                    .from('chat_sessions')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .order('updated_at', { ascending: false });
-
-                if (error) throw error;
-
-                chatSessions = data || [];
-                renderChatHistory();
-                
-                console.log('✅ Histórico de chats carregado:', chatSessions.length);
-            } catch (error) {
-                console.error('❌ Erro ao carregar histórico:', error);
-            }
-        }
-
-        function renderChatHistory() {
-            const chatHistoryList = document.getElementById('chatHistoryList');
-            
-            if (chatSessions.length === 0) {
-                chatHistoryList.innerHTML = '<li class="chat-history-empty">Nenhuma conversa ainda</li>';
-                return;
-            }
-
-            chatHistoryList.innerHTML = chatSessions.map(session => {
-                const isActive = session.id === currentSessionId;
-                const date = new Date(session.updated_at);
-                const timeAgo = getTimeAgo(date);
-                
-                return `
-                    <li class="chat-history-item">
-                        <a href="#" class="chat-history-link ${isActive ? 'active' : ''}" data-session-id="${session.id}">
-                            <div class="chat-history-info">
-                                <div class="chat-history-link-title">${session.title}</div>
-                                <div class="chat-history-meta">
-                                    <span>📅 ${timeAgo}</span>
-                                    <span>💬 ${session.message_count || 0}</span>
-                                </div>
-                            </div>
-                            <div class="chat-history-actions">
-                                <button class="btn-chat-action btn-rename-chat" data-session-id="${session.id}" title="Renomear">
-                                    ✏️
-                                </button>
-                                <button class="btn-chat-action btn-delete-chat" data-session-id="${session.id}" title="Deletar">
-                                    🗑️
-                                </button>
-                            </div>
-                        </a>
-                    </li>
-                `;
-            }).join('');
-
-            // Adicionar event listeners
-            attachChatHistoryListeners();
-        }
-
-        function attachChatHistoryListeners() {
-            // Carregar chat ao clicar
-            document.querySelectorAll('.chat-history-link').forEach(link => {
-                link.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    const sessionId = this.dataset.sessionId;
-                    await loadChatSession(sessionId);
-                });
-            });
-
-            // Renomear chat
-            document.querySelectorAll('.btn-rename-chat').forEach(btn => {
-                btn.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const sessionId = this.dataset.sessionId;
-                    await renameChatSession(sessionId);
-                });
-            });
-
-            // Deletar chat
-            document.querySelectorAll('.btn-delete-chat').forEach(btn => {
-                btn.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const sessionId = this.dataset.sessionId;
-                    await deleteChatSession(sessionId);
-                });
-            });
-        }
-
-        async function loadChatSession(sessionId) {
-            if (!supabase || !currentUser) return;
-
-            try {
-                // Marcar todas as outras sessões como inativas
-                await supabase
-                    .from('chat_sessions')
-                    .update({ is_active: false })
-                    .eq('user_id', currentUser.id);
-
-                // Marcar esta sessão como ativa
-                await supabase
-                    .from('chat_sessions')
-                    .update({ is_active: true })
-                    .eq('id', sessionId);
-
-                currentSessionId = sessionId;
-
-                // Carregar mensagens desta sessão
-                const { data: messages, error } = await supabase
-                    .from('chat_messages')
-                    .select('*')
-                    .eq('session_id', sessionId)
-                    .order('created_at', { ascending: true });
-
-                if (error) throw error;
-
-                // Limpar chat atual
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.innerHTML = '';
-
-                // Renderizar mensagens
-                messages.forEach(msg => {
-                    addMessage(msg.content, msg.is_user, msg.metadata, false);
-                });
-
-                // Atualizar UI
-                await loadChatHistory();
-                
-                console.log('✅ Chat carregado:', sessionId, 'com', messages.length, 'mensagens');
-                
-                // Scroll para o final
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            } catch (error) {
-                console.error('❌ Erro ao carregar chat:', error);
-                showAlert('Erro ao carregar conversa', 'error');
-            }
-        }
-
-        async function renameChatSession(sessionId) {
-            const session = chatSessions.find(s => s.id === sessionId);
-            if (!session) return;
-
-            const newTitle = prompt('Digite o novo nome da conversa:', session.title);
-            if (!newTitle || newTitle.trim() === '') return;
-
-            try {
-                const { error } = await supabase
-                    .from('chat_sessions')
-                    .update({ title: newTitle.trim() })
-                    .eq('id', sessionId);
-
-                if (error) throw error;
-
-                console.log('✅ Chat renomeado');
-                await loadChatHistory();
-                showAlert('✅ Conversa renomeada com sucesso!', 'success');
-            } catch (error) {
-                console.error('❌ Erro ao renomear chat:', error);
-                showAlert('Erro ao renomear conversa', 'error');
-            }
-        }
-
-        async function deleteChatSession(sessionId) {
-            const session = chatSessions.find(s => s.id === sessionId);
-            if (!session) return;
-
-            if (!confirm(`Deseja realmente deletar a conversa "${session.title}"?`)) return;
-
-            try {
-                const { error } = await supabase
-                    .from('chat_sessions')
-                    .delete()
-                    .eq('id', sessionId);
-
-                if (error) throw error;
-
-                console.log('✅ Chat deletado');
-
-                // Se deletou o chat atual, criar novo
-                if (sessionId === currentSessionId) {
-                    await handleNewChat();
-                } else {
-                    await loadChatHistory();
-                }
-
-                showAlert('✅ Conversa deletada com sucesso!', 'success');
-            } catch (error) {
-                console.error('❌ Erro ao deletar chat:', error);
-                showAlert('Erro ao deletar conversa', 'error');
-            }
-        }
-
-        async function handleNewChat() {
-            if (!confirm('Deseja criar uma nova conversa? A conversa atual será salva.')) return;
-
-            try {
-                // Marcar sessão atual como inativa
-                if (currentSessionId) {
-                    await supabase
-                        .from('chat_sessions')
-                        .update({ is_active: false })
-                        .eq('id', currentSessionId);
-                }
-
-                // Criar nova sessão
-                const newSession = await createNewChatSession();
-                if (newSession) {
-                    currentSessionId = newSession.id;
-
-                    // Limpar chat
-                    const chatMessages = document.getElementById('chatMessages');
-                    chatMessages.innerHTML = `
-                        <div class="welcome-message">
-                            <h2>👋 Olá! Eu sou a NatanAI</h2>
-                            <p id="welcomeText">Estou aqui para ajudar você com suas dúvidas sobre desenvolvimento web, SEO, design e muito mais. Como posso te ajudar hoje?</p>
-                        </div>
-                    `;
-
-                    // Recarregar histórico
-                    await loadChatHistory();
-
-                    console.log('✅ Novo chat criado');
-                    showAlert('✅ Nova conversa criada!', 'success');
-                }
-            } catch (error) {
-                console.error('❌ Erro ao criar novo chat:', error);
-                showAlert('Erro ao criar nova conversa', 'error');
-            }
-        }
-
-        function getTimeAgo(date) {
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) return 'Agora';
-            if (diffMins < 60) return `${diffMins}min`;
-            if (diffHours < 24) return `${diffHours}h`;
-            if (diffDays < 7) return `${diffDays}d`;
-            
-            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
-        }
-
-        // ============================================
-        // 🔐 AUTENTICAÇÃO E CARREGAMENTO
-        // ============================================
-
-        async function loadAndApplyTheme() {
-            if (!currentUser) return;
-
-            const settingsKey = `natandev_settings_${currentUser.id}`;
-            const savedSettings = localStorage.getItem(settingsKey);
-            
-            if (savedSettings) {
-                try {
-                    const settings = JSON.parse(savedSettings);
-                    if (settings.darkMode) {
-                        document.body.classList.add('dark-mode');
-                    }
-                } catch (error) {
-                    console.error('Erro ao aplicar tema:', error);
-                }
-            }
-
-            if (!supabase) return;
-
-            try {
-                const { data, error } = await supabase
-                    .from('user_settings')
-                    .select('settings')
-                    .eq('user_id', currentUser.id)
-                    .single();
-
-                if (!error && data?.settings) {
-                    if (data.settings.darkMode) {
-                        document.body.classList.add('dark-mode');
-                    } else {
-                        document.body.classList.remove('dark-mode');
-                    }
-                    localStorage.setItem(settingsKey, JSON.stringify(data.settings));
-                }
-            } catch (error) {
-                console.error('Erro ao carregar tema do Supabase:', error);
-            }
-        }
-
-        async function checkAuth() {
-            if (!supabase) {
-                console.error('⚠️ Supabase não configurado');
-                window.location.href = 'login.html';
-                return false;
-            }
-
-            try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                
-                if (error) throw error;
-                
-                if (!session || !session.user) {
-                    console.log('❌ Nenhuma sessão ativa');
-                    window.location.href = 'login.html';
-                    return false;
-                }
-
-                currentUser = session.user;
-                userPlan = currentUser.user_metadata?.plan || 'starter';
-                isAdmin = currentUser.email === ADMIN_EMAIL;
-                
-                localStorage.setItem('natandev_is_admin', isAdmin.toString());
-                
-                console.log('✅ Usuário autenticado:', {
-                    email: currentUser.email,
-                    plan: userPlan,
-                    isAdmin: isAdmin
-                });
-
-                await loadUserInfo();
-                await loadAndApplyTheme();
-                await checkAPIConnection();
-                
-                // Carregar ou criar sessão de chat
-                await getCurrentOrCreateSession();
-                
-                // Carregar histórico de chats
-                await loadChatHistory();
-                
-                // Carregar mensagens da sessão atual
-                if (currentSessionId) {
-                    await loadChatSession(currentSessionId);
-                }
-                
-                return true;
-                
-            } catch (error) {
-                console.error('Erro ao verificar autenticação:', error);
-                window.location.href = 'login.html';
-                return false;
-            }
-        }
-
-        async function checkAPIConnection() {
-            try {
-                const response = await fetch(API_URL.replace('/api/chat', '/ping'), {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    apiConnected = true;
-                    updateConnectionStatus(true);
-                    console.log('✅ API Python conectada');
-                } else {
-                    throw new Error('API não respondeu corretamente');
-                }
-            } catch (error) {
-                apiConnected = false;
-                updateConnectionStatus(false);
-                console.error('❌ API Python offline:', error);
-                console.warn('⚠️ API offline. Tentará reconectar ao enviar mensagem.');
-            }
-        }
-
-        function updateConnectionStatus(connected) {
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-            
-            if (connected) {
-                statusDot.classList.remove('offline');
-                statusText.textContent = 'Conectado';
+    }
+
+    if (!supabase) return;
+
+    try {
+        const { data, error } = await supabase
+            .from('user_settings')
+            .select('settings')
+            .eq('user_id', currentUser.id)
+            .single();
+
+        if (!error && data?.settings) {
+            if (data.settings.darkMode) {
+                document.body.classList.add('dark-mode');
             } else {
-                statusDot.classList.add('offline');
-                statusText.textContent = 'API Offline';
+                document.body.classList.remove('dark-mode');
             }
+            localStorage.setItem(settingsKey, JSON.stringify(data.settings));
+        }
+    } catch (error) {
+        console.error('Erro ao carregar tema do Supabase:', error);
+    }
+}
+
+async function checkAuth() {
+    if (!supabase) {
+        console.error('⚠️ Supabase não configurado');
+        window.location.href = 'login.html';
+        return false;
+    }
+
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) throw error;
+        
+        if (!session || !session.user) {
+            console.log('❌ Nenhuma sessão ativa');
+            window.location.href = 'login.html';
+            return false;
         }
 
-        async function loadUserInfo() {
-            if (!currentUser) return;
+        currentUser = session.user;
+        userPlan = currentUser.user_metadata?.plan || 'starter';
+        isAdmin = currentUser.email === ADMIN_EMAIL;
+        
+        // Verificar se é usuário FREE
+        if (supabase) {
+            try {
+                const { data: accountData, error: accountError } = await supabase
+                    .from('user_accounts')
+                    .select('plan_type')
+                    .eq('user_id', currentUser.id)
+                    .single();
 
-            const username = currentUser.email.split('@')[0];
-            const initials = username.substring(0, 2).toUpperCase();
+                if (!accountError && accountData) {
+                    isFreeUser = (accountData.plan_type === 'free');
+                    console.log(`🔍 Tipo de conta: ${accountData.plan_type}`);
+                }
+            } catch (error) {
+                console.warn('⚠️ Erro ao verificar plan_type');
+                isFreeUser = false;
+            }
+        }
+        
+        localStorage.setItem('natandev_is_admin', isAdmin.toString());
+        
+        console.log('✅ Usuário autenticado:', {
+            email: currentUser.email,
+            plan: userPlan,
+            isAdmin: isAdmin,
+            isFree: isFreeUser
+        });
+
+        await loadUserInfo();
+        await loadAndApplyTheme();
+        await checkAPIConnection();
+        
+        // FREE: não carrega sessões
+        if (!isFreeUser) {
+            await getCurrentOrCreateSession();
+            await loadChatHistory();
             
-            document.getElementById('userName').textContent = username;
-            document.getElementById('userAvatar').textContent = initials;
+            if (currentSessionId) {
+                await loadChatSession(currentSessionId);
+            }
+        } else {
+            // Esconder seção de histórico para usuários FREE
+            renderChatHistoryForFree();
+            
+            // Mostrar mensagem de boas-vindas com aviso FREE
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeText = chatMessages.querySelector('#welcomeText');
+            if (welcomeText) {
+                welcomeText.innerHTML = '🎁 Você está no plano FREE. Suas conversas não são salvas e desaparecem ao sair da página. <br><br>Estou aqui para ajudar você com suas dúvidas sobre desenvolvimento web, SEO, design e muito mais. Como posso te ajudar hoje?';
+            }
+        }
+        
+        return true;
+        
+    } catch (error) {
+        console.error('Erro ao verificar autenticação:', error);
+        window.location.href = 'login.html';
+        return false;
+    }
+}
 
-            const PLAN_NAMES = {
-                starter: 'Starter',
-                professional: 'Professional',
-                free: 'Free'
-            };
+async function checkAPIConnection() {
+    try {
+        const response = await fetch(API_URL.replace('/api/chat', '/ping'), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-            const PLAN_ICONS = {
-                starter: '🌱',
+        if (response.ok) {
+            apiConnected = true;
+            updateConnectionStatus(true);
+            console.log('✅ API Python conectada');
+        } else {
+            throw new Error('API não respondeu corretamente');
+        }
+    } catch (error) {
+        apiConnected = false;
+        updateConnectionStatus(false);
+        console.error('❌ API Python offline:', error);
+        console.warn('⚠️ API offline. Tentará reconectar ao enviar mensagem.');
+    }
+}
+
+function updateConnectionStatus(connected) {
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    
+    if (connected) {
+        statusDot.classList.remove('offline');
+        statusText.textContent = 'Conectado';
+    } else {
+        statusDot.classList.add('offline');
+        statusText.textContent = 'API Offline';
+    }
+}
+
+async function loadUserInfo() {
+    if (!currentUser) return;
+
+    const username = currentUser.email.split('@')[0];
+    const initials = username.substring(0, 2).toUpperCase();
+    
+    document.getElementById('userName').textContent = username;
+    document.getElementById('userAvatar').textContent = initials;
+
+    const PLAN_NAMES = {
+        starter: 'Starter',
+        professional: 'Professional',
+        free: 'Free'
+    };
+
+    const PLAN_ICONS = {
+        starter: '🌱',
+        professional: '💎',
+        free: '🎁'
+    };
+
+    if (isAdmin) {
+        document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
+        document.getElementById('headerPlanBadge').textContent = '👑 ADMIN';
+    } else {
+        const planName = PLAN_NAMES[userPlan] || 'Starter';
+        const planIcon = PLAN_ICONS[userPlan] || '🌱';
+        document.getElementById('userPlan').textContent = `${planIcon} ${planName}`;
+        document.getElementById('headerPlanBadge').textContent = `${planIcon} ${planName}`;
+    }
+
+    console.log('✅ Interface do usuário carregada');
+}
+
+function showAlert(message, type) {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.textContent = message;
+    alertBox.className = `alert alert-${type} show`;
+    
+    setTimeout(() => {
+        alertBox.classList.remove('show');
+    }, 5000);
+}
+
+function addMessage(content, isUser = false, metadata = null, saveToDb = true) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const welcome = messagesContainer.querySelector('.welcome-message');
+    if (welcome) welcome.remove();
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+    
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('pt-BR', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+
+    let metadataHTML = '';
+    if (metadata) {
+        const tags = [];
+        
+        if (metadata.tipo_usuario) {
+            const icons = {
+                admin: '👑',
                 professional: '💎',
+                starter: '🌱',
                 free: '🎁'
             };
+            tags.push(`${icons[metadata.tipo_usuario] || '👤'} ${metadata.tipo_usuario}`);
+        }
+        
+        if (metadata.plano_usuario) {
+            tags.push(`${metadata.plano_usuario}`);
+        }
+        
+        if (metadata.validacao_anti_alucinacao !== undefined) {
+            tags.push(metadata.validacao_anti_alucinacao ? '✅ Validado' : '⚠️ Verificar');
+        }
+        
+        if (metadata.autenticado !== undefined) {
+            tags.push(metadata.autenticado ? '🔒 Auth' : '🔓 Guest');
+        }
+        
+        if (tags.length > 0) {
+            metadataHTML = `<div class="message-metadata">
+                ${tags.map(tag => `<span class="metadata-tag">${tag}</span>`).join('')}
+            </div>`;
+        }
+    }
 
-            if (isAdmin) {
-                document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
-                document.getElementById('headerPlanBadge').textContent = '👑 ADMIN';
-            } else {
-                const planName = PLAN_NAMES[userPlan] || 'Starter';
-                const planIcon = PLAN_ICONS[userPlan] || '🌱';
-                document.getElementById('userPlan').textContent = `${planIcon} ${planName}`;
-                document.getElementById('headerPlanBadge').textContent = `${planIcon} ${planName}`;
-            }
+    messageDiv.innerHTML = `
+        <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+        <div class="message-content">
+            ${content}
+            <div class="message-time">${timeString}</div>
+            ${metadataHTML}
+        </div>
+    `;
 
-            console.log('✅ Interface do usuário carregada');
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // FREE: não salva no banco
+    if (saveToDb && !isFreeUser) {
+        saveMessageToDatabase(content, isUser, metadata);
+    }
+}
+
+function showTypingIndicator() {
+    const messagesContainer = document.getElementById('chatMessages');
+    const indicator = document.createElement('div');
+    indicator.className = 'message ai';
+    indicator.id = 'typingIndicator';
+    indicator.innerHTML = `
+        <div class="message-avatar">🤖</div>
+        <div class="typing-indicator show">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
+    messagesContainer.appendChild(indicator);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) indicator.remove();
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+    
+    if (!message) return;
+
+    if (!currentUser) {
+        showAlert('⚠️ Usuário não identificado', 'error');
+        return;
+    }
+
+    // FREE: não precisa de sessão
+    if (!isFreeUser && !currentSessionId) {
+        await getCurrentOrCreateSession();
+        if (!currentSessionId) {
+            showAlert('❌ Erro ao criar sessão de chat', 'error');
+            return;
+        }
+    }
+
+    if (!apiConnected) {
+        showAlert('⚠️ API offline. Tentando reconectar...', 'warning');
+        await checkAPIConnection();
+        if (!apiConnected) {
+            showAlert('❌ Não foi possível conectar com a API. Verifique se o servidor Python está rodando.', 'error');
+            return;
+        }
+    }
+
+    input.value = '';
+    input.style.height = 'auto';
+    
+    addMessage(message, true);
+    
+    const sendBtn = document.getElementById('sendBtn');
+    sendBtn.disabled = true;
+    
+    showTypingIndicator();
+
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+            throw new Error('Sessão expirada. Faça login novamente.');
         }
 
-        function showAlert(message, type) {
-            const alertBox = document.getElementById('alertBox');
-            alertBox.textContent = message;
-            alertBox.className = `alert alert-${type} show`;
-            
-            setTimeout(() => {
-                alertBox.classList.remove('show');
-            }, 5000);
-        }
-
-        function addMessage(content, isUser = false, metadata = null, saveToDb = true) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const welcome = messagesContainer.querySelector('.welcome-message');
-            if (welcome) welcome.remove();
-
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
-            
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('pt-BR', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-
-            let metadataHTML = '';
-            if (metadata) {
-                const tags = [];
-                
-                if (metadata.tipo_usuario) {
-                    const icons = {
-                        admin: '👑',
-                        professional: '💎',
-                        starter: '🌱',
-                        free: '🎁'
-                    };
-                    tags.push(`${icons[metadata.tipo_usuario] || '👤'} ${metadata.tipo_usuario}`);
-                }
-                
-                if (metadata.plano_usuario) {
-                    tags.push(`${metadata.plano_usuario}`);
-                }
-                
-                if (metadata.validacao_anti_alucinacao !== undefined) {
-                    tags.push(metadata.validacao_anti_alucinacao ? '✅ Validado' : '⚠️ Verificar');
-                }
-                
-                if (metadata.autenticado !== undefined) {
-                    tags.push(metadata.autenticado ? '🔒 Auth' : '🔓 Guest');
-                }
-                
-                if (tags.length > 0) {
-                    metadataHTML = `<div class="message-metadata">
-                        ${tags.map(tag => `<span class="metadata-tag">${tag}</span>`).join('')}
-                    </div>`;
-                }
-            }
-
-            messageDiv.innerHTML = `
-                <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
-                <div class="message-content">
-                    ${content}
-                    <div class="message-time">${timeString}</div>
-                    ${metadataHTML}
-                </div>
-            `;
-
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-            // Salvar no banco de dados
-            if (saveToDb) {
-                saveMessageToDatabase(content, isUser, metadata);
-            }
-        }
-
-        function showTypingIndicator() {
-            const messagesContainer = document.getElementById('chatMessages');
-            const indicator = document.createElement('div');
-            indicator.className = 'message ai';
-            indicator.id = 'typingIndicator';
-            indicator.innerHTML = `
-                <div class="message-avatar">🤖</div>
-                <div class="typing-indicator show">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-            `;
-            messagesContainer.appendChild(indicator);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.remove();
-        }
-
-        async function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-
-            if (!currentUser) {
-                showAlert('⚠️ Usuário não identificado', 'error');
-                return;
-            }
-
-            // Garantir que temos uma sessão ativa
-            if (!currentSessionId) {
-                await getCurrentOrCreateSession();
-                if (!currentSessionId) {
-                    showAlert('❌ Erro ao criar sessão de chat', 'error');
-                    return;
-                }
-            }
-
-            if (!apiConnected) {
-                showAlert('⚠️ API offline. Tentando reconectar...', 'warning');
-                await checkAPIConnection();
-                if (!apiConnected) {
-                    showAlert('❌ Não foi possível conectar com a API. Verifique se o servidor Python está rodando.', 'error');
-                    return;
-                }
-            }
-
-            input.value = '';
-            input.style.height = 'auto';
-            
-            addMessage(message, true);
-            
-            const sendBtn = document.getElementById('sendBtn');
-            sendBtn.disabled = true;
-            
-            showTypingIndicator();
-
+        let planType = 'paid';
+        if (supabase) {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
-                
-                if (!session) {
-                    throw new Error('Sessão expirada. Faça login novamente.');
+                const { data: accountData, error: accountError } = await supabase
+                    .from('user_accounts')
+                    .select('plan_type')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (!accountError && accountData) {
+                    planType = accountData.plan_type || 'paid';
                 }
-
-                let planType = 'paid';
-                if (supabase) {
-                    try {
-                        const { data: accountData, error: accountError } = await supabase
-                            .from('user_accounts')
-                            .select('plan_type')
-                            .eq('user_id', currentUser.id)
-                            .single();
-
-                        if (!accountError && accountData) {
-                            planType = accountData.plan_type || 'paid';
-                        }
-                    } catch (error) {
-                        console.warn('⚠️ Erro ao buscar plan_type, assumindo paid');
-                    }
-                }
-
-                const userData = {
-                    user_id: currentUser.id,
-                    email: currentUser.email,
-                    plan: userPlan,
-                    plan_type: planType,
-                    is_admin: isAdmin,
-                    name: currentUser.user_metadata?.name || currentUser.email.split('@')[0]
-                };
-
-                console.log('📤 Enviando mensagem para IA');
-
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${session.access_token}`
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        user_data: userData
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.detail || `Erro ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                hideTypingIndicator();
-                
-                if (data.response || data.resposta) {
-                    const aiResponse = data.response || data.resposta;
-                    addMessage(aiResponse, false, data.metadata);
-                    
-                    console.log('✅ Resposta da IA recebida');
-                } else {
-                    throw new Error('Resposta inválida da IA');
-                }
-
             } catch (error) {
-                console.error('❌ Erro ao enviar mensagem:', error);
-                hideTypingIndicator();
-                
-                let errorMessage = 'Desculpe, ocorreu um erro ao processar sua mensagem.';
-                
-                if (error.message.includes('Failed to fetch')) {
-                    errorMessage = '⚠️ Não foi possível conectar com a IA. Verifique se o servidor Python está rodando.';
-                    apiConnected = false;
-                    updateConnectionStatus(false);
-                } else if (error.message.includes('Sessão expirada')) {
-                    errorMessage = '⚠️ Sua sessão expirou. Você será redirecionado para o login.';
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
-                } else if (error.message) {
-                    errorMessage = `❌ ${error.message}`;
-                }
-                
-                addMessage(errorMessage, false, null, false);
-                showAlert(errorMessage, 'error');
-                
-            } finally {
-                sendBtn.disabled = false;
-                input.focus();
+                console.warn('⚠️ Erro ao buscar plan_type, assumindo paid');
             }
         }
 
-        // ============================================
-        // 🎯 EVENT LISTENERS
-        // ============================================
+        const userData = {
+            user_id: currentUser.id,
+            email: currentUser.email,
+            plan: userPlan,
+            plan_type: planType,
+            is_admin: isAdmin,
+            name: currentUser.user_metadata?.name || currentUser.email.split('@')[0]
+        };
 
-        document.getElementById('sendBtn').addEventListener('click', async function(e) {
-            e.preventDefault();
-            await sendMessage();
+        console.log('📤 Enviando mensagem para IA');
+
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({
+                message: message,
+                user_data: userData
+            })
         });
 
-        document.getElementById('chatInput').addEventListener('keydown', async function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                await sendMessage();
-            }
-        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.detail || `Erro ${response.status}: ${response.statusText}`);
+        }
 
-        document.getElementById('chatInput').addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-        });
-
-        document.getElementById('newChatBtn').addEventListener('click', async function(e) {
-            e.preventDefault();
-            await handleNewChat();
-        });
-
-        document.getElementById('logoutBtn').addEventListener('click', async function() {
-            if (!confirm('Deseja realmente sair?')) return;
+        const data = await response.json();
+        
+        hideTypingIndicator();
+        
+        if (data.response || data.resposta) {
+            const aiResponse = data.response || data.resposta;
+            addMessage(aiResponse, false, data.metadata);
             
-            if (supabase) {
-                try {
-                    const { error } = await supabase.auth.signOut();
-                    if (error) throw error;
-                    console.log('✅ Logout realizado');
-                } catch (error) {
-                    console.error('Erro ao fazer logout:', error);
-                }
-            }
-            
-            localStorage.removeItem('natandev_is_admin');
-            if (currentUser) {
-                localStorage.removeItem(`natandev_settings_${currentUser.id}`);
-            }
-            
-            window.location.href = 'login.html';
-        });
+            console.log('✅ Resposta da IA recebida');
+        } else {
+            throw new Error('Resposta inválida da IA');
+        }
 
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const mobileOverlay = document.getElementById('mobileOverlay');
+    } catch (error) {
+        console.error('❌ Erro ao enviar mensagem:', error);
+        hideTypingIndicator();
+        
+        let errorMessage = 'Desculpe, ocorreu um erro ao processar sua mensagem.';
+        
+        if (error.message.includes('Failed to fetch')) {
+            errorMessage = '⚠️ Não foi possível conectar com a IA. Verifique se o servidor Python está rodando.';
+            apiConnected = false;
+            updateConnectionStatus(false);
+        } else if (error.message.includes('Sessão expirada')) {
+            errorMessage = '⚠️ Sua sessão expirou. Você será redirecionado para o login.';
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        } else if (error.message) {
+            errorMessage = `❌ ${error.message}`;
+        }
+        
+        addMessage(errorMessage, false, null, false);
+        showAlert(errorMessage, 'error');
+        
+    } finally {
+        sendBtn.disabled = false;
+        input.focus();
+    }
+}
 
-        mobileMenuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-        });
+// ============================================
+// 🎯 EVENT LISTENERS
+// ============================================
 
-        mobileOverlay.addEventListener('click', function() {
+document.getElementById('sendBtn').addEventListener('click', async function(e) {
+    e.preventDefault();
+    await sendMessage();
+});
+
+document.getElementById('chatInput').addEventListener('keydown', async function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        await sendMessage();
+    }
+});
+
+document.getElementById('chatInput').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+});
+
+document.getElementById('newChatBtn').addEventListener('click', async function(e) {
+    e.preventDefault();
+    await handleNewChat();
+});
+
+document.getElementById('logoutBtn').addEventListener('click', async function() {
+    if (!confirm('Deseja realmente sair?')) return;
+    
+    if (supabase) {
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+            console.log('✅ Logout realizado');
+        } catch (error) {
+            console.error('Erro ao fazer logout:', error);
+        }
+    }
+    
+    localStorage.removeItem('natandev_is_admin');
+    if (currentUser) {
+        localStorage.removeItem(`natandev_settings_${currentUser.id}`);
+    }
+    
+    window.location.href = 'login.html';
+});
+
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const sidebar = document.getElementById('sidebar');
+const mobileOverlay = document.getElementById('mobileOverlay');
+
+mobileMenuToggle.addEventListener('click', function() {
+    sidebar.classList.toggle('active');
+    mobileOverlay.classList.toggle('active');
+});
+
+mobileOverlay.addEventListener('click', function() {
+    sidebar.classList.remove('active');
+    mobileOverlay.classList.remove('active');
+});
+
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
             sidebar.classList.remove('active');
             mobileOverlay.classList.remove('active');
-        });
+        }
+    });
+});
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('active');
-                    mobileOverlay.classList.remove('active');
-                }
-            });
-        });
+// ============================================
+// 🔄 SINCRONIZAÇÃO DE TEMA
+// ============================================
 
-        // ============================================
-        // 🔄 SINCRONIZAÇÃO DE TEMA
-        // ============================================
+window.addEventListener('storage', function(e) {
+    if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
+        try {
+            const settings = JSON.parse(e.newValue);
 
-        window.addEventListener('storage', function(e) {
-            if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
-                try {
-                    const settings = JSON.parse(e.newValue);
-
-                    if (settings.darkMode) {
-                        document.body.classList.add('dark-mode');
-                    } else {
-                        document.body.classList.remove('dark-mode');
-                    }
-                    console.log('✅ Tema sincronizado via storage event');
-                } catch (error) {
-                    console.error('Erro ao processar storage event:', error);
-                }
+            if (settings.darkMode) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
             }
-        });
+            console.log('✅ Tema sincronizado via storage event');
+        } catch (error) {
+            console.error('Erro ao processar storage event:', error);
+        }
+    }
+});
 
-        let lastSettingsCheck = null;
-        setInterval(async function() {
-            if (!currentUser) return;
-            
-            const settingsKey = `natandev_settings_${currentUser.id}`;
-            const currentSettings = localStorage.getItem(settingsKey);
-            
-            if (currentSettings !== lastSettingsCheck) {
-                lastSettingsCheck = currentSettings;
-                if (currentSettings) {
-                    try {
-                        const settings = JSON.parse(currentSettings);
-                        if (settings.darkMode) {
-                            document.body.classList.add('dark-mode');
-                        } else {
-                            document.body.classList.remove('dark-mode');
-                        }
-                        console.log('✅ Tema sincronizado via polling');
-                    } catch (error) {
-                        console.error('Erro ao aplicar configurações:', error);
-                    }
+let lastSettingsCheck = null;
+setInterval(async function() {
+    if (!currentUser) return;
+    
+    const settingsKey = `natandev_settings_${currentUser.id}`;
+    const currentSettings = localStorage.getItem(settingsKey);
+    
+    if (currentSettings !== lastSettingsCheck) {
+        lastSettingsCheck = currentSettings;
+        if (currentSettings) {
+            try {
+                const settings = JSON.parse(currentSettings);
+                if (settings.darkMode) {
+                    document.body.classList.add('dark-mode');
+                } else {
+                    document.body.classList.remove('dark-mode');
                 }
-            }
-        }, 1000);
-
-        // ============================================
-        // 🚀 INICIALIZAÇÃO
-        // ============================================
-
-        async function init() {
-            console.log('🚀 Inicializando NatanAI...');
-            const authenticated = await checkAuth();
-            
-            if (authenticated) {
-                console.log('✅ NatanAI carregado com sucesso!');
-                console.log('📋 Configuração:', {
-                    user_id: currentUser.id,
-                    email: currentUser.email,
-                    plan: userPlan,
-                    is_admin: isAdmin,
-                    api_url: API_URL,
-                    current_session: currentSessionId
-                });
-                
-                document.getElementById('chatInput').focus();
+                console.log('✅ Tema sincronizado via polling');
+            } catch (error) {
+                console.error('Erro ao aplicar configurações:', error);
             }
         }
+    }
+}, 1000);
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
+// ============================================
+// 🚀 INICIALIZAÇÃO
+// ============================================
+
+async function init() {
+    console.log('🚀 Inicializando NatanAI...');
+    const authenticated = await checkAuth();
+    
+    if (authenticated) {
+        console.log('✅ NatanAI carregado com sucesso!');
+        console.log('📋 Configuração:', {
+            user_id: currentUser.id,
+            email: currentUser.email,
+            plan: userPlan,
+            is_admin: isAdmin,
+            is_free: isFreeUser,
+            api_url: API_URL,
+            current_session: currentSessionId || 'Temporário (FREE)'
+        });
+        
+        document.getElementById('chatInput').focus();
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
     </script>
 </body>
 </html>
+
 
