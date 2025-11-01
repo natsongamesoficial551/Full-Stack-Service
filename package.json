@@ -8,6 +8,6 @@
   },
   "scripts": {
     "build": "echo 'Build concluído'",
-    "atualizar-ia": "curl -X POST https://seu-site.netlify.app/.netlify/functions/atualizar-ia -H 'Authorization: Bearer SEU_TOKEN_SECRETO'"
+    "atualizar-ia": "curl -X POST https://natansites.com.br/.netlify/functions/atualizar-ia -H 'Authorization: Bearer SEU_TOKEN_SECRETO'"
   }
 }
