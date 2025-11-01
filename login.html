@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - NatanDEV</title>
+    <title>Login - NatanSites</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -88,15 +88,16 @@
         }
 
         .login-container {
-            max-width: 420px;
-            width: 100%;
-            background: var(--bg-surface);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(30, 64, 175, 0.12);
-            padding: 2rem;
-            animation: slideUp 0.6s ease;
-        }
-
+    max-width: 420px;
+    width: 100%;
+    background: var(--bg-surface);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(30, 64, 175, 0.12);
+    padding: 2rem;
+    animation: slideUp 0.6s ease;
+    max-height: 95vh; /* ADICIONE */
+    overflow-y: auto; /* ADICIONE */
+}
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -462,6 +463,128 @@
             }
         }
 
+        /* Desktops médios */
+        @media (min-width: 1025px) {
+            body {
+                padding: 2rem;
+            }
+
+            .login-container {
+                max-width: 480px;
+                padding: 3rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.05rem;
+            }
+
+            .logo-img {
+                width: 64px;
+                height: 64px;
+                font-size: 1.7rem;
+                margin-bottom: 1.25rem;
+            }
+
+            input[type="email"],
+            input[type="password"] {
+                padding: 1rem 1.25rem;
+                font-size: 1rem;
+            }
+
+            .btn, .btn-free-access {
+                padding: 1.1rem;
+                font-size: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            label {
+                font-size: 0.925rem;
+                margin-bottom: 0.625rem;
+            }
+        }
+
+        /* Desktops grandes (Full HD+) */
+        @media (min-width: 1440px) {
+            .login-container {
+                max-width: 520px;
+                padding: 3.5rem;
+                box-shadow: 0 15px 50px rgba(30, 64, 175, 0.15);
+            }
+
+            h1 {
+                font-size: 2.25rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .logo-img {
+                width: 72px;
+                height: 72px;
+                font-size: 1.9rem;
+                margin-bottom: 1.5rem;
+            }
+
+            input[type="email"],
+            input[type="password"] {
+                padding: 1.15rem 1.35rem;
+                font-size: 1.05rem;
+            }
+
+            .btn, .btn-free-access {
+                padding: 1.2rem;
+                font-size: 1.05rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.75rem;
+            }
+
+            label {
+                font-size: 0.975rem;
+            }
+
+            .back-link {
+                margin-top: 2rem;
+            }
+
+            .back-link a {
+                font-size: 1rem;
+            }
+        }
+
+        /* Desktops ultra-wide (2K/4K) */
+        @media (min-width: 1920px) {
+            .login-container {
+                max-width: 560px;
+                padding: 4rem;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.15rem;
+            }
+
+            .logo-img {
+                width: 80px;
+                height: 80px;
+                font-size: 2.1rem;
+            }
+        }
+
         /* Celulares pequenos */
         @media (max-width: 380px) {
             .login-container {
@@ -527,7 +650,7 @@
 
     <div class="login-container">
         <div class="logo-header">
-            <div class="logo-img">ND</div>
+            <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
             <h1>Bem-vindo de volta</h1>
             <p class="subtitle">Faça login para acessar o painel</p>
         </div>
@@ -538,18 +661,18 @@
         </div>
 
         <div id="alertBox" class="alert"></div>
-           <div id="freeAccessBanner" class="free-access-banner">
-            🎁 Acesso Grátis por 7 Dias Ativo! Experimente sem cadastro.
-        </div>
+           <!-- 🎁 Divisor e Botão Free Access -->
+<div class="divider" id="divider">
+    <span>OU</span>
+</div>
 
-        <!-- 🎁 Divisor e Botão Free Access -->
-        <div class="divider" id="divider">
-            <span>OU</span>
-        </div>
+<div id="freeAccessBanner" class="free-access-banner">
+    🎁 Acesso Grátis Permanente Ativo! Experimente sem cadastro.
+</div>
 
-        <button class="btn-free-access" id="freeAccessBtn">
-            🎁 Acessar Gratuitamente (7 dias)
-        </button>
+<button class="btn-free-access" id="freeAccessBtn">
+    🎁 Acessar Gratuitamente
+</button>
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">E-mail</label>
@@ -834,8 +957,7 @@
                     
                     console.log('✅ Login Free Access bem-sucedido!');
                     
-                    showAlert('✓ Acesso grátis ativado! Redirecionando...', 'success');
-                    
+                showAlert('✔ Acesso grátis permanente! Redirecionando...', 'success');                    
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1000);
@@ -855,7 +977,7 @@
                 showAlert(errorMessage, 'error');
             } finally {
                 btn.disabled = false;
-                btn.textContent = '🎁 Acessar Gratuitamente (7 dias)';
+                btn.textContent = '🎁 Acessar Gratuitamente';
             }
         });
     </script>

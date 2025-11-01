@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>NatanDEV - Plataforma de Criação de Sites Profissionais</title>
+    <title>NatanSites - Plataforma de Criação de Sites Profissionais</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -184,6 +184,11 @@ h1, h2, h3, h4, h5, h6 {
 
         .nav-links a:not(.btn):hover {
             color: var(--primary-blue);
+        }
+
+        /* Login Button - sempre visível */
+        .btn-login-desktop {
+            display: inline-block;
         }
 
         /* Mobile Menu Toggle */
@@ -468,13 +473,13 @@ h1, h2, h3, h4, h5, h6 {
         }
 
         .plans-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         .plans-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 3rem;
             margin-top: 4rem;
         }
@@ -539,7 +544,7 @@ h1, h2, h3, h4, h5, h6 {
         }
 
         .plan-price {
-    font-size: 3.5rem;
+    font-size: 2.7rem;
     font-weight: 800;
     color: var(--primary-blue);
     margin: 1.5rem 0;
@@ -839,7 +844,7 @@ h1, h2, h3, h4, h5, h6 {
             }
 
             .plans-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
                 gap: 2.5rem;
             }
 
@@ -899,6 +904,13 @@ h1, h2, h3, h4, h5, h6 {
                 font-size: 1.1rem;
             }
 
+            /* Botão de login visível no mobile */
+            .btn-login-desktop {
+                display: inline-block;
+                margin-left: auto;
+                margin-right: 1rem;
+            }
+
             .nav-links {
                 position: fixed;
                 top: 0;
@@ -927,11 +939,6 @@ h1, h2, h3, h4, h5, h6 {
 
             .nav-links a:not(.btn)::after {
                 display: none;
-            }
-
-            .nav-links .btn {
-                margin-top: 1rem;
-                text-align: center;
             }
 
             .nav-overlay {
@@ -1065,7 +1072,7 @@ h1, h2, h3, h4, h5, h6 {
             }
 
             .plan-price span {
-                font-size: 1.15rem;
+                font-size: 1.60rem;
             }
 
             .plan-features li {
@@ -1153,6 +1160,11 @@ h1, h2, h3, h4, h5, h6 {
                 width: 38px;
                 height: 38px;
                 font-size: 1rem;
+            }
+
+            .btn-login-desktop {
+                padding: 0.7rem 1.3rem;
+                font-size: 0.9rem;
             }
 
             .hero {
@@ -1263,7 +1275,7 @@ h1, h2, h3, h4, h5, h6 {
             }
 
             .plan-price span {
-                font-size:0.8rem;
+                font-size: 1.60rem;
             }
 
             .plan-features {
@@ -1362,6 +1374,11 @@ h1, h2, h3, h4, h5, h6 {
                 width: 35px;
                 height: 35px;
                 font-size: 0.9rem;
+            }
+
+            .btn-login-desktop {
+                padding: 0.6rem 1.1rem;
+                font-size: 0.85rem;
             }
 
             .hero {
@@ -1489,9 +1506,11 @@ h1, h2, h3, h4, h5, h6 {
     <header>
         <nav>
             <a href="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" class="logo">
-                <div class="logo-img">ND</div>
-                <span class="logo-text">NatanDEV</span>
+                <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
+                <span class="logo-text">NatanSites</span>
             </a>
+            
+            <a href="./login.html" class="btn btn-outline btn-login-desktop">Entrar</a>
             
             <div class="menu-toggle" id="menuToggle">
                 <span></span>
@@ -1505,7 +1524,6 @@ h1, h2, h3, h4, h5, h6 {
                 <a href="#benefits">Benefícios</a>
                 <a href="#plans">Planos</a>
                 <a href="#testimonials">Depoimentos</a>
-                <a href="./login.html" class="btn btn-outline">Entrar</a>
             </div>
         </nav>
     </header>
@@ -1532,7 +1550,7 @@ h1, h2, h3, h4, h5, h6 {
     <section id="benefits" class="benefits">
         <div class="section-header">
             <span class="section-label">Vantagens</span>
-            <h2 class="section-title">Por que escolher a NatanDEV?</h2>
+            <h2 class="section-title">Por que escolher a NatanSites?</h2>
             <p class="section-description">Experiência completa em desenvolvimento web com foco em resultados reais e crescimento sustentável do seu negócio.</p>
         </div>
         
@@ -1581,20 +1599,44 @@ h1, h2, h3, h4, h5, h6 {
             <div class="plans-grid">
                 <div class="plan-card">
                     <div class="plan-header">
+                        <h3 class="plan-name">Free</h3>
+                        <p class="plan-subtitle">Experimente gratuitamente</p>
+                    </div>
+                    <div class="plan-price">R$ 0,00</div>
+                    <ul class="plan-features">
+                        <li>Acesso à plataforma demo</li>
+                        <li>Criação de sites simples e básicos</li>
+                        <li>Sem uso comercial</li>
+                        <li>Sem hospedagem</li>
+                        <li>Sem domínio personalizado</li>
+                        <li>Marca D'água presente</li>
+                        <li>NatanAI: 100 mensagens/semana</li>
+                        <li>Contrato de 1 ano</li>
+                    </ul>
+                    <a href="./login.html" class="btn btn-primary" style="width: 100%;">Começar Grátis</a>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
                         <h3 class="plan-name">Starter</h3>
                         <p class="plan-subtitle">Para quem está começando</p>
                     </div>
-                    <div class="plan-price">R$ 320,00<span>+R$ 39,99/Mês</span></div>
+                    <div class="plan-price">R$ 320,00<span>   +R$39,99/Mês</span></div>
                     <ul class="plan-features">
+                        <li>Acesso à plataforma completa</li>
                         <li>Site responsivo básico</li>
                         <li>Design moderno e limpo</li>
                         <li>Otimização para mobile</li>
-                        <li>Hospedagem</li>
+                        <li>Uso comercial permitido</li>
+                        <li>Hospedagem incluída</li>
+                        <li>Sem domínio personalizado</li>
+                        <li>Sem marca D'água</li>
                         <li>Suporte pela plataforma 24/7</li>
                         <li>SEO básico otimizado</li>
+                        <li>NatanAI: 1.250 mensagens/mês</li>
                         <li>Contrato de 1 ano</li>
                     </ul>
-                    <a href="./form.html" class="btn btn-primary" style="width: 100%;">Escolher Starter</a>
+                    <a href="./starter.html" class="btn btn-primary" style="width: 100%;">Escolher Starter</a>
                 </div>
                 
                 <div class="plan-card featured">
@@ -1603,21 +1645,24 @@ h1, h2, h3, h4, h5, h6 {
                         <h3 class="plan-name">Professional</h3>
                         <p class="plan-subtitle">Para negócios sérios</p>
                     </div>
-                    <div class="plan-price">R$ 530,00<span>+R$ 79,99/Mês</span></div>
+                    <div class="plan-price">R$ 530,00<span>   +R$79,99/Mês</span></div>
                     <ul class="plan-features">
+                        <li>Acesso à plataforma completa</li>
                         <li>Design personalizado avançado</li>
                         <li>Animações e interatividade</li>
                         <li>SEO avançado otimizado</li>
                         <li>Integração de APIs</li>
-                        <li>SEO avançado com keywords</li>
-                        <li>Domínio personalizado</li>
+                        <li>Uso comercial permitido</li>
+                        <li>Domínio personalizado incluído</li>
+                        <li>Sem marca D'água</li>
                         <li>5 revisões incluídas</li>
                         <li>Formulários de contato</li>
-                        <li>Suporte prioritário</li>
+                        <li>Suporte prioritário 24/7</li>
                         <li>IA Inclusa - Opcional</li>
+                        <li>NatanAI: 5.000 mensagens/mês</li>
                         <li>Contrato de 1 ano</li>
                     </ul>
-                    <a href="./form.html" class="btn btn-primary" style="width: 100%;">Escolher Professional</a>
+                    <a href="./professional.html" class="btn btn-primary" style="width: 100%;">Escolher Professional</a>
                 </div>
             </div>
         </div>
@@ -1646,7 +1691,7 @@ h1, h2, h3, h4, h5, h6 {
             
             <div class="testimonial-card">
                 <div class="stars">★★★★★</div>
-                <p class="testimonial-text">"Natan, muito obrigada! Fiquei muito feliz com a página que você criou para o meu Instagram de yoga! Você conseguiu deixar o visual leve, bonito e funcional, facilitando o contato e o agendamento das aulas online. Foi super atencioso nos ajustes e seguiu direitinho as cores da minha identidade visual. Ficou lindo e com a minha cara! 😍"</p>
+                <p class="testimonial-text">"Natan, muito obrigada! Fiquei muito feliz com a página que você criou para o meu Instagram de yoga! Você conseguiu deixar o visual leve, bonito e funcional, facilitando o contato e o agendamento das aulas online. Foi super atencioso nos ajustes e seguiu direitinho as cores da minha identidade visual. Ficou lindo e com a minha cara! 😊"</p>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar">AG</div>
                     <div class="testimonial-info">
@@ -1658,12 +1703,12 @@ h1, h2, h3, h4, h5, h6 {
             
             <div class="testimonial-card">
                 <div class="stars">★★★★★</div>
-                <p class="testimonial-text">"A integração com IA facilitou demais nosso trabalho. Site entregue antes do prazo e com qualidade superior. Vale cada centavo investido!"</p>
+                <p class="testimonial-text">"O serviço do NatanSites é excelente! Sites bem feitos, detalhados e com ótimo preço. Super recomendo para quem busca qualidade e profissionalismo."</p>
                 <div class="testimonial-author">
                     <div class="testimonial-avatar">AC</div>
                     <div class="testimonial-info">
-                        <h4>Ana Carolina</h4>
-                        <p>Diretora, Clínica Bem-Estar</p>
+                        <h4>Emanuel</h4>
+                        <p>Estudante, Escola</p>
                     </div>
                 </div>
             </div>
@@ -1674,13 +1719,13 @@ h1, h2, h3, h4, h5, h6 {
     <footer>
         <div class="footer-content">
             <div class="footer-section footer-brand">
-                <h4>NatanDEV</h4>
+                <h4>NatanSites</h4>
                 <p>Transformando ideias em experiências digitais memoráveis. Tecnologia de ponta, design premium e resultados que impulsionam seu negócio.</p>
                 <div class="social-links">
                     <a href="https://www.facebook.com/profile.php?id=100076973940954" title="Facebook">📘</a>
                     <a href="https://www.instagram.com/nborges.ofc/" title="Instagram">📷</a>
                     <a href="https://www.linkedin.com/in/natan-borges-b3a3b5382/" title="LinkedIn">💼</a>
-                    <a href="#" title="Discord">🐦</a>
+                    <a href="#" title="Discord">🦆</a>
                 </div>
             </div>
             
@@ -1700,7 +1745,7 @@ h1, h2, h3, h4, h5, h6 {
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2025 NatanDEV. Todos os direitos reservados. Desenvolvido com 💙 no Brasil.</p>
+            <p>&copy; 2025 NatanSites. Todos os direitos reservados. Desenvolvido com 💙 no Brasil.</p>
         </div>
     </footer>
 
@@ -1874,10 +1919,10 @@ h1, h2, h3, h4, h5, h6 {
                 ripple.style.position = 'absolute';
                 ripple.style.borderRadius = '50%';
                 ripple.style.background = 'rgba(255, 255, 255, 0.5)';
-                ripple.style.transform = 'scale(0)';
+                    ripple.style.transform = 'scale(0)';
                 ripple.style.animation = 'ripple 0.6s ease-out';
                 ripple.style.pointerEvents = 'none';
-                
+
                 this.style.position = 'relative';
                 this.style.overflow = 'hidden';
                 this.appendChild(ripple);
