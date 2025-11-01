@@ -173,6 +173,197 @@
             flex-shrink: 0;
         }
 
+        /* ============================================ */
+        /* 💬 NOVOS ESTILOS - HISTÓRICO DE CHATS */
+        /* ============================================ */
+        
+        .chat-history-section {
+            padding: 0 1rem 1rem;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .chat-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-history-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-new-chat {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        body.dark-mode .btn-new-chat {
+            color: #0F172A;
+        }
+
+        .btn-new-chat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4);
+        }
+
+        body.dark-mode .btn-new-chat:hover {
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
+
+        .chat-history-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            max-height: 250px;
+            overflow-y: auto;
+            padding-right: 0.3rem;
+        }
+
+        .chat-history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-history-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-history-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .chat-history-item {
+            position: relative;
+        }
+
+        .chat-history-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            background: rgba(30, 64, 175, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        body.dark-mode .chat-history-link {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .chat-history-link:hover {
+            background: rgba(30, 64, 175, 0.08);
+            border-color: var(--primary-blue);
+            transform: translateX(4px);
+        }
+
+        body.dark-mode .chat-history-link:hover {
+            background: rgba(212, 175, 55, 0.12);
+        }
+
+        .chat-history-link.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border-color: transparent;
+        }
+
+        body.dark-mode .chat-history-link.active {
+            color: #0F172A;
+        }
+
+        .chat-history-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-history-link-title {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .chat-history-meta {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .chat-history-link.active .chat-history-meta {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        body.dark-mode .chat-history-link.active .chat-history-meta {
+            color: rgba(15, 23, 42, 0.7);
+        }
+
+        .chat-history-actions {
+            display: flex;
+            gap: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chat-history-link:hover .chat-history-actions {
+            opacity: 1;
+        }
+
+        .chat-history-link.active .chat-history-actions {
+            opacity: 1;
+        }
+
+        .btn-chat-action {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn-chat-action:hover {
+            background: rgba(0, 0, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        .chat-history-empty {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
         .user-section {
             padding: 1.5rem;
             border-top: 2px solid var(--border-color);
@@ -267,6 +458,10 @@
             background: #DC2626;
             transform: translateY(-2px);
         }
+
+        /* ============================================ */
+        /* 💬 CONTINUAÇÃO DOS ESTILOS */
+        /* ============================================ */
 
         .chat-container {
             margin-left: 280px;
@@ -822,6 +1017,15 @@
                 padding: 0.9rem 1rem;
                 font-size: 0.9rem;
             }
+
+            .chat-history-list {
+                max-height: 200px;
+            }
+
+            .btn-new-chat {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
         }
 
         /* ============================================ */
@@ -1015,6 +1219,24 @@
         </div>
 
         <div class="sidebar-content">
+            <!-- ============================================ -->
+            <!-- 💬 SEÇÃO DE HISTÓRICO DE CHATS -->
+            <!-- ============================================ -->
+            <div class="chat-history-section">
+                <div class="chat-history-header">
+                    <span class="chat-history-title">💬 Conversas</span>
+                    <button class="btn-new-chat" id="newChatBtn">
+                        <span>✨</span>
+                        <span>Novo</span>
+                    </button>
+                </div>
+                <ul class="chat-history-list" id="chatHistoryList">
+                    <li class="chat-history-empty">
+                        Nenhuma conversa ainda
+                    </li>
+                </ul>
+            </div>
+
             <nav>
                 <ul class="nav-menu">
                     <li class="nav-item">
@@ -1112,6 +1334,8 @@
         let userPlan = 'starter';
         let isAdmin = false;
         let apiConnected = false;
+        let currentSessionId = null;
+        let chatSessions = [];
         
         try {
             if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
@@ -1120,6 +1344,389 @@
         } catch (error) {
             console.error('Erro ao inicializar Supabase:', error);
         }
+
+        // ============================================
+        // 💬 FUNÇÕES DE GERENCIAMENTO DE CHATS
+        // ============================================
+
+        async function createNewChatSession() {
+            if (!supabase || !currentUser) {
+                console.error('Supabase ou usuário não disponível');
+                return null;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('chat_sessions')
+                    .insert({
+                        user_id: currentUser.id,
+                        title: 'Nova Conversa',
+                        is_active: true
+                    })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                console.log('✅ Nova sessão de chat criada:', data.id);
+                return data;
+            } catch (error) {
+                console.error('❌ Erro ao criar sessão de chat:', error);
+                return null;
+            }
+        }
+
+        async function getCurrentOrCreateSession() {
+            if (!supabase || !currentUser) return null;
+
+            try {
+                // Buscar sessão ativa do usuário
+                const { data: activeSessions, error } = await supabase
+                    .from('chat_sessions')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .eq('is_active', true)
+                    .order('updated_at', { ascending: false })
+                    .limit(1);
+
+                if (error) throw error;
+
+                // Se existe sessão ativa, usar ela
+                if (activeSessions && activeSessions.length > 0) {
+                    currentSessionId = activeSessions[0].id;
+                    console.log('✅ Sessão ativa encontrada:', currentSessionId);
+                    return activeSessions[0];
+                }
+
+                // Se não existe, criar nova
+                const newSession = await createNewChatSession();
+                if (newSession) {
+                    currentSessionId = newSession.id;
+                    return newSession;
+                }
+
+                return null;
+            } catch (error) {
+                console.error('❌ Erro ao buscar/criar sessão:', error);
+                return null;
+            }
+        }
+
+        async function saveMessageToDatabase(content, isUser, metadata = null) {
+            if (!supabase || !currentUser || !currentSessionId) {
+                console.warn('⚠️ Não foi possível salvar mensagem no banco');
+                return false;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('chat_messages')
+                    .insert({
+                        session_id: currentSessionId,
+                        user_id: currentUser.id,
+                        content: content,
+                        is_user: isUser,
+                        metadata: metadata
+                    })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                console.log('✅ Mensagem salva no banco:', data.id);
+                
+                // Atualizar título da sessão se for a primeira mensagem do usuário
+                if (isUser) {
+                    await updateSessionTitle(currentSessionId);
+                }
+
+                return true;
+            } catch (error) {
+                console.error('❌ Erro ao salvar mensagem:', error);
+                return false;
+            }
+        }
+
+        async function updateSessionTitle(sessionId) {
+            if (!supabase) return;
+
+            try {
+                // Usar a function do banco para gerar título
+                const { data, error } = await supabase.rpc('generate_chat_title', {
+                    session_uuid: sessionId
+                });
+
+                if (error) throw error;
+
+                // Atualizar o título na sessão
+                const { error: updateError } = await supabase
+                    .from('chat_sessions')
+                    .update({ title: data })
+                    .eq('id', sessionId);
+
+                if (updateError) throw updateError;
+
+                console.log('✅ Título da sessão atualizado:', data);
+                
+                // Recarregar lista de chats
+                await loadChatHistory();
+            } catch (error) {
+                console.error('❌ Erro ao atualizar título:', error);
+            }
+        }
+
+        async function loadChatHistory() {
+            if (!supabase || !currentUser) return;
+
+            try {
+                const { data, error } = await supabase
+                    .from('chat_sessions')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('updated_at', { ascending: false });
+
+                if (error) throw error;
+
+                chatSessions = data || [];
+                renderChatHistory();
+                
+                console.log('✅ Histórico de chats carregado:', chatSessions.length);
+            } catch (error) {
+                console.error('❌ Erro ao carregar histórico:', error);
+            }
+        }
+
+        function renderChatHistory() {
+            const chatHistoryList = document.getElementById('chatHistoryList');
+            
+            if (chatSessions.length === 0) {
+                chatHistoryList.innerHTML = '<li class="chat-history-empty">Nenhuma conversa ainda</li>';
+                return;
+            }
+
+            chatHistoryList.innerHTML = chatSessions.map(session => {
+                const isActive = session.id === currentSessionId;
+                const date = new Date(session.updated_at);
+                const timeAgo = getTimeAgo(date);
+                
+                return `
+                    <li class="chat-history-item">
+                        <a href="#" class="chat-history-link ${isActive ? 'active' : ''}" data-session-id="${session.id}">
+                            <div class="chat-history-info">
+                                <div class="chat-history-link-title">${session.title}</div>
+                                <div class="chat-history-meta">
+                                    <span>📅 ${timeAgo}</span>
+                                    <span>💬 ${session.message_count || 0}</span>
+                                </div>
+                            </div>
+                            <div class="chat-history-actions">
+                                <button class="btn-chat-action btn-rename-chat" data-session-id="${session.id}" title="Renomear">
+                                    ✏️
+                                </button>
+                                <button class="btn-chat-action btn-delete-chat" data-session-id="${session.id}" title="Deletar">
+                                    🗑️
+                                </button>
+                            </div>
+                        </a>
+                    </li>
+                `;
+            }).join('');
+
+            // Adicionar event listeners
+            attachChatHistoryListeners();
+        }
+
+        function attachChatHistoryListeners() {
+            // Carregar chat ao clicar
+            document.querySelectorAll('.chat-history-link').forEach(link => {
+                link.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    const sessionId = this.dataset.sessionId;
+                    await loadChatSession(sessionId);
+                });
+            });
+
+            // Renomear chat
+            document.querySelectorAll('.btn-rename-chat').forEach(btn => {
+                btn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const sessionId = this.dataset.sessionId;
+                    await renameChatSession(sessionId);
+                });
+            });
+
+            // Deletar chat
+            document.querySelectorAll('.btn-delete-chat').forEach(btn => {
+                btn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const sessionId = this.dataset.sessionId;
+                    await deleteChatSession(sessionId);
+                });
+            });
+        }
+
+        async function loadChatSession(sessionId) {
+            if (!supabase || !currentUser) return;
+
+            try {
+                // Marcar todas as outras sessões como inativas
+                await supabase
+                    .from('chat_sessions')
+                    .update({ is_active: false })
+                    .eq('user_id', currentUser.id);
+
+                // Marcar esta sessão como ativa
+                await supabase
+                    .from('chat_sessions')
+                    .update({ is_active: true })
+                    .eq('id', sessionId);
+
+                currentSessionId = sessionId;
+
+                // Carregar mensagens desta sessão
+                const { data: messages, error } = await supabase
+                    .from('chat_messages')
+                    .select('*')
+                    .eq('session_id', sessionId)
+                    .order('created_at', { ascending: true });
+
+                if (error) throw error;
+
+                // Limpar chat atual
+                const chatMessages = document.getElementById('chatMessages');
+                chatMessages.innerHTML = '';
+
+                // Renderizar mensagens
+                messages.forEach(msg => {
+                    addMessage(msg.content, msg.is_user, msg.metadata, false);
+                });
+
+                // Atualizar UI
+                await loadChatHistory();
+                
+                console.log('✅ Chat carregado:', sessionId, 'com', messages.length, 'mensagens');
+                
+                // Scroll para o final
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            } catch (error) {
+                console.error('❌ Erro ao carregar chat:', error);
+                showAlert('Erro ao carregar conversa', 'error');
+            }
+        }
+
+        async function renameChatSession(sessionId) {
+            const session = chatSessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            const newTitle = prompt('Digite o novo nome da conversa:', session.title);
+            if (!newTitle || newTitle.trim() === '') return;
+
+            try {
+                const { error } = await supabase
+                    .from('chat_sessions')
+                    .update({ title: newTitle.trim() })
+                    .eq('id', sessionId);
+
+                if (error) throw error;
+
+                console.log('✅ Chat renomeado');
+                await loadChatHistory();
+                showAlert('✅ Conversa renomeada com sucesso!', 'success');
+            } catch (error) {
+                console.error('❌ Erro ao renomear chat:', error);
+                showAlert('Erro ao renomear conversa', 'error');
+            }
+        }
+
+        async function deleteChatSession(sessionId) {
+            const session = chatSessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            if (!confirm(`Deseja realmente deletar a conversa "${session.title}"?`)) return;
+
+            try {
+                const { error } = await supabase
+                    .from('chat_sessions')
+                    .delete()
+                    .eq('id', sessionId);
+
+                if (error) throw error;
+
+                console.log('✅ Chat deletado');
+
+                // Se deletou o chat atual, criar novo
+                if (sessionId === currentSessionId) {
+                    await handleNewChat();
+                } else {
+                    await loadChatHistory();
+                }
+
+                showAlert('✅ Conversa deletada com sucesso!', 'success');
+            } catch (error) {
+                console.error('❌ Erro ao deletar chat:', error);
+                showAlert('Erro ao deletar conversa', 'error');
+            }
+        }
+
+        async function handleNewChat() {
+            if (!confirm('Deseja criar uma nova conversa? A conversa atual será salva.')) return;
+
+            try {
+                // Marcar sessão atual como inativa
+                if (currentSessionId) {
+                    await supabase
+                        .from('chat_sessions')
+                        .update({ is_active: false })
+                        .eq('id', currentSessionId);
+                }
+
+                // Criar nova sessão
+                const newSession = await createNewChatSession();
+                if (newSession) {
+                    currentSessionId = newSession.id;
+
+                    // Limpar chat
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML = `
+                        <div class="welcome-message">
+                            <h2>👋 Olá! Eu sou a NatanAI</h2>
+                            <p id="welcomeText">Estou aqui para ajudar você com suas dúvidas sobre desenvolvimento web, SEO, design e muito mais. Como posso te ajudar hoje?</p>
+                        </div>
+                    `;
+
+                    // Recarregar histórico
+                    await loadChatHistory();
+
+                    console.log('✅ Novo chat criado');
+                    showAlert('✅ Nova conversa criada!', 'success');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao criar novo chat:', error);
+                showAlert('Erro ao criar nova conversa', 'error');
+            }
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Agora';
+            if (diffMins < 60) return `${diffMins}min`;
+            if (diffHours < 24) return `${diffHours}h`;
+            if (diffDays < 7) return `${diffDays}d`;
+            
+            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+        }
+
+        // ============================================
+        // 🔐 AUTENTICAÇÃO E CARREGAMENTO
+        // ============================================
 
         async function loadAndApplyTheme() {
             if (!currentUser) return;
@@ -1194,6 +1801,17 @@
                 await loadAndApplyTheme();
                 await checkAPIConnection();
                 
+                // Carregar ou criar sessão de chat
+                await getCurrentOrCreateSession();
+                
+                // Carregar histórico de chats
+                await loadChatHistory();
+                
+                // Carregar mensagens da sessão atual
+                if (currentSessionId) {
+                    await loadChatSession(currentSessionId);
+                }
+                
                 return true;
                 
             } catch (error) {
@@ -1264,25 +1882,11 @@
             if (isAdmin) {
                 document.getElementById('userPlan').innerHTML = '👑 <span class="admin-badge">ADMIN</span>';
                 document.getElementById('headerPlanBadge').textContent = '👑 ADMIN';
-                
-                document.getElementById('welcomeText').textContent = 
-                    'Olá Natan! Como dono da NatanSites, você tem acesso total. Posso te ajudar com informações técnicas, dados de clientes e sistema. Como posso te ajudar hoje?';
             } else {
                 const planName = PLAN_NAMES[userPlan] || 'Starter';
                 const planIcon = PLAN_ICONS[userPlan] || '🌱';
                 document.getElementById('userPlan').textContent = `${planIcon} ${planName}`;
                 document.getElementById('headerPlanBadge').textContent = `${planIcon} ${planName}`;
-                
-                if (userPlan === 'professional') {
-                    document.getElementById('welcomeText').textContent = 
-                        'Como cliente Professional, você tem suporte prioritário! Estou aqui para te ajudar com tudo sobre desenvolvimento web, SEO avançado, APIs e muito mais. Como posso te ajudar hoje?';
-                } else if (userPlan === 'free') {
-                    document.getElementById('welcomeText').textContent = 
-                        'Você está usando o acesso grátis! Aproveite para testar a IA e conhecer nossos serviços!';
-                } else {
-                    document.getElementById('welcomeText').textContent = 
-                        'Como cliente Starter, posso te ajudar com dúvidas sobre seu site, hospedagem e serviços básicos. Se precisar de recursos avançados, posso te falar sobre o plano Professional! Como posso te ajudar hoje?';
-                }
             }
 
             console.log('✅ Interface do usuário carregada');
@@ -1298,7 +1902,7 @@
             }, 5000);
         }
 
-        function addMessage(content, isUser = false, metadata = null) {
+        function addMessage(content, isUser = false, metadata = null, saveToDb = true) {
             const messagesContainer = document.getElementById('chatMessages');
             const welcome = messagesContainer.querySelector('.welcome-message');
             if (welcome) welcome.remove();
@@ -1356,6 +1960,11 @@
 
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Salvar no banco de dados
+            if (saveToDb) {
+                saveMessageToDatabase(content, isUser, metadata);
+            }
         }
 
         function showTypingIndicator() {
@@ -1389,6 +1998,15 @@
             if (!currentUser) {
                 showAlert('⚠️ Usuário não identificado', 'error');
                 return;
+            }
+
+            // Garantir que temos uma sessão ativa
+            if (!currentSessionId) {
+                await getCurrentOrCreateSession();
+                if (!currentSessionId) {
+                    showAlert('❌ Erro ao criar sessão de chat', 'error');
+                    return;
+                }
             }
 
             if (!apiConnected) {
@@ -1428,7 +2046,6 @@
 
                         if (!accountError && accountData) {
                             planType = accountData.plan_type || 'paid';
-                            console.log('✅ Plan type detectado:', planType);
                         }
                     } catch (error) {
                         console.warn('⚠️ Erro ao buscar plan_type, assumindo paid');
@@ -1444,10 +2061,7 @@
                     name: currentUser.user_metadata?.name || currentUser.email.split('@')[0]
                 };
 
-                console.log('📤 Enviando mensagem para IA:', {
-                    message: message.substring(0, 50) + '...',
-                    userData: userData
-                });
+                console.log('📤 Enviando mensagem para IA');
 
                 const response = await fetch(API_URL, {
                     method: 'POST',
@@ -1486,7 +2100,7 @@
                 let errorMessage = 'Desculpe, ocorreu um erro ao processar sua mensagem.';
                 
                 if (error.message.includes('Failed to fetch')) {
-                    errorMessage = '⚠️ Não foi possível conectar com a IA. Verifique se o servidor Python está rodando na URL: ' + API_URL;
+                    errorMessage = '⚠️ Não foi possível conectar com a IA. Verifique se o servidor Python está rodando.';
                     apiConnected = false;
                     updateConnectionStatus(false);
                 } else if (error.message.includes('Sessão expirada')) {
@@ -1498,7 +2112,7 @@
                     errorMessage = `❌ ${error.message}`;
                 }
                 
-                addMessage(errorMessage, false);
+                addMessage(errorMessage, false, null, false);
                 showAlert(errorMessage, 'error');
                 
             } finally {
@@ -1506,6 +2120,10 @@
                 input.focus();
             }
         }
+
+        // ============================================
+        // 🎯 EVENT LISTENERS
+        // ============================================
 
         document.getElementById('sendBtn').addEventListener('click', async function(e) {
             e.preventDefault();
@@ -1522,6 +2140,11 @@
         document.getElementById('chatInput').addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+        });
+
+        document.getElementById('newChatBtn').addEventListener('click', async function(e) {
+            e.preventDefault();
+            await handleNewChat();
         });
 
         document.getElementById('logoutBtn').addEventListener('click', async function() {
@@ -1568,10 +2191,15 @@
             });
         });
 
+        // ============================================
+        // 🔄 SINCRONIZAÇÃO DE TEMA
+        // ============================================
+
         window.addEventListener('storage', function(e) {
             if (e.key && e.key.startsWith('natandev_settings_') && e.newValue) {
                 try {
                     const settings = JSON.parse(e.newValue);
+
                     if (settings.darkMode) {
                         document.body.classList.add('dark-mode');
                     } else {
@@ -1609,6 +2237,10 @@
             }
         }, 1000);
 
+        // ============================================
+        // 🚀 INICIALIZAÇÃO
+        // ============================================
+
         async function init() {
             console.log('🚀 Inicializando NatanAI...');
             const authenticated = await checkAuth();
@@ -1620,7 +2252,8 @@
                     email: currentUser.email,
                     plan: userPlan,
                     is_admin: isAdmin,
-                    api_url: API_URL
+                    api_url: API_URL,
+                    current_session: currentSessionId
                 });
                 
                 document.getElementById('chatInput').focus();
@@ -1635,3 +2268,4 @@
     </script>
 </body>
 </html>
+
