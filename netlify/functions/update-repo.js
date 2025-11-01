@@ -21,11 +21,11 @@ exports.handler = async () => {
 
           await supabase.from("repo_content").upsert({
             file_path: path + file.name,
-            content: text,
-            updated_at: new Date()
+            file_content: text,
+            fetched_at: new Date()
           });
 
-          console.log("✅ Atualizado:", path + file.name);
+          console.log("✅ Repo atualizado:", path + file.name);
         }
 
         if (file.type === "dir") {
@@ -35,11 +35,13 @@ exports.handler = async () => {
     }
 
     await fetchFiles(repoUrl);
+
     return {
       statusCode: 200,
-      body: "✅ Repositório atualizado!"
+      body: "✅ Repositório lido e salvo no Supabase!"
     };
   } catch (e) {
+    console.error("❌ Erro:", e);
     return { statusCode: 500, body: e.toString() };
   }
 };
