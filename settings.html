@@ -1010,6 +1010,13 @@
         // ============================================
         // 🔧 CONFIGURAÇÃO DO SUPABASE
         // ============================================
+
+window.env = {
+  SUPABASE_URL: "{{SUPABASE_URL}}",
+  SUPABASE_ANON_KEY: "{{SUPABASE_ANON_KEY}}"
+};
+
+
         const ADMIN_EMAIL = 'natan@natandev.com';
 
         let supabase = null;

@@ -887,6 +887,13 @@ def home():
         </div>
 
         <script>
+
+window.env = {
+  SUPABASE_URL: "{{SUPABASE_URL}}",
+  SUPABASE_ANON_KEY: "{{SUPABASE_ANON_KEY}}"
+};
+
+
         let mensagensNaMemoria = 0;
         let temResumo = false;
 
