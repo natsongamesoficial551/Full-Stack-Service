@@ -63,41 +63,46 @@ exports.handler = async (event) => {
   }
 
   async function scrapePage(path) {
-    const url = siteURL + path;
-    try {
-      const res = await fetch(url);
-      const html = await res.text();
-      const $ = cheerio.load(html);
-      const text = $("body").text().replace(/\s+/g, " ").trim();
+  const url = siteURL + path;
+  try {
+    const res = await fetch(url);
+    const html = await res.text();
+    const $ = cheerio.load(html);
+    const text = $("body").text().replace(/\s+/g, " ").trim();
 
-      await saveSiteContent(path, "body", text, url);
+    await saveSiteContent(path, "body", text, url);
 
-      // planos
-      const planos = [];
-      $(".plan, .pricing-card, .plano-card").each((i, el) => {
-        planos.push({
-          nome: $(el).find("h2, h3").first().text().trim(),
-          preco: $(el).find(".price, .preco").first().text().trim()
-        });
+    // planos
+    const planos = [];
+    $(".plan, .pricing-card, .plano-card").each((i, el) => {
+      planos.push({
+        nome: $(el).find("h2, h3").first().text().trim(),
+        preco: $(el).find(".price, .preco").first().text().trim()
       });
-      if (planos.length) await savePlataformaInfo("planos", { planos });
+    });
+    if (planos.length) await savePlataformaInfo("planos", { planos });
 
-      // promo
-      if (text.match(/promo|desconto|relâmpago/i)) {
-        await savePlataformaInfo("promocoes", { texto: text.slice(0, 500), url });
-      }
+    // 🆕 PROMO - AUMENTA LIMITE PARA 5000 CARACTERES
+    if (text.match(/promo|desconto|relâmpago|relampago/i)) {
+      await savePlataformaInfo("promocoes", { 
+        texto: text.slice(0, 5000),  // ✅ Aumentado de 500 para 5000
+        url 
+      });
+    }
 
-      // contato
-      const wa = $('a[href*="wa.me"],a[href*="whatsapp"]').first().attr("href");
-      const mail = $('a[href^="mailto:"]').first().attr("href");
-      if (wa || mail) await savePlataformaInfo("contato", { whatsapp: wa, email: mail });
+    // contato
+    const wa = $('a[href*="wa.me"],a[href*="whatsapp"]').first().attr("href");
+    const mail = $('a[href^="mailto:"]').first().attr("href");
+    if (wa || mail) await savePlataformaInfo("contato", { whatsapp: wa, email: mail });
 
-      // memória IA interna
-      await saveIAMemoria(`Mudanças detectadas na página ${path}`, "scraper");
+    // memória IA interna
+    await saveIAMemoria(`Mudanças detectadas na página ${path}`, "scraper");
 
-      console.log("📄 Página OK →", path);
-    } catch (e) { console.log("⚠️ Página falhou:", path); }
+    console.log("📄 Página OK →", path);
+  } catch (e) { 
+    console.log("⚠️ Página falhou:", path); 
   }
+}
 
   async function fetchGitHubDir(url, prefix="") {
     try {

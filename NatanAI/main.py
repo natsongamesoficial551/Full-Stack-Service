@@ -119,22 +119,36 @@ INTERVALO_ATUALIZACAO_CACHE = 300  # 5 minutos
 cache_lock = threading.Lock()
 
 def carregar_dados_supabase(tabela):
-    """Carrega dados de uma tabela do Supabase com cache"""
     try:
         if not supabase:
-            print(f"⚠️ Supabase não conectado para tabela: {tabela}")
             return None
         
-        with cache_lock:
-            cache_entry = CACHE_SUPABASE.get(tabela)
-            agora = datetime.now()
+        # 🆕 ORDENA POR DATA MAIS RECENTE
+        if tabela == 'site_content':
+            # Para cada página, pega só o registro mais recente
+            response = supabase.table(tabela)\
+                .select('*')\
+                .order('scraped_at', desc=True)\
+                .execute()
+        else:
+            response = supabase.table(tabela).select('*').execute()
+        
+        if response.data:
+            # 🆕 Remove duplicatas, mantém só mais recente
+            if tabela == 'site_content':
+                dados_unicos = {}
+                for item in response.data:
+                    page = item.get('page_name')
+                    if page not in dados_unicos:
+                        dados_unicos[page] = item
+                
+                response.data = list(dados_unicos.values())
             
-            # Verifica se cache é válido
-            if cache_entry['data'] and cache_entry['ultima_atualizacao']:
-                diferenca = (agora - cache_entry['ultima_atualizacao']).total_seconds()
-                if diferenca < INTERVALO_ATUALIZACAO_CACHE:
-                    print(f"📦 Cache válido para {tabela} ({int(diferenca)}s)")
-                    return cache_entry['data']
+            with cache_lock:
+                CACHE_SUPABASE[tabela]['data'] = response.data
+                CACHE_SUPABASE[tabela]['ultima_atualizacao'] = agora
+            
+            return response.data
         
         # Busca dados do Supabase
         print(f"🔄 Carregando dados da tabela: {tabela}")
@@ -167,8 +181,8 @@ def formatar_site_content(dados):
         content = item.get('content', '')
         
         if content:
-            # Limita conteúdo por página
-            content_resumido = content[:500] + "..." if len(content) > 500 else content
+            # 🆕 AUMENTA LIMITE DE 500 PARA 3000 CARACTERES
+            content_resumido = content[:3732] + "..." if len(content) > 3732 else content
             texto += f"Página: {page}\n{content_resumido}\n\n"
     
     return texto
@@ -198,7 +212,7 @@ def formatar_plataforma_info(dados):
         elif secao == 'promocoes' and isinstance(dados_secao, dict):
             promo_texto = dados_secao.get('texto', '')
             if promo_texto:
-                texto += f"PROMOÇÃO ATIVA:\n{promo_texto[:300]}\n\n"
+                texto += f"PROMOÇÃO ATIVA:\n{promo_texto[:5000]}\n\n"
         
         elif secao == 'contato' and isinstance(dados_secao, dict):
             whatsapp = dados_secao.get('whatsapp', '')
@@ -230,7 +244,7 @@ def formatar_repo_content(dados):
         # Prioriza arquivos importantes
         if any(arq in file_path for arq in arquivos_importantes):
             if content:
-                content_resumido = content[:400] + "..." if len(content) > 400 else content
+                content_resumido = content[:4000] + "..." if len(content) > 4000 else content
                 texto += f"Arquivo: {file_path}\n{content_resumido}\n\n"
     
     return texto
