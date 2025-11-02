@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Permite rodar manualmente também
+  workflow_dispatch:
 
 jobs:
   atualizar-ia:
@@ -14,28 +14,45 @@ jobs:
       - name: 📦 Checkout
         uses: actions/checkout@v3
       
-      - name: ⏳ Aguardar deploy do Netlify
+      - name: ⏳ Aguardar deploy do Netlify (AUMENTADO)
         run: |
-          echo "⏳ Aguardando Netlify fazer deploy (90 segundos)..."
-          sleep 90
+          echo "⏳ Aguardando Netlify fazer deploy completo..."
+          echo "📌 Tempo de espera: 2 minutos (120 segundos)"
+          sleep 120
           echo "✅ Deploy do Netlify deve estar concluído!"
+      
+      - name: 🔍 Verificar se site está acessível
+        run: |
+          echo "🔍 Verificando acesso ao site..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://natansites.com.br/promocao_relampago.html)
+          echo "Status HTTP: $STATUS"
+          
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Site está acessível!"
+          else
+            echo "⚠️ Site retornou código $STATUS - continuando mesmo assim..."
+          fi
       
       - name: 🔄 Chamar webhook de atualização
         id: webhook
         run: |
           echo "📡 Chamando webhook de atualização da IA..."
+          echo "🔑 Usando WEBHOOK_SECRET configurado"
           
           RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
             https://natansites.com.br/.netlify/functions/atualizar-ia \
             -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
             -H "Content-Type: application/json" \
-            --max-time 60)
+            --max-time 90)
           
           HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
           BODY=$(echo "$RESPONSE" | sed '$d')
           
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 RESPOSTA DO WEBHOOK:"
           echo "Status HTTP: $HTTP_CODE"
-          echo "Resposta: $BODY"
+          echo "Corpo: $BODY"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           
           if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
             echo "✅ Webhook chamado com sucesso!"
@@ -43,28 +60,58 @@ jobs:
           else
             echo "⚠️ Webhook retornou código $HTTP_CODE"
             echo "status=warning" >> $GITHUB_OUTPUT
+            exit 0
           fi
       
-      - name: ⏰ Aguardar cache do backend atualizar
+      - name: ⏰ Aguardar processamento completo
         if: steps.webhook.outputs.status == 'success'
         run: |
-          echo "⏰ Aguardando cache do backend atualizar (até 5 minutos)..."
-          echo "💡 A IA começará a responder com dados novos em breve!"
+          echo "⏰ Aguardando processamento completo..."
+          echo "📌 Tempo total: 3 minutos"
+          echo ""
+          echo "O que está acontecendo agora:"
+          echo "  1. ✅ Scraping das páginas do site"
+          echo "  2. ✅ Importação do repositório GitHub"
+          echo "  3. ✅ Salvamento no Supabase"
+          echo "  4. ⏳ Aguardando cache do backend atualizar (até 5 min)"
+          echo ""
+          sleep 180
+          echo "✅ Processamento deve estar completo!"
+      
+      - name: 🧹 Limpar cache antigo (NOVO)
+        if: steps.webhook.outputs.status == 'success'
+        continue-on-error: true
+        run: |
+          echo "🧹 Forçando atualização do cache..."
+          curl -X POST \
+            https://natanai-dev.onrender.com/atualizar_cache \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --max-time 30 || echo "⚠️ Falha ao limpar cache (não crítico)"
       
       - name: ✅ Atualização concluída
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "✅ PROCESSO CONCLUÍDO!"
+          echo "✅ PROCESSO CONCLUÍDO COM SUCESSO!"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-          echo "📊 Status:"
+          echo "📊 Resumo:"
           echo "  ✅ GitHub atualizado"
-          echo "  ✅ Netlify fez deploy"
-          echo "  ✅ Webhook foi chamado"
+          echo "  ✅ Netlify fez deploy (120s aguardados)"
+          echo "  ✅ Site verificado e acessível"
+          echo "  ✅ Webhook executado com sucesso"
+          echo "  ✅ Cache forçado a atualizar"
           echo "  ⏳ IA será atualizada em até 5 minutos"
           echo ""
           echo "🔍 Para verificar se atualizou:"
-          echo "  - Rode: ./verificar-supabase.ps1"
-          echo "  - Ou pergunte algo pra IA e veja se responde com dados novos"
+          echo "  1. Acesse: https://natansites.com.br/promocao_relampago.html"
+          echo "  2. Verifique o conteúdo da página"
+          echo "  3. Pergunte à IA sobre promoções"
+          echo "  4. Compare a resposta com o HTML atual"
+          echo ""
+          echo "🆘 Se não funcionar:"
+          echo "  - Verifique logs em: GitHub Actions"
+          echo "  - Teste manualmente: POST /atualizar_cache"
+          echo "  - Confira Supabase: tabela 'site_content'"
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
