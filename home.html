@@ -2382,6 +2382,27 @@ h1, h2, h3, h4, h5, h6 {
         }
 
         // ============================================
+        // 📨 EVENT LISTENERS DO CHAT
+        // ============================================
+
+        // Event listener do botão enviar
+        sendChatBtn.addEventListener('click', sendChatMessage);
+
+        // Event listener da tecla Enter
+        chatInputField.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendChatMessage();
+            }
+        });
+
+        // Auto-resize do textarea
+        chatInputField.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        });
+
+        // ============================================
         // 🎯 MOBILE MENU & OUTROS
         // ============================================
 
