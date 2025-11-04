@@ -268,12 +268,6 @@
             border: 2px solid var(--warning);
         }
 
-        .alert-info {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--secondary-blue);
-            border: 2px solid var(--secondary-blue);
-        }
-
         .admin-section {
             display: none;
         }
@@ -310,9 +304,9 @@
         }
 
         input[type="email"],
-        input[type="password"],
+        input[type="url"],
         input[type="text"],
-        input[type="url"] {
+        select {
             width: 100%;
             padding: 1rem 1.2rem;
             border: 2px solid var(--border-color);
@@ -325,25 +319,31 @@
         }
 
         body.dark-mode input[type="email"],
-        body.dark-mode input[type="password"],
+        body.dark-mode input[type="url"],
         body.dark-mode input[type="text"],
-        body.dark-mode input[type="url"] {
+        body.dark-mode select {
             background: #0F172A;
         }
 
-        input:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--primary-blue);
             box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
         }
 
-        body.dark-mode input:focus {
+        body.dark-mode input:focus,
+        body.dark-mode select:focus {
             box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
         }
 
         input::placeholder {
             color: var(--text-secondary);
             opacity: 0.6;
+        }
+
+        select {
+            cursor: pointer;
         }
 
         .btn {
@@ -409,15 +409,6 @@
             background: #DC2626;
         }
 
-        .btn-warning {
-            background: linear-gradient(135deg, var(--warning), #F59E0B);
-            color: white;
-        }
-
-        .btn-warning:hover:not(:disabled) {
-            background: linear-gradient(135deg, #F59E0B, #D97706);
-        }
-
         .back-link {
             text-align: center;
             margin-top: 2rem;
@@ -443,101 +434,6 @@
             text-align: center;
             padding: 2rem;
             color: var(--text-secondary);
-        }
-
-        select {
-            width: 100%;
-            padding: 1rem 1.2rem;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1rem;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            background: var(--bg-surface);
-            cursor: pointer;
-        }
-
-        body.dark-mode select {
-            background: #0F172A;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
-        }
-
-        body.dark-mode select:focus {
-            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
-        }
-
-        .plan-details {
-            background: var(--bg-main);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            display: none;
-            transition: all 0.3s ease;
-        }
-
-        .plan-details.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        .plan-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            margin-bottom: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .plan-price {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-
-        .plan-price small {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
-        .plan-features {
-            list-style: none;
-        }
-
-        .plan-features li {
-            padding: 0.5rem 0;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .plan-features li::before {
-            content: '✓';
-            color: var(--success);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .recommended-badge {
-            background: linear-gradient(135deg, var(--success), #10B981);
-            color: white;
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
         }
 
         .account-details-card {
@@ -582,80 +478,6 @@
             flex: 1;
         }
 
-        /* ============================================ */
-        /* 🎁 ESTILOS PARA ACESSO GRÁTIS */
-        /* ============================================ */
-        .free-access-status {
-            background: var(--bg-main);
-            border: 3px solid var(--success);
-            border-radius: 16px;
-            padding: 1.8rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .free-access-status.active {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
-            border-color: var(--success);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
-        }
-
-        .free-access-status.inactive {
-            border-color: var(--border-color);
-            background: var(--bg-main);
-        }
-
-        .free-access-icon {
-            font-size: 3rem;
-            flex-shrink: 0;
-        }
-
-        .free-access-info {
-            flex: 1;
-        }
-
-        .free-access-info h3 {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .free-access-info p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-badge.active {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-        }
-
-        .status-badge.inactive {
-            background: linear-gradient(135deg, var(--text-secondary), #4B5563);
-            color: white;
-        }
-
         @media (max-width: 768px) {
             body {
                 padding: 1.5rem;
@@ -678,15 +500,6 @@
             .button-group {
                 flex-direction: column;
             }
-
-            .free-access-status {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .countdown-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
         @media (max-width: 480px) {
@@ -705,17 +518,13 @@
             .section-title {
                 font-size: 1.2rem;
             }
-
-            .free-access-icon {
-                font-size: 2.5rem;
-            }
         }
     </style>
 </head>
 <body>
     <div class="settings-container">
         <div class="header">
-            <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
+            <div class="logo-img">NS</div>
             <h1>Configurações</h1>
             <p class="subtitle">Personalize sua experiência</p>
         </div>
@@ -794,91 +603,45 @@
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- 🎁 SEÇÃO ADMIN - ACESSO GRÁTIS DE 7 DIAS -->
-        <!-- ============================================ -->
-        <div class="settings-card admin-section" id="freeAccessSection" style="display: none;">
+        <!-- 🆕 SEÇÃO ADMIN - ADICIONAR PLANO A USUÁRIO -->
+        <div class="settings-card admin-section" id="addPlanSection" style="display: none;">
             <h2 class="section-title">
-                🎁 Acesso Grátis permanente
-                <span class="admin-badge">ADMIN</span>
-            </h2>
-
-            <div id="freeAccessAlertBox" class="alert"></div>
-
-            <!-- Status do Acesso Grátis -->
-            <div class="free-access-status inactive" id="freeAccessStatus">
-                <div class="free-access-icon" id="freeAccessIcon">🔒</div>
-                <div class="free-access-info">
-                    <h3 id="freeAccessTitle">
-                        Acesso Grátis Desativado
-                        <span class="status-badge inactive" id="statusBadge">INATIVO</span>
-                    </h3>
-                    <p id="freeAccessDescription">
-                        Ative o acesso grátis para liberar a plataforma . Todos poderão usar os recursos sem criar site.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Botões de Controle -->
-            <div class="button-group" style="margin-top: 1.5rem;">
-                <button class="btn btn-success" id="activateFreeAccessBtn">
-                    ✅ Ativar Acesso Grátis Permanente
-                </button>
-                <button class="btn btn-danger" id="deactivateFreeAccessBtn" style="display: none;">
-                    🚫 Desativar Acesso Grátis
-                </button>
-            </div>
-
-            <!-- Informações Adicionais -->
-            <div style="background: rgba(59, 130, 246, 0.05); border: 2px solid rgba(59, 130, 246, 0.2); border-radius: 12px; padding: 1.2rem; margin-top: 1.5rem;">
-                <h4 style="color: var(--secondary-blue); font-size: 1.1rem; margin-bottom: 0.8rem; font-family: 'Sora', sans-serif; font-weight: 700;">ℹ️ Como Funciona</h4>
-                <ul style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8; padding-left: 1.5rem;">
-                    <li>Usuários terão <strong>acesso completo à plataforma</strong> enquanto o modo estiver ativo</li>
-                    <li>O acesso permanece <strong>ativo até você desligar</strong> manualmente</li>
-                    <li>Ao desativar, todos os usuários Free são <strong>removidos imediatamente</strong></li>
-                </ul>
-            </div>
-        </div>
- 
-        <!-- SEÇÃO ADMIN - CRIAR CONTA -->
-        <div class="settings-card admin-section" id="adminSection">
-            <h2 class="section-title">
-                👑 Administração
+                ➕ Adicionar Plano a Usuário
                 <span class="admin-badge">ADMIN</span>
             </h2>
             
-            <div id="adminAlertBox" class="alert"></div>
+            <div id="addPlanAlertBox" class="alert"></div>
 
-            <form id="createAccountForm">
+            <form id="addPlanForm">
                 <div class="form-group">
-                    <label for="newEmail">E-mail do Novo Usuário</label>
-                    <input type="email" id="newEmail" placeholder="usuario@exemplo.com" required>
+                    <label for="planUserEmail">E-mail do Usuário</label>
+                    <input type="email" id="planUserEmail" placeholder="usuario@exemplo.com" required>
+                    <small style="color: var(--text-secondary); font-size: 0.85rem; display: block; margin-top: 0.5rem;">
+                        💡 Digite o email do usuário que deseja adicionar/alterar o plano
+                    </small>
                 </div>
 
                 <div class="form-group">
-                    <label for="newPassword">Senha</label>
-                    <input type="password" id="newPassword" placeholder="Mínimo 6 caracteres" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="newName">Nome do Usuário (opcional)</label>
-                    <input type="text" id="newName" placeholder="Nome completo">
-                </div>
-
-                <div class="form-group">
-                    <label for="planSelect">Plano de Assinatura</label>
-                    <select id="planSelect" required>
+                    <label for="planTypeSelect">Tipo de Plano</label>
+                    <select id="planTypeSelect" required>
                         <option value="">Selecione um plano</option>
-                        <option value="starter">Starter - R$ 39,99/mês</option>
-                        <option value="professional">Professional - R$ 79,99/mês (Recomendado)</option>
+                        <option value="free">🎉 Free (Gratuito Permanente)</option>
+                        <option value="starter">⭐ Starter (R$ 39,99/mês)</option>
+                        <option value="professional">💎 Professional (R$ 79,99/mês)</option>
+                        <option value="admin">👑 Admin (Acesso Total)</option>
                     </select>
                 </div>
 
-                <div id="planDetails" class="plan-details"></div>
+                <div id="planDetailsInfo" style="background: var(--bg-main); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; display: none;">
+                    <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-family: 'Sora', sans-serif; font-weight: 700;">📋 Detalhes do Plano Selecionado:</h4>
+                    <div id="planDetailsContent"></div>
+                </div>
 
-                <button type="submit" class="btn" id="createAccountBtn">
-                    Cadastrar Nova Conta
-                </button>
+                <div class="button-group">
+                    <button type="submit" class="btn" id="addPlanBtn">
+                        ✅ Atribuir Plano
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -902,7 +665,7 @@
             </form>
 
             <div id="accountDetailsCard" class="account-details-card">
-                <div class="plan-title" id="accountEmail">📧 Email da Conta</div>
+                <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;" id="accountEmail">📧 Email da Conta</div>
                 
                 <div style="margin: 1.5rem 0;">
                     <div class="account-detail-item">
@@ -923,11 +686,14 @@
                 </div>
 
                 <div class="button-group">
-                    <button class="btn btn-success" id="reactivateBtn" style="display: none;">
-                        ✅ Reativar Conta (+ 1 Ano)
+                    <button class="btn btn-success" id="changePlanBtn" style="display: none;">
+                        ⬆️ Alterar Plano
+                    </button>
+                    <button class="btn" id="reactivateBtn" style="display: none;">
+                        ✅ Reativar (+ 1 Ano)
                     </button>
                     <button class="btn btn-danger" id="suspendBtn" style="display: none;">
-                        🚫 Suspender Conta
+                        🚫 Suspender
                     </button>
                 </div>
             </div>
@@ -994,7 +760,7 @@
             </form>
 
             <div id="websitesListCard" class="account-details-card">
-                <div class="plan-title" id="websitesUserEmail">📧 Sites do Cliente</div>
+                <div style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;" id="websitesUserEmail">📧 Sites do Cliente</div>
                 
                 <div id="websitesList" style="margin: 1.5rem 0;">
                     <!-- Lista de sites será inserida aqui -->
@@ -1011,14 +777,12 @@
         // ============================================
         // 🔧 CONFIGURAÇÃO DO SUPABASE
         // ============================================
-
-               const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
+        const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
         const ADMIN_EMAIL = 'natan@natandev.com';
 
         let supabase = null;
         let currentUser = null;
-        let countdownInterval = null;
         
         try {
             if (!SUPABASE_URL.includes('SUPABASE_AQUI') && !SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
@@ -1039,45 +803,6 @@
             dataSaver: false
         };
 
-        // Dados dos planos
-        const PLANS = {
-            starter: {
-                name: 'Starter',
-                price: 'R$ 39,99',
-                priceMonthly: 'R$ 39,99/mês',
-                setup: 'R$ 320,00',
-                features: [
-                    'Site responsivo básico',
-                    'Design moderno e limpo',
-                    'Otimização para mobile',
-                    'Hospedagem incluída',
-                    'Suporte pela plataforma 24/7',
-                    'SEO básico otimizado',
-                    'Contrato de 1 ano'
-                ]
-            },
-            professional: {
-                name: 'Professional',
-                price: 'R$ 79,99',
-                priceMonthly: 'R$ 79,99/mês',
-                setup: 'R$ 530,00',
-                recommended: true,
-                features: [
-                    'Design personalizado avançado',
-                    'Animações e interatividade',
-                    'SEO avançado otimizado',
-                    'Integração de APIs',
-                    'SEO avançado com keywords',
-                    'Domínio personalizado',
-                    '5 revisões incluídas',
-                    'Formulários de contato',
-                    'Suporte prioritário',
-                    'IA Inclusa - Opcional',
-                    'Contrato de 1 ano'
-                ]
-            }
-        };
-
         // ============================================
         // 🎨 FUNÇÕES DE CONFIGURAÇÕES
         // ============================================
@@ -1090,16 +815,6 @@
             setTimeout(() => {
                 alertBox.classList.remove('show');
             }, 5000);
-        }
-
-        function showFreeAccessAlert(message, type) {
-            const alertBox = document.getElementById('freeAccessAlertBox');
-            alertBox.textContent = message;
-            alertBox.className = `alert alert-${type} show`;
-            
-            setTimeout(() => {
-                alertBox.classList.remove('show');
-            }, 7000);
         }
 
         function showManageAlert(message, type) {
@@ -1235,252 +950,10 @@
                     }
                     
                     await saveUserSettings(settings);
-                    showAlert('✓ Configuração salva!', 'success');
+                    showAlert('✔ Configuração salva!', 'success');
                 });
             });
         }
-
-        // ============================================
-// 🎁 FUNÇÕES DE ACESSO GRÁTIS PERMANENTE
-// ============================================
-
-let currentFreeEmail = null;
-let currentFreePassword = null;
-
-async function loadFreeAccessStatus() {
-    if (!supabase) return;
-
-    try {
-        const { data, error } = await supabase
-            .from('free_access_config')
-            .select('*')
-            .single();
-
-        if (error) throw error;
-
-        // Armazena credenciais globalmente
-        currentFreeEmail = data.free_account_email;
-        currentFreePassword = data.free_account_password;
-
-        updateFreeAccessUI(data);
-
-        console.log('✅ Status do Acesso Grátis carregado:', {
-            ativo: data.is_active,
-            email: data.free_account_email
-        });
-    } catch (error) {
-        console.error('❌ Erro ao carregar status do acesso grátis:', error);
-    }
-}
-
-function updateFreeAccessUI(data) {
-    const statusDiv = document.getElementById('freeAccessStatus');
-    const icon = document.getElementById('freeAccessIcon');
-    const title = document.getElementById('freeAccessTitle');
-    const description = document.getElementById('freeAccessDescription');
-    const activateBtn = document.getElementById('activateFreeAccessBtn');
-    const deactivateBtn = document.getElementById('deactivateFreeAccessBtn');
-
-    if (data.is_active) {
-        // ✅ MODO ATIVO
-        statusDiv.classList.remove('inactive');
-        statusDiv.classList.add('active');
-        icon.textContent = '🎁';
-        title.innerHTML = 'Acesso Grátis Ativo <span class="status-badge active" id="statusBadge">ATIVO</span>';
-        
-        const credentials = currentFreeEmail && currentFreePassword
-            ? `\n\n📧 Email: ${currentFreeEmail}\n🔑 Senha: ${currentFreePassword}\n\n`
-            : '';
-        
-        description.textContent = `A plataforma está liberada gratuitamente até você desativar.${credentials}Usuários podem usar todos os recursos exceto criação de sites.`;
-        
-        activateBtn.style.display = 'none';
-        deactivateBtn.style.display = 'block';
-    } else {
-        // 🔒 MODO INATIVO
-        statusDiv.classList.remove('active');
-        statusDiv.classList.add('inactive');
-        icon.textContent = '🔒';
-        title.innerHTML = 'Acesso Grátis Desativado <span class="status-badge inactive" id="statusBadge">INATIVO</span>';
-        description.textContent = 'Ative o acesso grátis para liberar a plataforma permanentemente. Todos poderão usar os recursos sem criar site.';
-        
-        activateBtn.style.display = 'block';
-        deactivateBtn.style.display = 'none';
-    }
-}
-
-// ============================================
-// ✅ ATIVAR ACESSO GRÁTIS PERMANENTE
-// ============================================
-document.getElementById('activateFreeAccessBtn').addEventListener('click', async function() {
-    if (!confirm('Deseja ATIVAR o Acesso Grátis PERMANENTE?\n\nUma conta grátis será criada automaticamente para acesso público.')) {
-        return;
-    }
-
-    const btn = this;
-    btn.disabled = true;
-    btn.textContent = 'Ativando...';
-
-    try {
-        const now = new Date();
-        
-        // 🆕 SEM DATA DE EXPIRAÇÃO
-        const freeEmail = 'free@natandev.com';
-        const freePassword = 'natanfree2025';
-
-        console.log('🔐 Criando conta free permanente...');
-
-        // Criar conta no Supabase Auth
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: freeEmail,
-            password: freePassword,
-            options: {
-                data: {
-                    name: 'Acesso Grátis',
-                    plan: 'free',
-                    plan_name: 'Free'
-                }
-            }
-        });
-
-        if (signUpError && !signUpError.message.includes('already registered')) {
-            throw signUpError;
-        }
-
-        const freeUserId = signUpData?.user?.id || null;
-
-        // Registrar na tabela user_accounts
-        if (freeUserId) {
-            await supabase.from('user_accounts').upsert({
-                user_id: freeUserId,
-                user_email: freeEmail,
-                plan_name: 'Free',
-                plan_type: 'free',
-                is_suspended: false,
-                account_expires_at: null, // 🆕 SEM EXPIRAÇÃO
-                first_login_at: now.toISOString(),
-                created_at: now.toISOString()
-            }, { onConflict: 'user_id' });
-
-            await supabase.from('user_settings').upsert({
-                user_id: freeUserId,
-                settings: {
-                    darkMode: false,
-                    typingSound: false,
-                    sendSound: true,
-                    deleteSound: false,
-                    clickSound: true,
-                    desktopNotif: true,
-                    dataSaver: false
-                },
-                created_at: now.toISOString(),
-                updated_at: now.toISOString()
-            }, { onConflict: 'user_id' });
-        }
-
-        // Atualizar free_access_config
-        const { error: updateError } = await supabase
-            .from('free_access_config')
-            .update({
-                is_active: true,
-                started_at: now.toISOString(),
-                expires_at: null, // 🆕 NULL = PERMANENTE
-                free_account_email: freeEmail,
-                free_account_password: freePassword,
-                free_account_user_id: freeUserId,
-                created_by: currentUser.email,
-                updated_at: now.toISOString()
-            })
-            .eq('id', (await supabase.from('free_access_config').select('id').single()).data.id);
-
-        if (updateError) throw updateError;
-
-        showFreeAccessAlert(
-            `✅ Acesso Grátis PERMANENTE ativado!\n\n` +
-            `📧 Email: ${freeEmail}\n` +
-            `🔑 Senha: ${freePassword}\n\n` +
-            `Permanece ativo até você desativar.`,
-            'success'
-        );
-        
-        currentFreeEmail = freeEmail;
-        currentFreePassword = freePassword;
-        await loadFreeAccessStatus();
-
-        console.log('✅ Acesso grátis permanente ativado');
-
-    } catch (error) {
-        console.error('❌ Erro ao ativar acesso grátis:', error);
-        showFreeAccessAlert(`❌ Erro: ${error.message}`, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = '✅ Ativar Acesso Grátis Permanente';
-    }
-});
-
-// ============================================
-// 🚫 DESATIVAR ACESSO GRÁTIS
-// ============================================
-document.getElementById('deactivateFreeAccessBtn').addEventListener('click', async function() {
-    if (!confirm('Deseja DESATIVAR o Acesso Grátis?\n\nA conta grátis será deletada permanentemente.')) {
-        return;
-    }
-
-    const btn = this;
-    btn.disabled = true;
-    btn.textContent = 'Desativando...';
-
-    try {
-        // Buscar ID da conta FREE
-        const { data: configData } = await supabase
-            .from('free_access_config')
-            .select('free_account_user_id, free_account_email')
-            .single();
-
-        const freeUserId = configData?.free_account_user_id;
-
-        // Deletar registros do banco
-        if (freeUserId) {
-            console.log('🗑️ Deletando conta free do banco...');
-            
-            await supabase.from('user_accounts').delete().eq('user_id', freeUserId);
-            await supabase.from('user_settings').delete().eq('user_id', freeUserId);
-
-            console.log('✅ Dados da conta free removidos');
-        }
-
-        // Desativar e limpar free_access_config
-        const { error: updateError } = await supabase
-            .from('free_access_config')
-            .update({
-                is_active: false,
-                started_at: null,
-                expires_at: null,
-                free_account_email: null,
-                free_account_password: null,
-                free_account_user_id: null,
-                updated_at: new Date().toISOString()
-            })
-            .eq('id', (await supabase.from('free_access_config').select('id').single()).data.id);
-
-        if (updateError) throw updateError;
-
-        showFreeAccessAlert('✅ Acesso Grátis desativado! Conta free deletada.', 'success');
-        
-        currentFreeEmail = null;
-        currentFreePassword = null;
-        await loadFreeAccessStatus();
-
-        console.log('✅ Acesso grátis desativado completamente');
-
-    } catch (error) {
-        console.error('❌ Erro ao desativar acesso grátis:', error);
-        showFreeAccessAlert(`❌ Erro: ${error.message}`, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = '🚫 Desativar Acesso Grátis';
-    }
-});
 
         // ============================================
         // 👑 VERIFICAÇÃO DE ADMIN
@@ -1493,11 +966,9 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             localStorage.setItem('natandev_is_admin', isAdmin.toString());
             
             if (isAdmin) {
-                document.getElementById('adminSection').style.display = 'block';
+                document.getElementById('addPlanSection').style.display = 'block';
                 document.getElementById('manageAccountsSection').style.display = 'block';
-                document.getElementById('freeAccessSection').style.display = 'block';
                 await showWebsiteAdminSections();
-                await loadFreeAccessStatus();
                 console.log('✅ Acesso admin habilitado para:', currentUser.email);
             } else {
                 console.log('ℹ️ Usuário não é admin:', currentUser.email);
@@ -1505,133 +976,214 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
         }
 
         // ============================================
-        // 📝 CRIAR NOVA CONTA (APENAS ADMIN)
+        // ➕ ADICIONAR PLANO A USUÁRIO (ADMIN)
         // ============================================
 
-        // Mostra detalhes do plano selecionado
-        document.getElementById('planSelect').addEventListener('change', function() {
-            const planKey = this.value;
-            const planDetails = document.getElementById('planDetails');
+        function showAddPlanAlert(message, type) {
+            const alertBox = document.getElementById('addPlanAlertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+            
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
 
-            if (!planKey) {
-                planDetails.classList.remove('show');
+        // Mostra detalhes do plano selecionado
+        document.getElementById('planTypeSelect').addEventListener('change', function() {
+            const planType = this.value;
+            const detailsDiv = document.getElementById('planDetailsInfo');
+            const contentDiv = document.getElementById('planDetailsContent');
+
+            if (!planType) {
+                detailsDiv.style.display = 'none';
                 return;
             }
 
-            const plan = PLANS[planKey];
+            const planDetails = {
+                'free': {
+                    name: '🎉 Free (Gratuito Permanente)',
+                    features: [
+                        '✅ Acesso básico ao dashboard',
+                        '✅ 1 site cadastrado',
+                        '✅ Suporte por email',
+                        '✅ Validade: PERMANENTE'
+                    ],
+                    price: 'Gratuito para sempre'
+                },
+                'starter': {
+                    name: '⭐ Starter',
+                    features: [
+                        '✅ Tudo do Free +',
+                        '✅ Até 5 sites',
+                        '✅ Suporte prioritário',
+                        '✅ Analytics básico',
+                        '✅ Validade: 1 ano a partir de hoje'
+                    ],
+                    price: 'R$ 39,99/mês'
+                },
+                'professional': {
+                    name: '💎 Professional',
+                    features: [
+                        '✅ Tudo do Starter +',
+                        '✅ Sites ilimitados',
+                        '✅ Suporte 24/7',
+                        '✅ Analytics avançado',
+                        '✅ Domínio personalizado',
+                        '✅ Validade: 1 ano a partir de hoje'
+                    ],
+                    price: 'R$ 79,99/mês'
+                },
+                'admin': {
+                    name: '👑 Admin (Acesso Total)',
+                    features: [
+                        '✅ Acesso total ao sistema',
+                        '✅ Gerenciar todas as contas',
+                        '✅ Adicionar/remover sites',
+                        '✅ Alterar planos de usuários',
+                        '✅ Validade: PERMANENTE'
+                    ],
+                    price: 'Acesso administrativo completo'
+                }
+            };
+
+            const plan = planDetails[planType];
             
-            let html = `
-                <div class="plan-title">
-                    ${plan.name}
-                    ${plan.recommended ? '<span class="recommended-badge">RECOMENDADO</span>' : ''}
+            contentDiv.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong style="font-size: 1.1rem; color: var(--primary-blue);">${plan.name}</strong>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">${plan.price}</div>
                 </div>
-                <div class="plan-price">
-                    ${plan.priceMonthly}
-                    <br>
-                    <small style="font-size: 0.8rem;">Setup: ${plan.setup}</small>
-                </div>
-                <ul class="plan-features">
-                    ${plan.features.map(f => `<li>${f}</li>`).join('')}
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    ${plan.features.map(feature => `<li style="padding: 0.5rem 0; color: var(--text-primary);">${feature}</li>`).join('')}
                 </ul>
             `;
-
-            planDetails.innerHTML = html;
-            planDetails.classList.add('show');
+            
+            detailsDiv.style.display = 'block';
         });
 
-        document.getElementById('createAccountForm').addEventListener('submit', async function(e) {
+        // Processar formulário de adicionar plano
+        document.getElementById('addPlanForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             if (!supabase) {
-                showAlert('⚠️ Supabase não configurado!', 'error', true);
+                showAddPlanAlert('⚠️ Supabase não configurado!', 'error');
                 return;
             }
 
-            const email = document.getElementById('newEmail').value.trim();
-            const password = document.getElementById('newPassword').value;
-            const name = document.getElementById('newName').value.trim();
-            const plan = document.getElementById('planSelect').value;
-            const btn = document.getElementById('createAccountBtn');
+            const userEmail = document.getElementById('planUserEmail').value.trim();
+            const planType = document.getElementById('planTypeSelect').value;
+            const btn = document.getElementById('addPlanBtn');
 
-            if (!email || !password) {
-                showAlert('⚠️ Preencha e-mail e senha!', 'error', true);
-                return;
-            }
-
-            if (!plan) {
-                showAlert('⚠️ Selecione um plano!', 'error', true);
-                return;
-            }
-
-            if (password.length < 6) {
-                showAlert('⚠️ A senha deve ter no mínimo 6 caracteres!', 'error', true);
+            if (!userEmail || !planType) {
+                showAddPlanAlert('⚠️ Preencha todos os campos!', 'error');
                 return;
             }
 
             btn.disabled = true;
-            btn.textContent = 'Criando conta...';
+            btn.textContent = 'Processando...';
 
             try {
-                const { data, error } = await supabase.auth.signUp({
-                    email: email,
-                    password: password,
-                    options: {
-                        data: {
-                            name: name || null,
-                            plan: plan,
-                            plan_name: PLANS[plan].name,
-                            created_by: currentUser.email
-                        }
-                    }
-                });
+                // Define os nomes dos planos
+                const planNames = {
+                    'free': 'Free',
+                    'starter': 'Starter',
+                    'professional': 'Professional',
+                    'admin': 'Admin'
+                };
 
-                if (error) throw error;
+                const planName = planNames[planType];
 
-                if (data.user) {
-                    // Calcula data de expiração (1 ano)
-                    const expiryDate = new Date();
-                    expiryDate.setFullYear(expiryDate.getFullYear() + 1);
-                    expiryDate.setHours(23, 59, 59, 999);
+                // Define a data de expiração baseada no tipo de plano
+                let accountExpiresAt = null;
+                
+                if (planType === 'starter' || planType === 'professional') {
+                    // Planos pagos: 1 ano a partir de hoje
+                    const now = new Date();
+                    const expiry = new Date(now);
+                    expiry.setFullYear(expiry.getFullYear() + 1);
+                    expiry.setHours(23, 59, 59, 999);
+                    accountExpiresAt = expiry.toISOString();
+                }
+                // Para 'free' e 'admin', accountExpiresAt fica null (permanente)
 
-                    await supabase.from('user_settings').insert({
-                        user_id: data.user.id,
-                        settings: DEFAULT_SETTINGS,
-                        created_at: new Date().toISOString(),
-                        updated_at: new Date().toISOString()
-                    });
+                // Verifica se o usuário já existe na tabela user_accounts
+                const { data: existingAccount, error: checkError } = await supabase
+                    .from('user_accounts')
+                    .select('user_id, user_email')
+                    .eq('user_email', userEmail)
+                    .single();
 
-                    // ✅ Adiciona registro na tabela user_accounts com plan_type 'paid'
-                    await supabase.from('user_accounts').insert({
-                        user_id: data.user.id,
-                        user_email: email,
-                        plan_name: PLANS[plan].name,
-                        plan_type: 'paid',
-                        is_suspended: false,
-                        account_expires_at: expiryDate.toISOString(),
-                        first_login_at: null,
-                        created_at: new Date().toISOString()
-                    });
+                if (checkError && checkError.code !== 'PGRST116') {
+                    throw checkError;
                 }
 
-                showAlert(`✓ Conta criada! E-mail: ${email} | Plano: ${PLANS[plan].name}`, 'success', true);
-                document.getElementById('createAccountForm').reset();
-                document.getElementById('planDetails').classList.remove('show');
+                if (existingAccount) {
+                    // Usuário já existe, apenas atualiza o plano
+                    const { error: updateError } = await supabase
+                        .from('user_accounts')
+                        .update({
+                            plan_name: planName,
+                            plan_type: planType === 'free' ? 'free' : planType === 'admin' ? 'admin' : 'paid',
+                            account_expires_at: accountExpiresAt,
+                            is_suspended: false
+                        })
+                        .eq('user_email', userEmail);
+
+                    if (updateError) throw updateError;
+
+                    showAddPlanAlert(`✔ Plano "${planName}" atualizado com sucesso para ${userEmail}!`, 'success');
+                } else {
+                    // Usuário não existe, cria uma nova conta
+                    // Busca o user_id na tabela auth.users do Supabase
+                    const { data: authUser, error: authError } = await supabase.auth.admin.getUserByEmail(userEmail);
+                    
+                    if (authError || !authUser) {
+                        throw new Error('Usuário não encontrado no sistema de autenticação. Ele precisa fazer o primeiro login antes.');
+                    }
+
+                    const userId = authUser.user.id;
+
+                    const { error: insertError } = await supabase
+                        .from('user_accounts')
+                        .insert({
+                            user_id: userId,
+                            user_email: userEmail,
+                            plan_name: planName,
+                            plan_type: planType === 'free' ? 'free' : planType === 'admin' ? 'admin' : 'paid',
+                            account_expires_at: accountExpiresAt,
+                            is_suspended: false,
+                            created_at: new Date().toISOString()
+                        });
+
+                    if (insertError) throw insertError;
+
+                    showAddPlanAlert(`✔ Plano "${planName}" atribuído com sucesso para ${userEmail}!`, 'success');
+                }
+
+                // Limpa o formulário
+                document.getElementById('addPlanForm').reset();
+                document.getElementById('planDetailsInfo').style.display = 'none';
+
+                console.log(`✅ Plano ${planName} atribuído/atualizado para ${userEmail}`);
 
             } catch (error) {
-                console.error('Erro ao criar conta:', error);
+                console.error('Erro ao atribuir plano:', error);
                 
-                let errorMessage = '❌ Erro ao criar conta!';
+                let errorMessage = '❌ Erro ao atribuir plano!';
                 
-                if (error.message.includes('already registered')) {
-                    errorMessage = '⚠️ Este e-mail já está cadastrado!';
+                if (error.message.includes('não encontrado no sistema')) {
+                    errorMessage = '⚠️ ' + error.message;
+                } else if (error.message.includes('duplicate key')) {
+                    errorMessage = '⚠️ Este usuário já possui um plano. Use a seção "Gerenciar Contas" para alterá-lo.';
                 } else {
                     errorMessage = `❌ ${error.message}`;
                 }
                 
-                showAlert(errorMessage, 'error', true);
+                showAddPlanAlert(errorMessage, 'error');
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Cadastrar Nova Conta';
+                btn.textContent = '✅ Atribuir Plano';
             }
         });
 
@@ -1690,7 +1242,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             btn.textContent = 'Buscando...';
 
             try {
-                // ✅ Busca pela tabela user_accounts usando o email
                 const { data: accountData, error: accountError } = await supabase
                     .from('user_accounts')
                     .select('*')
@@ -1702,7 +1253,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 }
 
                 displayAccountDetails(accountData);
-                showManageAlert('✓ Conta encontrada!', 'success');
+                showManageAlert('✔ Conta encontrada!', 'success');
 
             } catch (error) {
                 console.error('Erro ao buscar conta:', error);
@@ -1714,7 +1265,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             }
         });
 
-        // ✅ Exibe detalhes da conta (atualizado)
+        // Exibe detalhes da conta
         function displayAccountDetails(accountData) {
             const card = document.getElementById('accountDetailsCard');
             
@@ -1728,7 +1279,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 ? '<span style="color: var(--error); font-weight: bold;">🚫 SUSPENSA</span>' 
                 : '<span style="color: var(--success); font-weight: bold;">✅ ATIVA</span>';
             
-            // Exibe plan_name e plan_type
             const planDisplay = accountData.plan_name || 'Não definido';
             const planType = accountData.plan_type || 'paid';
             document.getElementById('accountPlan').textContent = `${planDisplay} (${planType.toUpperCase()})`;
@@ -1736,9 +1286,17 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             document.getElementById('accountFirstLogin').textContent = firstLogin 
                 ? firstLogin.toLocaleString('pt-BR') 
                 : 'Nunca fez login';
-            document.getElementById('accountExpiry').textContent = expiry 
-                ? expiry.toLocaleDateString('pt-BR') 
-                : 'Não definido';
+            
+            // Para contas FREE permanentes
+            if (planType === 'free' && !expiry) {
+                document.getElementById('accountExpiry').textContent = '∞ Permanente (FREE)';
+            } else if (planType === 'admin' && !expiry) {
+                document.getElementById('accountExpiry').textContent = '∞ Permanente (ADMIN)';
+            } else {
+                document.getElementById('accountExpiry').textContent = expiry 
+                    ? expiry.toLocaleDateString('pt-BR') 
+                    : 'Não definido';
+            }
             
             if (firstLogin) {
                 const timeUsed = calculateTimeUsed(firstLogin);
@@ -1747,6 +1305,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 document.getElementById('accountTimeUsed').textContent = 'Conta nunca foi usada';
             }
 
+            // Botões de ação
             if (isSuspended) {
                 document.getElementById('reactivateBtn').style.display = 'block';
                 document.getElementById('suspendBtn').style.display = 'none';
@@ -1755,9 +1314,80 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 document.getElementById('suspendBtn').style.display = 'block';
             }
 
+            // Botão de alterar plano (FREE → PAID)
+            if (planType === 'free') {
+                document.getElementById('changePlanBtn').style.display = 'block';
+            } else {
+                document.getElementById('changePlanBtn').style.display = 'none';
+            }
+
             card.dataset.userId = accountData.user_id;
             card.classList.add('show');
         }
+
+        // Alterar plano (FREE → STARTER/PROFESSIONAL)
+        document.getElementById('changePlanBtn').addEventListener('click', async function() {
+            const newPlan = prompt('Digite o novo plano:\n\n1 - Starter (R$ 39,99/mês)\n2 - Professional (R$ 79,99/mês)\n\nDigite 1 ou 2:');
+            
+            if (!newPlan || (newPlan !== '1' && newPlan !== '2')) {
+                showManageAlert('❌ Plano inválido!', 'error');
+                return;
+            }
+
+            const planName = newPlan === '1' ? 'Starter' : 'Professional';
+            
+            if (!confirm(`Deseja realmente alterar para o plano ${planName}?`)) return;
+
+            const card = document.getElementById('accountDetailsCard');
+            const userId = card.dataset.userId;
+            const btn = this;
+
+            if (!userId) {
+                showManageAlert('❌ ID do usuário não encontrado', 'error');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Alterando...';
+
+            try {
+                const now = new Date();
+                const newExpiry = new Date(now);
+                newExpiry.setFullYear(newExpiry.getFullYear() + 1);
+                newExpiry.setHours(23, 59, 59, 999);
+
+                const { error } = await supabase
+                    .from('user_accounts')
+                    .update({
+                        plan_name: planName,
+                        plan_type: 'paid',
+                        is_suspended: false,
+                        account_expires_at: newExpiry.toISOString()
+                    })
+                    .eq('user_id', userId);
+
+                if (error) throw error;
+
+                showManageAlert(`✔ Plano alterado para ${planName} com sucesso! Expira em: ${newExpiry.toLocaleDateString('pt-BR')}`, 'success');
+                
+                // Recarrega os detalhes
+                const email = document.getElementById('searchEmail').value;
+                const { data: accountData } = await supabase
+                    .from('user_accounts')
+                    .select('*')
+                    .eq('user_email', email)
+                    .single();
+                
+                if (accountData) displayAccountDetails(accountData);
+
+            } catch (error) {
+                console.error('Erro ao alterar plano:', error);
+                showManageAlert(`❌ Erro ao alterar plano: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⬆️ Alterar Plano';
+            }
+        });
 
         // Reativa conta
         document.getElementById('reactivateBtn').addEventListener('click', async function() {
@@ -1791,7 +1421,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
 
                 if (error) throw error;
 
-                showManageAlert('✓ Conta reativada com sucesso! Nova data de expiração: ' + newExpiry.toLocaleDateString('pt-BR'), 'success');
+                showManageAlert('✔ Conta reativada com sucesso! Nova data de expiração: ' + newExpiry.toLocaleDateString('pt-BR'), 'success');
                 
                 document.getElementById('accountStatus').innerHTML = '<span style="color: var(--success); font-weight: bold;">✅ ATIVA</span>';
                 document.getElementById('accountExpiry').textContent = newExpiry.toLocaleDateString('pt-BR');
@@ -1803,7 +1433,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 showManageAlert(`❌ Erro ao reativar conta: ${error.message}`, 'error');
             } finally {
                 btn.disabled = false;
-                btn.textContent = '✅ Reativar Conta (+ 1 Ano)';
+                btn.textContent = '✅ Reativar (+ 1 Ano)';
             }
         });
 
@@ -1831,7 +1461,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
 
                 if (error) throw error;
 
-                showManageAlert('✓ Conta suspensa com sucesso!', 'success');
+                showManageAlert('✔ Conta suspensa com sucesso!', 'success');
                 
                 document.getElementById('accountStatus').innerHTML = '<span style="color: var(--error); font-weight: bold;">🚫 SUSPENSA</span>';
                 btn.style.display = 'none';
@@ -1870,7 +1500,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             }, 7000);
         }
 
-        // Mostra seções admin de websites
         async function showWebsiteAdminSections() {
             if (!currentUser) return;
             
@@ -1903,7 +1532,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 return;
             }
 
-            // Valida formato de URL
             try {
                 new URL(siteUrl);
                 if (imageUrl) {
@@ -1918,7 +1546,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             btn.textContent = 'Adicionando site...';
 
             try {
-                // ✅ Busca o user_id pela tabela user_accounts
                 const { data: accountData, error: accountError } = await supabase
                     .from('user_accounts')
                     .select('user_id')
@@ -1931,7 +1558,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
 
                 const userId = accountData.user_id;
 
-                // Adiciona o site ao banco de dados
                 const { data, error } = await supabase
                     .from('user_websites')
                     .insert({
@@ -1948,7 +1574,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
 
                 if (error) throw error;
 
-                showWebsiteAlert(`✓ Site "${siteName}" adicionado com sucesso para ${userEmail}!`, 'success');
+                showWebsiteAlert(`✔ Site "${siteName}" adicionado com sucesso para ${userEmail}!`, 'success');
                 document.getElementById('addWebsiteForm').reset();
                 console.log('✅ Site adicionado:', data);
 
@@ -2044,7 +1670,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
                 `).join('');
 
                 websitesListCard.classList.add('show');
-                showListWebsiteAlert(`✓ ${sites.length} site(s) encontrado(s)!`, 'success');
+                showListWebsiteAlert(`✔ ${sites.length} site(s) encontrado(s)!`, 'success');
 
             } catch (error) {
                 console.error('Erro ao buscar sites:', error);
@@ -2056,10 +1682,7 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             }
         });
 
-        // ============================================
-        // 🗑️ REMOVER SITE
-        // ============================================
-        
+        // Remover site
         async function deleteWebsite(siteId, siteName) {
             if (!confirm(`Deseja realmente REMOVER o site "${siteName}"?`)) return;
 
@@ -2071,9 +1694,8 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
 
                 if (error) throw error;
 
-                showListWebsiteAlert(`✓ Site "${siteName}" removido com sucesso!`, 'success');
+                showListWebsiteAlert(`✔ Site "${siteName}" removido com sucesso!`, 'success');
                 
-                // Recarrega a lista
                 document.getElementById('searchWebsiteForm').dispatchEvent(new Event('submit'));
 
             } catch (error) {
@@ -2119,7 +1741,6 @@ document.getElementById('deactivateFreeAccessBtn').addEventListener('click', asy
             }
         }
 
-    
         init();
     </script>
 </body>

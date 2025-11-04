@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canal de Novidades - NatanSites</title>
+
+  <!-- Fontes e Supabase -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-blue: #1E40AF;
+      --secondary-blue: #3B82F6;
+      --accent: #60A5FA;
+      --bg-main: #F9FAFB;
+      --bg-surface: #FFFFFF;
+      --text-primary: #111827;
+      --text-secondary: #6B7280;
+      --border-color: #E5E7EB;
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+    }
+
+    body.dark-mode {
+      --primary-blue: #D4AF37;
+      --secondary-blue: #C9A227;
+      --accent: #E0C15A;
+      --bg-main: #0F172A;
+      --bg-surface: #1E293B;
+      --text-primary: #F9FAFB;
+      --text-secondary: #94A3B8;
+      --border-color: #334155;
+      --glass-bg: rgba(17, 24, 39, 0.4);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--bg-surface);
+      border-right: 2px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      z-index: 1000;
+      transition: background 0.4s ease;
+    }
+
+    .sidebar-header {
+      padding: 2rem;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .logo-img {
+      width: 45px;
+      height: 45px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .logo-text {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 1rem;
+    }
+
+    .nav-menu {
+      list-style: none;
+    }
+
+    .nav-item {
+      margin-bottom: 0.5rem;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background: rgba(30, 64, 175, 0.05);
+      color: var(--primary-blue);
+    }
+
+    .nav-link.active {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+    }
+
+    .user-section {
+      padding: 1.5rem;
+      border-top: 2px solid var(--border-color);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 280px;
+      padding: 0;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      width: 100%;
+      height: 350px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2), transparent 70%);
+      transform: translate(-50%, -50%) rotate(0deg);
+      animation: rotateLight 10s linear infinite;
+    }
+
+    @keyframes rotateLight {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content h1 {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 2.8rem;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Novidades Container */
+    .news-container {
+      padding: 3rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      background: var(--bg-main);
+      position: relative;
+      z-index: 5;
+    }
+
+    /* Cards */
+    .news-card {
+      position: relative;
+      background: var(--glass-bg);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .news-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.6s ease;
+    }
+
+    .news-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .news-media img, .news-media video {
+      width: 100%;
+      border-radius: 18px;
+    }
+
+    .news-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      transition: color 0.3s ease;
+    }
+
+    .news-card:hover .news-title {
+      color: var(--primary-blue);
+    }
+
+    .news-description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .news-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .news-meta .pinned {
+      background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.3px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="logo">
+        <div class="logo-img">N</div>
+        <span class="logo-text">NatanSites</span>
+      </a>
+    </div>
+    <div class="sidebar-content">
+      <ul class="nav-menu">
+        <li class="nav-item"><a href="community.html" class="nav-link">Comunidade</a></li>
+        <li class="nav-item"><a href="chat.html" class="nav-link">Chat</a></li>
+        <li class="nav-item"><a href="feed.html" class="nav-link">Feed</a></li>
+        <li class="nav-item"><a href="websites.html" class="nav-link">Websites</a></li>
+        <li class="nav-item"><a href="depoimentos.html" class="nav-link">Depoimentos</a></li>
+        <li class="nav-item"><a href="novidades.html" class="nav-link active">Novidades</a></li>
+      </ul>
+    </div>
+    <div class="user-section">
+      <div class="user-info">
+        <div class="user-avatar">A</div>
+        <div>
+          <h4>Natan Admin</h4>
+          <p>Plano Comunidade</p>
+        </div>
+      </div>
+      <button class="btn-logout">Sair</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Canal de Novidades</h1>
+        <p>Fique por dentro de tudo que acontece na NatanSites.</p>
+      </div>
+    </section>
+
+    <section class="news-container" id="newsContainer">
+      <!-- As novidades serão carregadas dinamicamente -->
+    </section>
+  </div>
+
+  <script>
+    // === CONFIGURAÇÃO SUPABASE ===
+    const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const container = document.getElementById("newsContainer");
+
+    async function carregarNovidades() {
+      const { data, error } = await supabase
+        .from("novidades")
+        .select("*")
+        .order("fixado", { ascending: false })
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Erro ao carregar novidades:", error);
+        container.innerHTML = "<p>Erro ao carregar novidades 😕</p>";
+        return;
+      }
+
+      container.innerHTML = "";
+
+      data.forEach((item, i) => {
+        const card = document.createElement("article");
+        card.className = "news-card";
+
+        const midia = item.video_url
+          ? `<video controls><source src="${item.video_url}" type="video/mp4"></video>`
+          : `<img src="${item.imagem_url}" alt="${item.titulo}">`;
+
+        card.innerHTML = `
+          <div class="news-media">${midia}</div>
+          <h2 class="news-title">${item.titulo}</h2>
+          <p class="news-description">${item.descricao}</p>
+          <div class="news-meta">
+            <span>📅 ${new Date(item.created_at).toLocaleDateString("pt-BR")}</span>
+            ${item.fixado ? '<span class="pinned">Fixado</span>' : ""}
+          </div>
+        `;
+
+        setTimeout(() => {
+          card.classList.add("visible");
+        }, 100 * i);
+
+        container.appendChild(card);
+      });
+    }
+
+    carregarNovidades();
+  </script>
+  <script>
+  // === PARTE 4 - Interações: Curtir, Compartilhar e Fixar ===
+
+  // Função para re-renderizar cards com botões de interação
+  function adicionarInteracoes() {
+    const cards = document.querySelectorAll(".news-card");
+
+    cards.forEach(card => {
+      // Cria a barra de ações
+      const actions = document.createElement("div");
+      actions.className = "news-actions";
+      actions.innerHTML = `
+        <button class="btn-like">❤️ <span>0</span></button>
+        <button class="btn-share">🔗 Compartilhar</button>
+        <button class="btn-pin admin-only">📌 Fixar</button>
+      `;
+      card.appendChild(actions);
+    });
+
+    // Sistema de curtidas local (salva no localStorage)
+    document.querySelectorAll(".btn-like").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const span = btn.querySelector("span");
+        let count = parseInt(span.textContent);
+        const liked = btn.classList.toggle("liked");
+
+        span.textContent = liked ? count + 1 : Math.max(count - 1, 0);
+        btn.animate([{ transform: "scale(1.3)" }, { transform: "scale(1)" }], { duration: 200 });
+      });
+    });
+
+    // Compartilhar post
+    document.querySelectorAll(".btn-share").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const titulo = btn.closest(".news-card").querySelector(".news-title").textContent;
+        const url = window.location.href.split("?")[0] + "#";
+        navigator.clipboard.writeText(`${titulo} - ${url}`);
+        btn.textContent = "✅ Copiado!";
+        setTimeout(() => (btn.textContent = "🔗 Compartilhar"), 1500);
+      });
+    });
+
+    // Fixar post (simulado, apenas visual)
+    document.querySelectorAll(".btn-pin").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".news-card");
+        const meta = card.querySelector(".news-meta");
+        const pinned = meta.querySelector(".pinned");
+
+        if (pinned) {
+          pinned.remove();
+          btn.textContent = "📌 Fixar";
+        } else {
+          const tag = document.createElement("span");
+          tag.className = "pinned";
+          tag.textContent = "Fixado";
+          meta.appendChild(tag);
+          btn.textContent = "❌ Desafixar";
+          card.scrollIntoView({ behavior: "smooth" });
+        }
+
+        card.animate([{ transform: "scale(1.03)" }, { transform: "scale(1)" }], { duration: 300 });
+      });
+    });
+
+    // Ocultar botão "Fixar" se não for admin
+    const isAdmin = true; // 🔧 altere para false em produção
+    if (!isAdmin) document.querySelectorAll(".admin-only").forEach(b => b.remove());
+  }
+
+  // Aguarda as novidades carregarem e adiciona interações
+  const observer = new MutationObserver(() => {
+    if (document.querySelector(".news-card")) {
+      adicionarInteracoes();
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.getElementById("newsContainer"), { childList: true });
+
+  // === CSS inline para os botões (visual moderno) ===
+  const style = document.createElement("style");
+  style.textContent = `
+    .news-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+      margin-top: 0.8rem;
+    }
+    .news-actions button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.4rem 0.8rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .news-actions button:hover {
+      background: var(--secondary-blue);
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .btn-like.liked {
+      background: linear-gradient(135deg, #EF4444, #F87171);
+      color: white;
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+<script>
+  // === PARTE 5 - Interações Reais com Supabase ===
+
+  // Supondo que o Supabase já esteja inicializado (da Parte 3)
+  // Tabela necessária: "novidades" com colunas:
+  // id (uuid), titulo (text), descricao (text), imagem_url (text), video_url (text),
+  // created_at (timestamp), fixado (boolean), curtidas (integer)
+
+  // Atualiza curtidas no Supabase
+  async function atualizarCurtidas(id, novoValor) {
+    const { error } = await supabase
+      .from("novidades")
+      .update({ curtidas: novoValor })
+      .eq("id", id);
+
+    if (error) console.error("Erro ao atualizar curtidas:", error);
+  }
+
+  // Atualiza fixação no Supabase
+  async function atualizarFixacao(id, fixado) {
+    const { error } = await supabase
+      .from("novidades")
+      .update({ fixado: fixado })
+      .eq("id", id);
+
+    if (error) console.error("Erro ao fixar postagem:", error);
+  }
+
+  // Função para vincular interações com Supabase
+  function ativarIntegracaoSupabase() {
+    document.querySelectorAll(".news-card").forEach(card => {
+      const id = card.dataset.id;
+      const likeBtn = card.querySelector(".btn-like");
+      const span = likeBtn.querySelector("span");
+      const pinBtn = card.querySelector(".btn-pin");
+
+      // Curtidas com atualização real
+      likeBtn.addEventListener("click", async () => {
+        let count = parseInt(span.textContent);
+        const liked = likeBtn.classList.contains("liked");
+        const novoValor = liked ? count : count + 1;
+        span.textContent = novoValor;
+        await atualizarCurtidas(id, novoValor);
+      });
+
+      // Fixar postagem no banco
+      if (pinBtn) {
+        pinBtn.addEventListener("click", async () => {
+          const fixado = pinBtn.textContent.includes("Desafixar");
+          await atualizarFixacao(id, fixado ? false : true);
+        });
+      }
+    });
+  }
+
+  // Observa o container e ativa integração quando posts estiverem carregados
+  const observerSupabase = new MutationObserver(() => {
+    const cards = document.querySelectorAll(".news-card");
+    if (cards.length > 0) {
+      ativarIntegracaoSupabase();
+      observerSupabase.disconnect();
+    }
+  });
+
+  observerSupabase.observe(document.getElementById("newsContainer"), { childList: true });
+
+  // === CSS extra para feedback visual ===
+  const style2 = document.createElement("style");
+  style2.textContent = `
+    .btn-like.liked {
+      background: linear-gradient(135deg, #EF4444, #F87171);
+      color: #fff;
+      transform: scale(1.05);
+    }
+    .btn-like.liked span {
+      font-weight: bold;
+    }
+    .btn-pin {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  `;
+  document.head.appendChild(style2);
+</script>
+<script>
+  // === PARTE 6 - ScrollReveal + Atualização em Tempo Real ===
+
+  // Efeito suave de entrada dos cards (ScrollReveal manual)
+  function revealOnScroll() {
+    const cards = document.querySelectorAll(".news-card");
+    const trigger = window.innerHeight * 0.9;
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      if (rect.top < trigger && !card.classList.contains("visible")) {
+        card.classList.add("visible");
+        card.animate(
+          [
+            { opacity: 0, transform: "translateY(40px)" },
+            { opacity: 1, transform: "translateY(0)" }
+          ],
+          { duration: 600, easing: "ease-out" }
+        );
+      }
+    });
+  }
+
+  window.addEventListener("scroll", revealOnScroll);
+  window.addEventListener("load", revealOnScroll);
+
+  // === Atualização em tempo real (Supabase Realtime Subscriptions) ===
+  async function habilitarAtualizacoesTempoReal() {
+    const canal = supabase
+      .channel("novidades-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "novidades" },
+        (payload) => {
+          console.log("Mudança detectada:", payload);
+          carregarNovidades(); // atualiza lista automaticamente
+        }
+      )
+      .subscribe((status) => {
+        console.log("Canal Realtime:", status);
+      });
+  }
+
+  habilitarAtualizacoesTempoReal();
+
+  // === CSS extra para animações ===
+  const style6 = document.createElement("style");
+  style6.textContent = `
+    .news-card {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .news-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+  document.head.appendChild(style6);
+</script>
+<script>
+  // === PARTE 6 - ScrollReveal + Atualização em Tempo Real ===
+
+  // Efeito suave de entrada dos cards (ScrollReveal manual)
+  function revealOnScroll() {
+    const cards = document.querySelectorAll(".news-card");
+    const trigger = window.innerHeight * 0.9;
+
+    cards.forEach(card => {
+      const rect = card.getBoundingClientRect();
+      if (rect.top < trigger && !card.classList.contains("visible")) {
+        card.classList.add("visible");
+        card.animate(
+          [
+            { opacity: 0, transform: "translateY(40px)" },
+            { opacity: 1, transform: "translateY(0)" }
+          ],
+          { duration: 600, easing: "ease-out" }
+        );
+      }
+    });
+  }
+
+  window.addEventListener("scroll", revealOnScroll);
+  window.addEventListener("load", revealOnScroll);
+
+  // === Atualização em tempo real (Supabase Realtime Subscriptions) ===
+  async function habilitarAtualizacoesTempoReal() {
+    const canal = supabase
+      .channel("novidades-changes")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "novidades" },
+        (payload) => {
+          console.log("Mudança detectada:", payload);
+          carregarNovidades(); // atualiza lista automaticamente
+        }
+      )
+      .subscribe((status) => {
+        console.log("Canal Realtime:", status);
+      });
+  }
+
+  habilitarAtualizacoesTempoReal();
+
+  // === CSS extra para animações ===
+  const style6 = document.createElement("style");
+  style6.textContent = `
+    .news-card {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .news-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  `;
+  document.head.appendChild(style6);
+</script>
+<script>
+  // === PARTE 7 - Dark Mode, PWA e Performance ===
+
+  /* ---------- 🌙 DARK MODE ---------- */
+  const toggleDarkMode = () => {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("dark-mode", document.body.classList.contains("dark-mode"));
+  };
+
+  // Botão flutuante para alternar o modo
+  const darkBtn = document.createElement("button");
+  darkBtn.textContent = "🌙";
+  darkBtn.className = "toggle-dark";
+  document.body.appendChild(darkBtn);
+  darkBtn.addEventListener("click", toggleDarkMode);
+
+  // Mantém preferência do usuário
+  if (localStorage.getItem("dark-mode") === "true") {
+    document.body.classList.add("dark-mode");
+  }
+
+  /* ---------- ⚡ LAZY LOADING ---------- */
+  const lazyElements = document.querySelectorAll("img, video");
+  const lazyObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        if (el.dataset.src) el.src = el.dataset.src;
+        if (el.dataset.poster) el.poster = el.dataset.poster;
+        el.removeAttribute("loading");
+        observer.unobserve(el);
+      }
+    });
+  });
+
+  lazyElements.forEach(el => {
+    if (el.tagName === "IMG" || el.tagName === "VIDEO") {
+      el.loading = "lazy";
+      lazyObserver.observe(el);
+    }
+  });
+
+  /* ---------- 📱 PWA SETUP ---------- */
+  // Cria o manifest dinamicamente
+  const manifest = {
+    name: "NatanSites - Novidades",
+    short_name: "Novidades",
+    start_url: "./novidades.html",
+    display: "standalone",
+    background_color: "#0F172A",
+    theme_color: "#1E40AF",
+    icons: [
+      {
+        src: "https://natansites.com.br/icon-192.png",
+        sizes: "192x192",
+        type: "image/png"
+      },
+      {
+        src: "https://natansites.com.br/icon-512.png",
+        sizes: "512x512",
+        type: "image/png"
+      }
+    ]
+  };
+
+  const manifestBlob = new Blob([JSON.stringify(manifest)], { type: "application/json" });
+  const manifestURL = URL.createObjectURL(manifestBlob);
+  const link = document.createElement("link");
+  link.rel = "manifest";
+  link.href = manifestURL;
+  document.head.appendChild(link);
+
+  // Service Worker (básico)
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => console.log("✅ PWA instalado com sucesso"))
+      .catch(err => console.warn("Falha ao registrar Service Worker:", err));
+  }
+
+  // === CSS extra ===
+  const style7 = document.createElement("style");
+  style7.textContent = `
+    .toggle-dark {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      transition: all 0.3s ease;
+      z-index: 2000;
+    }
+    .toggle-dark:hover {
+      transform: scale(1.1) rotate(10deg);
+    }
+  `;
+  document.head.appendChild(style7);
+</script>
+</body>
+</html>

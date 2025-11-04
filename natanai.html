@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script defer src="/assets/js/supabase-init.js"></script>
 
     <style>
         * {
@@ -1242,16 +1241,22 @@
             <nav>
                 <ul class="nav-menu">
                     <li class="nav-item">
-                        <a href="dashboard.html" class="nav-link">
+                        <a href="dashboard.html" class="nav-link active">
                             <span class="nav-icon">🏠</span>
                             <span>Início</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="websites.html" class="nav-link">
+                        <a href="portfolio.html" class="nav-link">
                             <span class="nav-icon">🌐</span>
-                            <span>WebSites</span>
+                            <span>Portfólio</span>
                         </a>
+                    <li class="nav-item">
+                        <a href="community.html" class="nav-link">
+                            <span class="nav-icon">👥</span>
+                            <span>Comunidade</span>
+                        </a>
+                    </li>
                     </li>
                     <li class="nav-item">
                         <a href="suporte.html" class="nav-link">
@@ -1260,7 +1265,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="natanai.html" class="nav-link active">
+                        <a href="natanai.html" class="nav-link">
                             <span class="nav-icon">🤖</span>
                             <span>NatanAI</span>
                         </a>
@@ -2075,30 +2080,53 @@ async function sendMessage() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     
-    if (!message) return;
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('🚀 INICIANDO ENVIO DE MENSAGEM');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('📝 Mensagem:', message);
+    
+    if (!message) {
+        console.warn('⚠️ Mensagem vazia');
+        return;
+    }
 
     if (!currentUser) {
+        console.error('❌ currentUser não existe:', currentUser);
         showAlert('⚠️ Usuário não identificado', 'error');
         return;
     }
 
+    console.log('✅ Usuário identificado:', {
+        id: currentUser.id,
+        email: currentUser.email,
+        plan: userPlan,
+        isAdmin: isAdmin,
+        isFree: isFreeUser
+    });
+
     // FREE: não precisa de sessão
     if (!isFreeUser && !currentSessionId) {
+        console.log('📝 Criando sessão para usuário não-FREE');
         await getCurrentOrCreateSession();
         if (!currentSessionId) {
+            console.error('❌ Erro ao criar sessão de chat');
             showAlert('❌ Erro ao criar sessão de chat', 'error');
             return;
         }
     }
 
     if (!apiConnected) {
+        console.warn('⚠️ API offline, tentando reconectar...');
         showAlert('⚠️ API offline. Tentando reconectar...', 'warning');
         await checkAPIConnection();
         if (!apiConnected) {
+            console.error('❌ API continua offline');
             showAlert('❌ Não foi possível conectar com a API. Verifique se o servidor Python está rodando.', 'error');
             return;
         }
     }
+
+    console.log('✅ API conectada');
 
     input.value = '';
     input.style.height = 'auto';
@@ -2111,12 +2139,26 @@ async function sendMessage() {
     showTypingIndicator();
 
     try {
-        const { data: { session } } = await supabase.auth.getSession();
+        console.log('🔐 Obtendo sessão do Supabase...');
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+            console.error('❌ Erro ao obter sessão:', sessionError);
+            throw new Error(`Erro ao obter sessão: ${sessionError.message}`);
+        }
         
         if (!session) {
+            console.error('❌ Sessão é null');
             throw new Error('Sessão expirada. Faça login novamente.');
         }
 
+        console.log('✅ Sessão obtida:', {
+            access_token: session.access_token ? 'exists' : 'missing',
+            user_id: session.user?.id
+        });
+
+        // Buscar plan_type do banco
+        console.log('📊 Buscando plan_type do banco...');
         let planType = 'paid';
         if (supabase) {
             try {
@@ -2126,11 +2168,16 @@ async function sendMessage() {
                     .eq('user_id', currentUser.id)
                     .single();
 
-                if (!accountError && accountData) {
+                if (accountError) {
+                    console.warn('⚠️ Erro ao buscar plan_type:', accountError);
+                } else if (accountData) {
                     planType = accountData.plan_type || 'paid';
+                    console.log('✅ plan_type encontrado:', planType);
+                } else {
+                    console.warn('⚠️ accountData é null');
                 }
             } catch (error) {
-                console.warn('⚠️ Erro ao buscar plan_type, assumindo paid');
+                console.warn('⚠️ Exceção ao buscar plan_type:', error);
             }
         }
 
@@ -2143,7 +2190,15 @@ async function sendMessage() {
             name: currentUser.user_metadata?.name || currentUser.email.split('@')[0]
         };
 
-        console.log('📤 Enviando mensagem para IA');
+        console.log('📤 Dados do usuário preparados:', userData);
+        console.log('🌐 Enviando requisição para:', API_URL);
+
+        const requestBody = {
+            message: message,
+            user_data: userData
+        };
+
+        console.log('📦 Body da requisição:', JSON.stringify(requestBody, null, 2));
 
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -2151,32 +2206,65 @@ async function sendMessage() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${session.access_token}`
             },
-            body: JSON.stringify({
-                message: message,
-                user_data: userData
-            })
+            body: JSON.stringify(requestBody)
+        });
+
+        console.log('📡 Resposta recebida:', {
+            status: response.status,
+            statusText: response.statusText,
+            ok: response.ok
         });
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
+            const errorText = await response.text();
+            console.error('❌ Resposta de erro (texto):', errorText);
+            
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+                console.error('❌ Resposta de erro (JSON):', errorData);
+            } catch (e) {
+                console.error('❌ Não foi possível parsear erro como JSON');
+                errorData = { detail: errorText };
+            }
+            
             throw new Error(errorData.detail || `Erro ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json();
+        const responseText = await response.text();
+        console.log('📄 Texto da resposta:', responseText);
+
+        let data;
+        try {
+            data = JSON.parse(responseText);
+            console.log('✅ Resposta parseada:', data);
+        } catch (e) {
+            console.error('❌ Erro ao parsear resposta JSON:', e);
+            throw new Error('Resposta inválida do servidor');
+        }
         
         hideTypingIndicator();
         
         if (data.response || data.resposta) {
             const aiResponse = data.response || data.resposta;
+            console.log('✅ Resposta da IA:', aiResponse.substring(0, 100) + '...');
             addMessage(aiResponse, false, data.metadata);
             
-            console.log('✅ Resposta da IA recebida');
+            console.log('✅ Resposta da IA recebida e exibida');
         } else {
+            console.error('❌ Resposta sem campo response/resposta:', data);
             throw new Error('Resposta inválida da IA');
         }
 
     } catch (error) {
-        console.error('❌ Erro ao enviar mensagem:', error);
+        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('❌ ERRO CAPTURADO NO CATCH:');
+        console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.error('Tipo:', error.constructor.name);
+        console.error('Mensagem:', error.message);
+        console.error('Stack:', error.stack);
+        console.error('Objeto completo:', error);
+        
         hideTypingIndicator();
         
         let errorMessage = 'Desculpe, ocorreu um erro ao processar sua mensagem.';
@@ -2194,12 +2282,17 @@ async function sendMessage() {
             errorMessage = `❌ ${error.message}`;
         }
         
+        console.error('💬 Mensagem de erro para usuário:', errorMessage);
+        
         addMessage(errorMessage, false, null, false);
         showAlert(errorMessage, 'error');
         
     } finally {
         sendBtn.disabled = false;
         input.focus();
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('🏁 FIM DO PROCESSAMENTO');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     }
 }
 

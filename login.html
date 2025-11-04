@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - NatanSites</title>
+    <title>Login/Cadastro - NatanSites</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -87,17 +87,18 @@
             66% { transform: translate(-20px, 20px) rotate(240deg); }
         }
 
-        .login-container {
-    max-width: 420px;
-    width: 100%;
-    background: var(--bg-surface);
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(30, 64, 175, 0.12);
-    padding: 2rem;
-    animation: slideUp 0.6s ease;
-    max-height: 95vh; /* ADICIONE */
-    overflow-y: auto; /* ADICIONE */
-}
+        .auth-container {
+            max-width: 450px;
+            width: 100%;
+            background: var(--bg-surface);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(30, 64, 175, 0.12);
+            padding: 2.5rem;
+            animation: slideUp 0.6s ease;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -115,8 +116,8 @@
         }
 
         .logo-img {
-            width: 56px;
-            height: 56px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             border-radius: 14px;
             display: inline-flex;
@@ -131,7 +132,7 @@
 
         h1 {
             font-family: 'Sora', sans-serif;
-            font-size: 1.75rem;
+            font-size: 1.9rem;
             font-weight: 800;
             color: var(--text-primary);
             margin-bottom: 0.4rem;
@@ -144,6 +145,36 @@
             color: var(--text-secondary);
             font-weight: 400;
             text-align: center;
+        }
+
+        /* Toggle Tabs */
+        .auth-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-main);
+            padding: 0.3rem;
+            border-radius: 12px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.8rem;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
         }
 
         .form-group {
@@ -161,9 +192,10 @@
         }
 
         input[type="email"],
-        input[type="password"] {
+        input[type="password"],
+        input[type="text"] {
             width: 100%;
-            padding: 0.875rem 1rem;
+            padding: 0.95rem 1.2rem;
             border: 2px solid var(--border-color);
             border-radius: 10px;
             font-family: 'Space Grotesk', sans-serif;
@@ -186,7 +218,7 @@
 
         .btn {
             width: 100%;
-            padding: 0.95rem;
+            padding: 1rem;
             background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
             color: white;
             border: none;
@@ -216,7 +248,7 @@
         }
 
         .alert {
-            padding: 0.875rem 1rem;
+            padding: 0.9rem 1rem;
             border-radius: 10px;
             margin-bottom: 1.25rem;
             font-weight: 500;
@@ -276,366 +308,44 @@
             color: var(--secondary-blue);
         }
 
-                .free-access-banner {
+        .free-badge {
             background: linear-gradient(135deg, var(--success), #059669);
             color: white;
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            display: none;
-            animation: slideDown 0.5s ease;
-        }
-
-        .free-access-banner.show {
-            display: block;
-        }
-
-        .btn-free-access {
-            width: 100%;
-            padding: 0.95rem;
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Sora', sans-serif;
-            font-size: 0.95rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-            letter-spacing: -0.01em;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-            display: none;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
 
-        .btn-free-access.show {
-            display: block;
-        }
-
-        .btn-free-access:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
-            background: linear-gradient(135deg, #059669, #047857);
-        }
-
-        .btn-free-access:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 1.5rem 0;
-            display: none;
-        }
-
-        .divider.show {
-            display: flex;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .divider span {
-            padding: 0 1rem;
+        .helper-text {
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 600;
+            margin-top: 0.3rem;
         }
 
-        .config-warning {
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid var(--error);
-            border-radius: 10px;
-            padding: 0.875rem;
-            margin-bottom: 1.25rem;
-            font-size: 0.825rem;
-            color: var(--error);
-            text-align: center;
+        /* Hide forms */
+        .auth-form {
+            display: none;
         }
 
-        .config-warning strong {
+        .auth-form.active {
             display: block;
-            margin-bottom: 0.4rem;
         }
 
-        /* Tablets e iPads (Portrait) */
-        @media (min-width: 481px) and (max-width: 768px) {
-            body {
-                padding: 1.5rem;
-            }
-
-            .login-container {
-                max-width: 480px;
-                padding: 2.25rem;
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 2rem 1.5rem;
             }
 
             h1 {
-                font-size: 1.85rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .logo-img {
-                width: 60px;
-                height: 60px;
                 font-size: 1.6rem;
             }
 
-            input[type="email"],
-            input[type="password"] {
-                padding: 1rem 1.1rem;
-                font-size: 1rem;
-            }
-
-            .btn {
-                padding: 1.05rem;
-                font-size: 1rem;
-            }
-        }
-
-        /* Tablets (Landscape) e pequenos desktops */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .login-container {
-                max-width: 500px;
-                padding: 2.5rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .subtitle {
-                font-size: 1.05rem;
-            }
-
             .logo-img {
-                width: 64px;
-                height: 64px;
-                font-size: 1.7rem;
-            }
-        }
-
-        /* Desktops grandes */
-        @media (min-width: 1025px) {
-            body {
-                padding: 2rem;
-            }
-
-            .login-container {
-                max-width: 460px;
-                padding: 2.75rem;
-            }
-
-            h1 {
-                font-size: 2.1rem;
-            }
-
-            .subtitle {
-                font-size: 1.1rem;
-            }
-
-            .logo-img {
-                width: 68px;
-                height: 68px;
-                font-size: 1.8rem;
-            }
-
-            input[type="email"],
-            input[type="password"] {
-                padding: 1rem 1.2rem;
-                font-size: 1rem;
-            }
-
-            .btn {
-                padding: 1.1rem;
-                font-size: 1rem;
-            }
-        }
-
-        /* Desktops médios */
-        @media (min-width: 1025px) {
-            body {
-                padding: 2rem;
-            }
-
-            .login-container {
-                max-width: 480px;
-                padding: 3rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .subtitle {
-                font-size: 1.05rem;
-            }
-
-            .logo-img {
-                width: 64px;
-                height: 64px;
-                font-size: 1.7rem;
-                margin-bottom: 1.25rem;
-            }
-
-            input[type="email"],
-            input[type="password"] {
-                padding: 1rem 1.25rem;
-                font-size: 1rem;
-            }
-
-            .btn, .btn-free-access {
-                padding: 1.1rem;
-                font-size: 1rem;
-            }
-
-            .form-group {
-                margin-bottom: 1.5rem;
-            }
-
-            label {
-                font-size: 0.925rem;
-                margin-bottom: 0.625rem;
-            }
-        }
-
-        /* Desktops grandes (Full HD+) */
-        @media (min-width: 1440px) {
-            .login-container {
-                max-width: 520px;
-                padding: 3.5rem;
-                box-shadow: 0 15px 50px rgba(30, 64, 175, 0.15);
-            }
-
-            h1 {
-                font-size: 2.25rem;
-                margin-bottom: 0.6rem;
-            }
-
-            .subtitle {
-                font-size: 1.1rem;
-            }
-
-            .logo-img {
-                width: 72px;
-                height: 72px;
-                font-size: 1.9rem;
-                margin-bottom: 1.5rem;
-            }
-
-            input[type="email"],
-            input[type="password"] {
-                padding: 1.15rem 1.35rem;
-                font-size: 1.05rem;
-            }
-
-            .btn, .btn-free-access {
-                padding: 1.2rem;
-                font-size: 1.05rem;
-            }
-
-            .form-group {
-                margin-bottom: 1.75rem;
-            }
-
-            label {
-                font-size: 0.975rem;
-            }
-
-            .back-link {
-                margin-top: 2rem;
-            }
-
-            .back-link a {
-                font-size: 1rem;
-            }
-        }
-
-        /* Desktops ultra-wide (2K/4K) */
-        @media (min-width: 1920px) {
-            .login-container {
-                max-width: 560px;
-                padding: 4rem;
-            }
-
-            h1 {
-                font-size: 2.5rem;
-            }
-
-            .subtitle {
-                font-size: 1.15rem;
-            }
-
-            .logo-img {
-                width: 80px;
-                height: 80px;
-                font-size: 2.1rem;
-            }
-        }
-
-        /* Celulares pequenos */
-        @media (max-width: 380px) {
-            .login-container {
-                padding: 1.75rem 1.5rem;
-                border-radius: 16px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .subtitle {
-                font-size: 0.875rem;
-            }
-
-            .logo-img {
-                width: 50px;
-                height: 50px;
-                font-size: 1.3rem;
-                border-radius: 12px;
-            }
-
-            input[type="email"],
-            input[type="password"] {
-                padding: 0.8rem 0.9rem;
-                font-size: 0.9rem;
-            }
-
-            .btn {
-                padding: 0.85rem;
-                font-size: 0.9rem;
-            }
-
-            .back-link a {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* Celulares médios e grandes (padrão) */
-        @media (min-width: 381px) and (max-width: 480px) {
-            .login-container {
-                padding: 1.85rem 1.65rem;
-            }
-
-            h1 {
-                font-size: 1.65rem;
-            }
-
-            .logo-img {
-                width: 52px;
-                height: 52px;
+                width: 55px;
+                height: 55px;
                 font-size: 1.4rem;
             }
         }
@@ -648,43 +358,61 @@
         <div class="shape"></div>
     </div>
 
-    <div class="login-container">
+    <div class="auth-container">
         <div class="logo-header">
-            <img class="logo-img" src="./assets/crie-um-imagem-de-logo-do-discord--deixe-no-tamanh (2).png" alt="NS"></img>
-            <h1>Bem-vindo de volta</h1>
-            <p class="subtitle">Faça login para acessar o painel</p>
+            <div class="logo-img">NS</div>
+            <h1>Bem-vindo! 👋</h1>
+            <p class="subtitle">Acesse ou crie sua conta grátis</p>
         </div>
 
-        <div id="configWarning" class="config-warning" style="display: none;">
-            <strong>⚠️ Configuração necessária!</strong>
-            Configure suas credenciais do Supabase no código.
+        <div class="auth-tabs">
+            <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+            <button class="tab-btn" onclick="switchTab('signup')">Criar Conta</button>
         </div>
 
         <div id="alertBox" class="alert"></div>
-           <!-- 🎁 Divisor e Botão Free Access -->
-<div class="divider" id="divider">
-    <span>OU</span>
-</div>
 
-<div id="freeAccessBanner" class="free-access-banner">
-    🎁 Acesso Grátis Permanente Ativo! Experimente sem cadastro.
-</div>
-
-<button class="btn-free-access" id="freeAccessBtn">
-    🎁 Acessar Gratuitamente
-</button>
-        <form id="loginForm">
+        <!-- 🔐 FORMULÁRIO DE LOGIN -->
+        <form id="loginForm" class="auth-form active">
             <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" placeholder="seu@email.com" required autocomplete="email">
+                <label for="loginEmail">E-mail</label>
+                <input type="email" id="loginEmail" placeholder="seu@email.com" required autocomplete="email">
             </div>
 
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" placeholder="Digite sua senha" required autocomplete="current-password">
+                <label for="loginPassword">Senha</label>
+                <input type="password" id="loginPassword" placeholder="Digite sua senha" required autocomplete="current-password">
             </div>
 
             <button type="submit" class="btn" id="loginBtn">Entrar</button>
+        </form>
+
+        <!-- ✨ FORMULÁRIO DE CADASTRO -->
+        <form id="signupForm" class="auth-form">
+            <span class="free-badge">🎉 Conta Grátis Permanente</span>
+
+            <div class="form-group">
+                <label for="signupName">Nome Completo</label>
+                <input type="text" id="signupName" placeholder="Digite seu nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="signupEmail">E-mail</label>
+                <input type="email" id="signupEmail" placeholder="seu@email.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label for="signupPassword">Senha</label>
+                <input type="password" id="signupPassword" placeholder="Mínimo 6 caracteres" required autocomplete="new-password">
+                <p class="helper-text">Use uma senha forte com letras e números</p>
+            </div>
+
+            <div class="form-group">
+                <label for="signupPasswordConfirm">Confirmar Senha</label>
+                <input type="password" id="signupPasswordConfirm" placeholder="Digite a senha novamente" required>
+            </div>
+
+            <button type="submit" class="btn" id="signupBtn">Criar Conta Grátis</button>
         </form>
 
         <div class="back-link">
@@ -699,16 +427,12 @@
         const SUPABASE_URL = 'https://jqihtlvhradhpfckauaj.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxaWh0bHZocmFkaHBmY2thdWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NzEwOTEsImV4cCI6MjA3NzI0NzA5MX0.FO9_1dtEVdGstY2Rni3h5ul6Uu729n91ChA2njS-Mi8';
 
-        // E-mail do admin
         const ADMIN_EMAIL = 'natan@natandev.com';
 
         let supabase = null;
         
         try {
-            if (SUPABASE_URL.includes('SUPABASE_AQUI') || SUPABASE_ANON_KEY.includes('SUPABASE_AQUI')) {
-                document.getElementById('configWarning').style.display = 'block';
-                console.error('⚠️ Configure suas credenciais do Supabase!');
-            } else {
+            if (SUPABASE_URL && SUPABASE_ANON_KEY) {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 console.log('✅ Supabase inicializado com sucesso!');
             }
@@ -718,8 +442,27 @@
         }
 
         // ============================================
-        // 🔐 FUNÇÕES DE AUTENTICAÇÃO
+        // 🎨 ALTERNAR ENTRE LOGIN E CADASTRO
         // ============================================
+        function switchTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const tabs = document.querySelectorAll('.tab-btn');
+
+            tabs.forEach(t => t.classList.remove('active'));
+
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+                tabs[0].classList.add('active');
+            } else {
+                loginForm.classList.remove('active');
+                signupForm.classList.add('active');
+                tabs[1].classList.add('active');
+            }
+
+            document.getElementById('alertBox').classList.remove('show');
+        }
 
         function showAlert(message, type) {
             const alertBox = document.getElementById('alertBox');
@@ -731,6 +474,9 @@
             }, 5000);
         }
 
+        // ============================================
+        // 🔐 VERIFICA SESSÃO EXISTENTE
+        // ============================================
         async function checkSession() {
             if (!supabase) return;
 
@@ -739,11 +485,6 @@
                 
                 if (session) {
                     console.log('✅ Usuário já está logado:', session.user.email);
-                    
-                    // Salva se é admin no localStorage
-                    const isAdmin = session.user.email === ADMIN_EMAIL;
-                    localStorage.setItem('natandev_is_admin', isAdmin.toString());
-                    
                     window.location.href = 'dashboard.html';
                 }
             } catch (error) {
@@ -754,49 +495,8 @@
         checkSession();
 
         // ============================================
-        // 🎁 VERIFICAR SE FREE ACCESS ESTÁ ATIVO
-        // ============================================
-        async function checkFreeAccessStatus() {
-            if (!supabase) return;
-
-            try {
-                const { data, error } = await supabase
-                    .from('free_access_config')
-                    .select('is_active, free_account_email, free_account_password')
-                    .single();
-
-                if (error) {
-                    console.error('Erro ao verificar free access:', error);
-                    return;
-                }
-
-                if (data && data.is_active && data.free_account_email && data.free_account_password) {
-                    // Mostra banner e botão
-                    document.getElementById('freeAccessBanner').classList.add('show');
-                    document.getElementById('divider').classList.add('show');
-                    document.getElementById('freeAccessBtn').classList.add('show');
-                    
-                    console.log('🎁 Free Access está ativo! Botão habilitado.');
-                } else {
-                    // Esconde banner e botão
-                    document.getElementById('freeAccessBanner').classList.remove('show');
-                    document.getElementById('divider').classList.remove('show');
-                    document.getElementById('freeAccessBtn').classList.remove('show');
-                    
-                    console.log('🔒 Free Access está inativo.');
-                }
-            } catch (error) {
-                console.error('Erro ao verificar free access:', error);
-            }
-        }
-
-        // Verifica ao carregar a página
-        checkFreeAccessStatus();
-
-        // ============================================
         // 📝 FORMULÁRIO DE LOGIN
         // ============================================
-
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -805,8 +505,8 @@
                 return;
             }
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
             const loginBtn = document.getElementById('loginBtn');
 
             if (!email || !password) {
@@ -818,47 +518,23 @@
             loginBtn.textContent = 'Entrando...';
 
             try {
-                // REMOVIDO: emailRedirectTo para não exigir confirmação
                 const { data, error } = await supabase.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
 
-                if (error) {
-                    // Se o erro for de email não confirmado, tenta mesmo assim
-                    if (error.message.includes('Email not confirmed')) {
-                        showAlert('⚠️ Aguarde... tentando login', 'warning');
-                        
-                        // Aguarda um pouco e tenta novamente
-                        await new Promise(resolve => setTimeout(resolve, 1500));
-                        
-                        const { data: retryData, error: retryError } = await supabase.auth.signInWithPassword({
-                            email: email,
-                            password: password
-                        });
-                        
-                        if (!retryError && retryData.user) {
-                            data.user = retryData.user;
-                        } else {
-                            throw new Error('Credenciais incorretas ou conta inativa');
-                        }
-                    } else {
-                        throw error;
-                    }
-                }
+                if (error) throw error;
 
                 if (data.user) {
-                    // Verifica se é admin
                     const isAdmin = data.user.email === ADMIN_EMAIL;
                     localStorage.setItem('natandev_is_admin', isAdmin.toString());
                     
                     console.log('✅ Login bem-sucedido:', {
                         email: data.user.email,
-                        isAdmin: isAdmin,
-                        emailConfirmed: data.user.email_confirmed_at ? 'Sim' : 'Não'
+                        isAdmin: isAdmin
                     });
                     
-                    showAlert(isAdmin ? '✓ Bem-vindo Admin!' : '✓ Login realizado com sucesso!', 'success');
+                    showAlert(isAdmin ? '✔ Bem-vindo Admin!' : '✔ Login realizado com sucesso!', 'success');
                     
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
@@ -870,11 +546,8 @@
                 
                 let errorMessage = '❌ Erro ao fazer login!';
                 
-                if (error.message.includes('Invalid login credentials') || 
-                    error.message.includes('Credenciais incorretas')) {
+                if (error.message.includes('Invalid login credentials')) {
                     errorMessage = '❌ E-mail ou senha incorretos!';
-                } else if (error.message.includes('Email not confirmed')) {
-                    errorMessage = '⚠️ Email não confirmado! Entre em contato com o suporte.';
                 } else {
                     errorMessage = `❌ ${error.message}`;
                 }
@@ -887,9 +560,95 @@
         });
 
         // ============================================
+        // ✨ FORMULÁRIO DE CADASTRO
+        // ============================================
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    if (!supabase) {
+        showAlert('⚠️ Configure o Supabase primeiro!', 'error');
+        return;
+    }
+
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+    const signupBtn = document.getElementById('signupBtn');
+
+    // Validações
+    if (!name || !email || !password || !passwordConfirm) {
+        showAlert('⚠️ Preencha todos os campos!', 'error');
+        return;
+    }
+
+    if (password.length < 6) {
+        showAlert('⚠️ A senha deve ter no mínimo 6 caracteres!', 'error');
+        return;
+    }
+
+    if (password !== passwordConfirm) {
+        showAlert('⚠️ As senhas não coincidem!', 'error');
+        return;
+    }
+
+    signupBtn.disabled = true;
+    signupBtn.textContent = 'Criando conta...';
+
+    try {
+        console.log('📝 Criando conta FREE para:', email);
+
+        // Criar conta no Supabase Auth (o trigger faz o resto)
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    name: name,
+                    plan: 'free',
+                    plan_name: 'Free'
+                }
+            }
+        });
+
+        if (authError) throw authError;
+
+        if (authData.user) {
+            showAlert('✅ Conta criada com sucesso! Redirecionando...', 'success');
+            
+            console.log('🎉 Conta FREE criada com sucesso!');
+            console.log('📧 Email:', email);
+            console.log('👤 Nome:', name);
+            console.log('🎯 Plan Type: FREE');
+
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+        }
+
+    } catch (error) {
+        console.error('❌ Erro ao criar conta:', error);
+        
+        let errorMessage = '❌ Erro ao criar conta!';
+        
+        if (error.message.includes('already registered')) {
+            errorMessage = '⚠️ Este e-mail já está cadastrado!';
+        } else if (error.message.includes('Invalid email')) {
+            errorMessage = '⚠️ E-mail inválido!';
+        } else {
+            errorMessage = `❌ ${error.message}`;
+        }
+        
+        showAlert(errorMessage, 'error');
+    } finally {
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Criar Conta Grátis';
+    }
+});
+
+        // ============================================
         // 🔄 MONITORAMENTO DE AUTENTICAÇÃO
         // ============================================
-
         if (supabase) {
             supabase.auth.onAuthStateChange((event, session) => {
                 console.log('Auth event:', event);
@@ -897,7 +656,7 @@
                 if (event === 'SIGNED_IN' && session) {
                     const isAdmin = session.user.email === ADMIN_EMAIL;
                     localStorage.setItem('natandev_is_admin', isAdmin.toString());
-                    console.log('✅ Usuário logado:', session.user.email, isAdmin ? '(ADMIN)' : '');
+                    console.log('✅ Usuário logado:', session.user.email);
                 }
                 
                 if (event === 'SIGNED_OUT') {
@@ -906,80 +665,6 @@
                 }
             });
         }
-
-        // ============================================
-        // 🎁 LOGIN COM FREE ACCESS
-        // ============================================
-        document.getElementById('freeAccessBtn').addEventListener('click', async function() {
-            if (!supabase) {
-                showAlert('⚠️ Configure o Supabase primeiro!', 'error');
-                return;
-            }
-
-            const btn = this;
-            btn.disabled = true;
-            btn.textContent = 'Entrando...';
-
-            try {
-                // Busca credenciais da conta free
-                const { data: config, error: configError } = await supabase
-                    .from('free_access_config')
-                    .select('free_account_email, free_account_password, is_active')
-                    .single();
-
-                if (configError) throw configError;
-
-                if (!config.is_active) {
-                    showAlert('⚠️ Acesso grátis está desativado no momento.', 'warning');
-                    return;
-                }
-
-                const freeEmail = config.free_account_email;
-                const freePassword = config.free_account_password;
-
-                if (!freeEmail || !freePassword) {
-                    showAlert('⚠️ Credenciais do acesso grátis não encontradas.', 'error');
-                    return;
-                }
-
-                console.log('🔑 Fazendo login com conta free...');
-
-                // Faz login automático
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: freeEmail,
-                    password: freePassword
-                });
-
-                if (error) throw error;
-
-                if (data.user) {
-                    localStorage.setItem('natandev_is_admin', 'false');
-                    
-                    console.log('✅ Login Free Access bem-sucedido!');
-                    
-                showAlert('✔ Acesso grátis permanente! Redirecionando...', 'success');                    
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1000);
-                }
-
-            } catch (error) {
-                console.error('❌ Erro no login free:', error);
-                
-                let errorMessage = '❌ Erro ao acessar gratuitamente!';
-                
-                if (error.message.includes('Invalid login credentials')) {
-                    errorMessage = '⚠️ Conta grátis não encontrada. Entre em contato com o suporte.';
-                } else {
-                    errorMessage = `❌ ${error.message}`;
-                }
-                
-                showAlert(errorMessage, 'error');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '🎁 Acessar Gratuitamente';
-            }
-        });
     </script>
 </body>
 </html>
