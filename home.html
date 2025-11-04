@@ -2274,6 +2274,33 @@ h1, h2, h3, h4, h5, h6 {
             typingIndicator.classList.remove('show');
         }
 
+        // ============================================
+        // 🌐 SISTEMA DE BROWSER ID (VISITANTES ANÔNIMOS)
+        // ============================================
+
+        // Gera ou recupera ID único do navegador
+        function getBrowserId() {
+            let browserId = localStorage.getItem('natansites_browser_id');
+            
+            if (!browserId) {
+                // Gera ID único: timestamp + random
+                browserId = 'browser_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('natansites_browser_id', browserId);
+                console.log('🆕 Novo browser_id gerado:', browserId);
+            } else {
+                console.log('✅ Browser_id existente:', browserId);
+            }
+            
+            return browserId;
+        }
+
+        // Inicializa browser_id ao carregar a página
+        const BROWSER_ID = getBrowserId();
+
+        // ============================================
+        // 💬 FUNÇÃO DE ENVIAR MENSAGEM (ATUALIZADA)
+        // ============================================
+
         async function sendChatMessage() {
             const message = chatInputField.value.trim();
             
@@ -2291,16 +2318,7 @@ h1, h2, h3, h4, h5, h6 {
             showTypingIndicator();
 
             try {
-                // Dados do usuário (visitante não autenticado)
-                const userData = {
-                    user_id: 'guest_' + Date.now(),
-                    email: 'guest@natansites.com',
-                    plan: 'free',
-                    plan_type: 'free',
-                    is_admin: false,
-                    name: 'Visitante'
-                };
-
+                // 🆕 ENVIA BROWSER_ID PARA IDENTIFICAR VISITANTE ANÔNIMO
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
@@ -2308,7 +2326,8 @@ h1, h2, h3, h4, h5, h6 {
                     },
                     body: JSON.stringify({
                         message: message,
-                        user_data: userData
+                        browser_id: BROWSER_ID  // 🚨 ESSENCIAL: ID único do navegador
+                        // SEM user_data = visitante anônimo (50 msgs/24h)
                     })
                 });
 
@@ -2320,9 +2339,26 @@ h1, h2, h3, h4, h5, h6 {
                 
                 hideTypingIndicator();
                 
+                // Verifica se atingiu limite de visitante
+                if (data.limite_atingido) {
+                    addChatMessage(data.response, false);
+                    console.log('🚫 Limite de visitante atingido:', data);
+                    return;
+                }
+                
                 if (data.response || data.resposta) {
                     const aiResponse = data.response || data.resposta;
                     addChatMessage(aiResponse, false);
+                    
+                    // 📊 Log de estatísticas do visitante
+                    if (data.mensagens_usadas !== undefined) {
+                        console.log('📊 Visitante Anônimo:', {
+                            mensagens_usadas: data.mensagens_usadas,
+                            limite_total: data.limite_total,
+                            mensagens_restantes: data.mensagens_restantes,
+                            tempo_para_renovar: data.tempo_para_renovar
+                        });
+                    }
                 } else {
                     throw new Error('Resposta inválida da IA');
                 }
@@ -2344,21 +2380,6 @@ h1, h2, h3, h4, h5, h6 {
                 chatInputField.focus();
             }
         }
-
-        // Event listeners do chat
-        sendChatBtn.addEventListener('click', sendChatMessage);
-
-        chatInputField.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendChatMessage();
-            }
-        });
-
-        chatInputField.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-        });
 
         // ============================================
         // 🎯 MOBILE MENU & OUTROS
