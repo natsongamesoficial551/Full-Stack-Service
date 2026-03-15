@@ -1145,7 +1145,8 @@ if (!updateData || updateData.length === 0) {
             .eq('user_id', currentUser.id)
             .single();
 
-        if (existingAccount && existingAccount.plan_type === 'paid') {
+        const paidPlans = ['paid', 'starter', 'professional', 'admin'];
+        if (existingAccount && paidPlans.includes(existingAccount.plan_type)) {
             console.log('ℹ️ Usuário já possui plano pago, não será convertido para free');
             return false;
         }
@@ -1407,13 +1408,11 @@ if (!updateData || updateData.length === 0) {
                     .upsert({
                         user_id: currentUser.id,
                         user_email: currentUser.email,
-                        plan_type: 'paid',
                         first_login_at: now.toISOString(),
-                        account_expires_at: expiryDate.toISOString(),
-                        is_suspended: false,
-                        created_at: now.toISOString()
+                        updated_at: now.toISOString()
                     }, {
-                        onConflict: 'user_id'
+                        onConflict: 'user_id',
+                        ignoreDuplicates: false
                     })
                     .select()
                     .single();
@@ -1585,7 +1584,7 @@ if (plan_type === 'free') {
                 }
 
                 console.log('✅ Conta PAGA ativa - plan_type:', plan_type);
-                return 'paid';
+                return plan_type;
 
             } catch (error) {
                 console.error('❌ Erro ao verificar status da conta:', error);
@@ -1700,7 +1699,7 @@ paymentMethodElements.forEach(el => {
         console.log('✅ Interface FREE configurada - plano pago IGNORADO');
     } else if (accountStatus === 'suspended') {
         console.log('⚠️ Conta suspensa - plano não carregado');
-    } else if (accountStatus === 'paid') {
+    } else if (['paid', 'starter', 'professional', 'admin'].includes(accountStatus)) {
         // Apenas carrega plano pago se for realmente um usuário PAGO
         await loadUserPlan();
         console.log('✅ Plano pago carregado');
@@ -1738,7 +1737,12 @@ paymentMethodElements.forEach(el => {
                     }
                 };
 
-                const userPlan = user?.user_metadata?.plan || 'starter';
+                const { data: accData } = await supabase
+                    .from('user_accounts')
+                    .select('plan_type')
+                    .eq('user_id', currentUser.id)
+                    .single();
+                const userPlan = accData?.plan_type || 'starter';
                 const planInfo = PLANS[userPlan] || PLANS.starter;
 
                 const planNameElement = document.getElementById('planName');
