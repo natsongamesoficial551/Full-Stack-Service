@@ -1335,7 +1335,7 @@
        const SUPABASE_URL = window.APP_CONFIG.SUPABASE_URL;
         const SUPABASE_ANON_KEY = window.APP_CONFIG.SUPABASE_ANON_KEY;
 
-const ADMIN_EMAIL = 'natan@natandev.com';
+const ADMIN_EMAIL = 'borgesnatan09@gmail.com';
 const API_URL = 'https://natanai-dev.onrender.com/api/chat';
 
 let currentUser = null;
@@ -1844,7 +1844,6 @@ async function checkAuth() {
         }
 
         currentUser = session.user;
-        userPlan = currentUser.user_metadata?.plan || 'starter';
         isAdmin = currentUser.email === ADMIN_EMAIL;
         
         // Verificar se é usuário FREE
@@ -1858,6 +1857,7 @@ async function checkAuth() {
 
                 if (!accountError && accountData) {
                     isFreeUser = (accountData.plan_type === 'free');
+                    userPlan = accountData.plan_type || 'starter';
                     console.log(`🔍 Tipo de conta: ${accountData.plan_type}`);
                 }
             } catch (error) {
@@ -2171,7 +2171,7 @@ async function sendMessage() {
                 if (accountError) {
                     console.warn('⚠️ Erro ao buscar plan_type:', accountError);
                 } else if (accountData) {
-                    planType = accountData.plan_type || 'paid';
+                    planType = accountData.plan_type || 'starter';
                     console.log('✅ plan_type encontrado:', planType);
                 } else {
                     console.warn('⚠️ accountData é null');

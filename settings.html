@@ -780,7 +780,7 @@
         // ============================================
         const SUPABASE_URL = window.APP_CONFIG.SUPABASE_URL;
         const SUPABASE_ANON_KEY = window.APP_CONFIG.SUPABASE_ANON_KEY;
-        const ADMIN_EMAIL = 'natan@natandev.com';
+        const ADMIN_EMAIL = 'borgesnatan09@gmail.com';
 
         let currentUser = null;
         
@@ -1124,9 +1124,10 @@
                         .from('user_accounts')
                         .update({
                             plan_name: planName,
-                            plan_type: planType === 'free' ? 'free' : planType === 'admin' ? 'admin' : 'paid',
+                            plan_type: planType,
                             account_expires_at: accountExpiresAt,
-                            is_suspended: false
+                            is_suspended: false,
+                            updated_at: new Date().toISOString()
                         })
                         .eq('user_email', userEmail);
 
@@ -1134,29 +1135,9 @@
 
                     showAddPlanAlert(`✔ Plano "${planName}" atualizado com sucesso para ${userEmail}!`, 'success');
                 } else {
-                    // Usuário não existe, cria uma nova conta
-                    // Busca o user_id na tabela auth.users do Supabase
-                    const { data: authUser, error: authError } = await supabase.auth.admin.getUserByEmail(userEmail);
-                    
-                    if (authError || !authUser) {
-                        throw new Error('Usuário não encontrado no sistema de autenticação. Ele precisa fazer o primeiro login antes.');
-                    }
-
-                    const userId = authUser.user.id;
-
-                    const { error: insertError } = await supabase
-                        .from('user_accounts')
-                        .insert({
-                            user_id: userId,
-                            user_email: userEmail,
-                            plan_name: planName,
-                            plan_type: planType === 'free' ? 'free' : planType === 'admin' ? 'admin' : 'paid',
-                            account_expires_at: accountExpiresAt,
-                            is_suspended: false,
-                            created_at: new Date().toISOString()
-                        });
-
-                    if (insertError) throw insertError;
+                    // Usuário não tem registro ainda
+                    // O usuário precisa fazer login primeiro (trigger cria o registro automaticamente)
+                    throw new Error('Usuário não encontrado. Ele precisa fazer o primeiro login na plataforma antes de receber um plano.');
 
                     showAddPlanAlert(`✔ Plano "${planName}" atribuído com sucesso para ${userEmail}!`, 'success');
                 }
@@ -1280,7 +1261,7 @@
                 : '<span style="color: var(--success); font-weight: bold;">✅ ATIVA</span>';
             
             const planDisplay = accountData.plan_name || 'Não definido';
-            const planType = accountData.plan_type || 'paid';
+            const planType = accountData.plan_type || 'starter';
             document.getElementById('accountPlan').textContent = `${planDisplay} (${planType.toUpperCase()})`;
             
             document.getElementById('accountFirstLogin').textContent = firstLogin 
@@ -1360,7 +1341,7 @@
                     .from('user_accounts')
                     .update({
                         plan_name: planName,
-                        plan_type: 'paid',
+                        plan_type: planName === 'Starter' ? 'starter' : 'professional',
                         is_suspended: false,
                         account_expires_at: newExpiry.toISOString()
                     })
