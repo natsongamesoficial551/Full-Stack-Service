@@ -4,8 +4,3 @@
 
 [build.environment]
 SECRETS_SCAN_ENABLED = "false"
-
-# Ping automático ao Supabase a cada 10 minutos para evitar hibernação
-[[scheduled-functions]]
-  name = "ping-supabase"
-  cron = "*/10 * * * *"
